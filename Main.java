@@ -19,6 +19,7 @@ class Main {
       System.out.println("-------------------------------------------------");
       System.out.println("Please select from the menu below");
       System.out.println("A.Book a room");
+      System.out.println("B.Check room availability");
 
       System.out.print("Enter Selection: ");
 
@@ -28,12 +29,19 @@ class Main {
         case 'A':
           CheckIn();
           break;
+        case 'B':
+          Room();
+          break;
           default:
           System.out.println("Invaild Selection");
       }
     }
     KB.close();
     
+  }
+
+  public static void Room() {
+
   }
 
   public static void CheckIn(){
