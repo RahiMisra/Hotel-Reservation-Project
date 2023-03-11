@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.*;
 
 class Main {
 
@@ -42,14 +43,43 @@ class Main {
 
   public static void Room() {
 
-    Scanner KB = new Scanner(System.in);
       int numOfRoom = 10;
-    
-      while(numOfRoom == 10){
-        System.out.println("We have "+ numOfRoom +" rooms available ");
-      }
       
-      KB.close();
+      switch(1){
+        case 1:
+        System.out.println("We have 10 rooms available");
+        break;
+        case 2:
+        System.out.println("We have 9 rooms available");
+        break;
+        case 3:
+        System.out.println("We have 8 rooms available");
+        break;
+        case 4:
+        System.out.println("We have 7 rooms available");
+        break;
+        case 5:
+        System.out.println("We have 6 rooms available");
+        break;
+        case 6:
+        System.out.println("We have 5 rooms available");
+        break;
+        case 7:
+        System.out.println("We have 4 rooms available");
+        break;
+        case 8:
+        System.out.println("We have 3 rooms available");
+        break;
+        case 9:
+        System.out.println("We have 2 rooms available");
+        break;
+        case 10:
+        System.out.println("We have 1 room available");
+        break;
+        default:
+        System.out.println("We have no rooms available");
+      }
+        
   }
  //method to connect to database
  //call at the beginning of the program
