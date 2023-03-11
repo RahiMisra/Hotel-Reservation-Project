@@ -42,8 +42,14 @@ class Main {
 
   public static void Room() {
 
-    int roomNum;
-
+    Scanner KB = new Scanner(System.in);
+      int numOfRoom = 10;
+    
+      while(numOfRoom == 10){
+        System.out.println("We have "+ numOfRoom +" rooms available ");
+      }
+      
+      KB.close();
   }
 
   public static void CheckIn(){
@@ -61,11 +67,9 @@ class Main {
     System.out.print("Please enter your email address: ");
     String email = KB.next();
 
-    Customer customer = new Customer(name, phoneNum, email);
-
-    writer.write(customer.name + ", ");
-    writer.write(String.valueOf(customer.phoneNum) + ", ");
-    writer.write(customer.email);
+    writer.write(name + ", ");
+    writer.write(String.valueOf(phoneNum) + ", ");
+    writer.write(email);
 
     System.out.println("You have entered " +name+ ", " +phoneNum+ ", and "+email);
 
