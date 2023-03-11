@@ -7,6 +7,7 @@ import java.sql.*;
 class Main {
 
   public static void main(String[] args) {
+
 //makes a connection to the database server
     Connection con = getConnection();
    //check if the database connects
@@ -16,12 +17,13 @@ class Main {
   else {
     System.out.println("Database connection failed.");
   }
-    Scanner KB = new Scanner(System.in);
+
+  Scanner KB = new Scanner(System.in);
   
     boolean menu = true;
     
     while(menu) {
-      char selection;
+      String selection;
       System.out.println();
 
       System.out.println("WELCOME TO THE BUG-BYTE HOTEL RESERVATION SYSTEM");
@@ -32,14 +34,13 @@ class Main {
 
       System.out.print("Enter Selection: ");
 
-      selection = KB.next().charAt(0);
+      selection = KB.next();
+      
+      selection = selection.toUpperCase();
 
       switch(selection){
-        case 'A':
-          CheckIn();
-          break;
-        case 'B':
-          Room();
+        case "A":
+          bookRoom();
           break;
           default:
           System.out.println("Invaild Selection");
@@ -49,46 +50,6 @@ class Main {
     
   }
 
-  public static void Room() {
-
-      int numOfRoom = 10;
-      
-      switch(1){
-        case 1:
-        System.out.println("We have 10 rooms available");
-        break;
-        case 2:
-        System.out.println("We have 9 rooms available");
-        break;
-        case 3:
-        System.out.println("We have 8 rooms available");
-        break;
-        case 4:
-        System.out.println("We have 7 rooms available");
-        break;
-        case 5:
-        System.out.println("We have 6 rooms available");
-        break;
-        case 6:
-        System.out.println("We have 5 rooms available");
-        break;
-        case 7:
-        System.out.println("We have 4 rooms available");
-        break;
-        case 8:
-        System.out.println("We have 3 rooms available");
-        break;
-        case 9:
-        System.out.println("We have 2 rooms available");
-        break;
-        case 10:
-        System.out.println("We have 1 room available");
-        break;
-        default:
-        System.out.println("We have no rooms available");
-      }
-        
-  }
  //method to connect to database
  //call at the beginning of the program
   public static Connection getConnection() {
@@ -197,7 +158,7 @@ public static boolean testDatabaseconnection(Connection con) {
 	}
 }
 
-  public static void CheckIn(){
+  public static void bookRoom(){
     try {
       BufferedWriter writer = new BufferedWriter(new FileWriter("HotelInput.txt"));
          
