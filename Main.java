@@ -7,7 +7,15 @@ import java.sql.*;
 class Main {
 
   public static void main(String[] args) {
-    
+//makes a connection to the database server
+    Connection con = getConnection();
+   //check if the database connects
+  if (testDatabaseconnection(con)) {
+    System.out.println("Database connection successful!");
+  }
+  else {
+    System.out.println("Database connection failed.");
+  }
     Scanner KB = new Scanner(System.in);
   
     boolean menu = true;
