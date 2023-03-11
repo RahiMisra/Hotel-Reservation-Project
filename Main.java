@@ -42,6 +42,8 @@ class Main {
 
   public static void Room() {
 
+    int roomNum;
+
   }
 
   public static void CheckIn(){
