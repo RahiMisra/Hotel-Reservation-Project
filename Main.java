@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 
-class Main {
+class Main extends DatabaseMethods{
 
   public static void main(String[] args) {
 //makes a connection to the database server
@@ -54,113 +54,7 @@ class Main {
     int roomNum;
 
   }
- //method to connect to database
- //call at the beginning of the program
-  public static Connection getConnection() {
-// Load the MySQL JDBC driver
-  try {
-		Class.forName("com.mysql.cj.jdbc.Driver");
-	} catch (ClassNotFoundException e) {
-		e.printStackTrace();
-		System.out.println("failed to make connection");
-	}
-    // connect to the MySQL database on db4free.net
-  String url = "jdbc:mysql://db4free.net:3306/hotelsql";
-  String username = "rahimisra";
-  String password = "kjVw@3dPju8aL5K";
-  Connection con = null;
-try {
-	con = DriverManager.getConnection(url, username, password);
-} catch (SQLException e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
-	System.out.println("failed to make connection");
-}
-  return con;
-}
-  //method to check if the database is connected
-  //useful to test if the database connection has worked
-public static boolean testDatabaseconnection(Connection con) {
-    boolean isconected = false;
-    try {
-    Statement stmt = con.createStatement();
-    ResultSet rs = stmt.executeQuery("SELECT 1");
-
-    if (rs.next()) {
-      isconected = true;
-    }
-
-    rs.close();
-    stmt.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
-      System.out.println("failed to connect to database server");
-    }
-    return isconected;
-}
-  public static void makeAccount(Connection con, String name, String password, String email, String phone, String username) {
-	String SQL = "INSERT INTO User_Info(Name, Password, Email, Phone, Username) Values(?,?,?,?,?)";
-	try {
-    PreparedStatement pstmt = con.prepareStatement(SQL);
-    pstmt.setString(1, name);
-    pstmt.setString(2, password);
-    pstmt.setString(3, email);
-    pstmt.setString(4,  phone);
-    pstmt.setString(5,  username);
-    pstmt.executeUpdate();
-	} catch (SQLException e) {
-		e.printStackTrace();
-		System.out.println("failed to make an account");
-	}
-} 
-  public static void updateName(Connection con, String name, String username) {
-	String SQL = "UPDATE User_Info SET Name = ? WHERE Username = ?";
-	try {
-    PreparedStatement pstmt = con.prepareStatement(SQL);
-    pstmt.setString(1, name);
-    pstmt.setString(2, username);
-    pstmt.executeUpdate();
-	} catch (SQLException e) {
-		e.printStackTrace();
-		System.out.println("failed to update account name");
-	}
-} 
-  public static void updatePassword(Connection con, String password, String username) {
-	String SQL = "UPDATE User_Info SET Password = ? WHERE Username = ?";
-	try {
-    PreparedStatement pstmt = con.prepareStatement(SQL);
-    pstmt.setString(1, password);
-    pstmt.setString(2, username);
-    pstmt.executeUpdate();
-	} catch (SQLException e) {
-		e.printStackTrace();
-		System.out.println("failed to update account password");
-	}
-} 
-  public static void updateEmail(Connection con, String email, String username) {
-	String SQL = "UPDATE User_Info SET Email = ? WHERE Username = ?";
-	try {
-    PreparedStatement pstmt = con.prepareStatement(SQL);
-    pstmt.setString(1, email);
-    pstmt.setString(2, username);
-    pstmt.executeUpdate();
-	} catch (SQLException e) {
-		e.printStackTrace();
-		System.out.println("failed to update account email");
-	}
-} 
-  public static void updatePhone(Connection con, String phone, String username) {
-	String SQL = "UPDATE User_Info SET Email = ? WHERE Username = ?";
-	try {
-    PreparedStatement pstmt = con.prepareStatement(SQL);
-    pstmt.setString(1, phone);
-    pstmt.setString(2, username);
-    pstmt.executeUpdate();
-	} catch (SQLException e) {
-		e.printStackTrace();
-		System.out.println("failed to update account phone");
-	}
-}
+ 
 
   public static void CheckIn(){
     try {
