@@ -7,6 +7,7 @@ import java.sql.*;
 class Main extends DatabaseMethods{
 
   public static void main(String[] args) {
+
 //makes a connection to the database server
     Connection con = getConnection();
    //check if the database connects
@@ -16,12 +17,13 @@ class Main extends DatabaseMethods{
   else {
     System.out.println("Database connection failed.");
   }
-    Scanner KB = new Scanner(System.in);
+
+  Scanner KB = new Scanner(System.in);
   
     boolean menu = true;
     
     while(menu) {
-      char selection;
+      String selection;
       System.out.println();
 
       System.out.println("WELCOME TO THE BUG-BYTE HOTEL RESERVATION SYSTEM");
@@ -32,14 +34,13 @@ class Main extends DatabaseMethods{
 
       System.out.print("Enter Selection: ");
 
-      selection = KB.next().charAt(0);
+      selection = KB.next();
+      
+      selection = selection.toUpperCase();
 
       switch(selection){
-        case 'A':
-          CheckIn();
-          break;
-        case 'B':
-          Room();
+        case "A":
+          bookRoom();
           break;
           default:
           System.out.println("Invaild Selection");
@@ -49,6 +50,7 @@ class Main extends DatabaseMethods{
     
   }
 
+
   public static void Room() {
 
     int roomNum;
@@ -56,7 +58,8 @@ class Main extends DatabaseMethods{
   }
  
 
-  public static void CheckIn(){
+
+  public static void bookRoom(){
     try {
       BufferedWriter writer = new BufferedWriter(new FileWriter("HotelInput.txt"));
          
@@ -71,11 +74,9 @@ class Main extends DatabaseMethods{
     System.out.print("Please enter your email address: ");
     String email = KB.next();
 
-    Customer customer = new Customer(name, phoneNum, email);
-
-    writer.write(customer.name + ", ");
-    writer.write(String.valueOf(customer.phoneNum) + ", ");
-    writer.write(customer.email);
+    writer.write(name + ", ");
+    writer.write(String.valueOf(phoneNum) + ", ");
+    writer.write(email);
 
     System.out.println("You have entered " +name+ ", " +phoneNum+ ", and "+email);
 
