@@ -1,3 +1,4 @@
+package databaseimplementation;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -6,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseMethods {
+	
 	public static Connection getConnection() {
 	    // Load the MySQL JDBC driver
 	    try {
@@ -57,7 +59,6 @@ public class DatabaseMethods {
 	
 	//User_Account
 //---------------------------------------------------------------------------------------------------------------
-
 	public static void makeAccount(Connection con, String name, String password, String email, String phone, String username) {
 		String SQL = "INSERT INTO User_Info(Name, Password, Email, Phone, Username) Values(?,?,?,?,?)";
 		try {
@@ -68,6 +69,7 @@ public class DatabaseMethods {
 	    pstmt.setString(4,  phone);
 	    pstmt.setString(5,  username);
 	    pstmt.executeUpdate();
+	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to make an account");
@@ -84,6 +86,7 @@ public class DatabaseMethods {
 	    pstmt.setString(4, phone);
 	    pstmt.setString(5, username);
 	    pstmt.executeUpdate();
+	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to update account");
@@ -97,6 +100,7 @@ public class DatabaseMethods {
 	    pstmt.setString(1, name);
 	    pstmt.setString(2, username);
 	    pstmt.executeUpdate();
+	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to update account name");
@@ -109,6 +113,7 @@ public class DatabaseMethods {
 	    pstmt.setString(1, password);
 	    pstmt.setString(2, username);
 	    pstmt.executeUpdate();
+	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to update account password");
@@ -122,6 +127,7 @@ public class DatabaseMethods {
 	    pstmt.setString(1, email);
 	    pstmt.setString(2, username);
 	    pstmt.executeUpdate();
+	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to update account email");
@@ -135,6 +141,7 @@ public class DatabaseMethods {
 	    pstmt.setString(1, phone);
 	    pstmt.setString(2, username);
 	    pstmt.executeUpdate();
+	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to update account phone");
@@ -160,6 +167,7 @@ public class DatabaseMethods {
 		    pstmt.setString(7, address);
 		    pstmt.setString(8, username);
 		    pstmt.executeUpdate();
+		    pstmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("failed to create payment account");
@@ -179,6 +187,7 @@ public class DatabaseMethods {
 	    pstmt.setString(7, address);
 	    pstmt.setString(8, username);
 	    pstmt.executeUpdate();
+	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to update payment account");
@@ -200,6 +209,7 @@ public class DatabaseMethods {
 	    pstmt.setInt(3, price);
 	    pstmt.setString(4,  username);
 	    pstmt.executeUpdate();
+	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to make a reservation");
@@ -215,11 +225,16 @@ public class DatabaseMethods {
 	    pstmt.setInt(3, price);
 	    pstmt.setString(4,  username);
 	    pstmt.executeUpdate();
+	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to update reservation");
 		}
 	} 
+	
+	
+	
+	
 	
 	//Rooms
 //---------------------------------------------------------------------------------------------------------------
@@ -235,6 +250,7 @@ public class DatabaseMethods {
 	    pstmt.setInt(6, bedsize);
 	    pstmt.setInt(7, price);
 	    pstmt.executeUpdate();
+	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to add a room");
@@ -248,11 +264,323 @@ public class DatabaseMethods {
 	    pstmt.setInt(1, price);
 	    pstmt.setInt(2, room);
 	    pstmt.executeUpdate();
+	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to update price of room");
 		}
 	} 
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//---------------------------------------------------------------------------------------------------------------
+//accessing data
+//---------------------------------------------------------------------------------------------------------------
+	
+	
+	
+	
+	
+	//User_Account
+//---------------------------------------------------------------------------------------------------------------
+	public static String getUser_Name(Connection con, String username) {
+		String gotName = null;
+		String SQL = "SELECT Name FROM User_Info WHERE Username = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotName = rs.getString("Name");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get name");
+		}
+		return gotName;
+	} 
+	
+	public static String getUser_Password(Connection con, String username) {
+		String gotPassword = null;
+		String SQL = "SELECT Password FROM User_Info WHERE Username = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotPassword = rs.getString("Password");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get password");
+		}
+		return gotPassword;
+	} 
+	
+	public static String getUser_Email(Connection con, String username) {
+		String gotEmail = null;
+		String SQL = "SELECT Email FROM User_Info WHERE Username = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotEmail = rs.getString("Email");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get email");
+		}
+		return gotEmail;
+	} 
+	
+	public static String getUser_Phone(Connection con, String username) {
+		String gotPhone = null;
+		String SQL = "SELECT Phone FROM User_Info WHERE Username = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotPhone = rs.getString("Phone");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get phone");
+		}
+		return gotPhone;
+	} 
+	
+	
+	
+	
+	
+	//Payment Account
+//---------------------------------------------------------------------------------------------------------------
+	public static String getPayment_Name(Connection con, String username) {
+		String gotName = null;
+		String SQL = "SELECT Name FROM Payment_Info WHERE Username = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotName = rs.getString("Name");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get name");
+		}
+		return gotName;
+	} 
+	
+	public static int getPayment_Type(Connection con, String username) {
+		int gotPayType = 0;
+		String SQL = "SELECT PayType FROM Payment_Info WHERE Username = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotPayType = rs.getInt("PayType");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get payment type");
+		}
+		return gotPayType;
+	}
+	
+	public static String getPayment_Card(Connection con, String username) {
+		String gotCard = null;
+		String SQL = "SELECT CardNum FROM Payment_Info WHERE Username = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotCard = rs.getString("CardNum");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get name");
+		}
+		return gotCard;
+	} 
+		
+	public static int getCCV(Connection con, String username) {
+		int gotCCV = 0;
+		String SQL = "SELECT CCV FROM Payment_Info WHERE Username = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotCCV = rs.getInt("CCV");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get ccv");
+		}
+		return gotCCV;
+	} 
+	public static String getPayment_ExpDate(Connection con, String username) {
+		String gotExp = null;
+		String SQL = "SELECT ExpDate FROM Payment_Info WHERE Username = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotExp = rs.getString("ExpDate");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get card expiration date");
+		}
+		return gotExp;
+	} 
+		
+	public static String getPayment_Country(Connection con, String username) {
+		String gotCountry = null;
+		String SQL = "SELECT Country FROM Payment_Info WHERE Username = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotCountry = rs.getString("Country");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get country of residence");
+		}
+		return gotCountry;
+	} 
+		
+	public static String getPayment_Address(Connection con, String username) {
+		String gotAddress = null;
+		String SQL = "SELECT Address FROM Payment_Info WHERE Username = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotAddress = rs.getString("Address");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get address");
+		}
+		return gotAddress;
+	} 
+	
+	
+	
+	
+	
+	//Reservations
+//---------------------------------------------------------------------------------------------------------------
+	public static String getReservation_Username(Connection con, int room, String date) {
+		String gotUsername = null;
+		String SQL = "SELECT Username FROM Reservation WHERE Room = ? AND Date = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setInt(1,  room);
+	    pstmt.setString(2,  date);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotUsername = rs.getString("Username");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get username");
+		}
+		return gotUsername;
+	}
+	
+	public static int getReservation_Price(Connection con, String username) {
+		int gotPrice = 0;
+		String SQL = "SELECT Price FROM Reservation WHERE Room = ? AND Date = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setString(1,  username);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotPrice = rs.getInt("Price");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get name");
+		}
+		return gotPrice;
+	}
+	
+	
+	
+	
+	
+	//Rooms
+//---------------------------------------------------------------------------------------------------------------
+	public static Room getRoom(Connection con, int room) {
+		Room gotRoom = new Room();
+		String SQL = "SELECT * FROM Rooms WHERE Room = ?";
+		try {
+	    PreparedStatement pstmt = con.prepareStatement(SQL);
+	    pstmt.setInt(1,  room);
+	    ResultSet rs = pstmt.executeQuery();
+	    if(rs.next()) {
+	    	gotRoom.room = rs.getInt("Room");
+	    	gotRoom.floor = rs.getInt("Floor");
+	    	gotRoom.bedrooms = rs.getInt("Bedrooms");
+	    	gotRoom.bathrooms = rs.getInt("Bathrooms");
+	    	gotRoom.beds = rs.getInt("Beds");
+	    	gotRoom.bedsize = rs.getInt("BedSize");
+	    	gotRoom.price = rs.getInt("Price");
+	    	gotRoom.room = rs.getInt("Room");
+	    }
+	    rs.close();
+	    pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("failed to get name");
+		}
+		return gotRoom;
+	}
+
 }
 	
