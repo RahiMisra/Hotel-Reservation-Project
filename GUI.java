@@ -640,7 +640,7 @@ public class GUI implements ActionListener {
     }
     public static void main(String[] args)
     {
-        HotelGUI h = new HotelGUI();
+        HotelGUI h = new GUI();
 
 
     }
