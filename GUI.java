@@ -44,7 +44,8 @@ public class GUI implements ActionListener {
     private ImageIcon image5;
 
 
-
+ private TextField searchbar;
+    private JButton searchbtn = new JButton("search");
 
     public GUI(){
 
@@ -54,6 +55,7 @@ public class GUI implements ActionListener {
         kingBedImage = new ImageIcon("king.png");
         queenBedImage = new ImageIcon("queen.png");
         suiteBedImage = new ImageIcon("suitecover.png");
+        searchbar = new TextField(20);
 
         MainPanel.setLayout(cardlayout);
 
@@ -89,6 +91,8 @@ public class GUI implements ActionListener {
         topPanel.add(homebtn);
         topPanel.add(roomsbtn);
         topPanel.add(bookbtn);
+        topPanel.add(searchbar);
+        topPanel.add(searchbtn);
 
         mainContainer.add(topPanel, BorderLayout.NORTH);
         mainContainer.add(MainPanel,BorderLayout.CENTER);
@@ -96,6 +100,7 @@ public class GUI implements ActionListener {
         homebtn.addActionListener(this);
         roomsbtn.addActionListener(this);
         bookbtn.addActionListener(this);
+        searchbtn.addActionListener(this);
         frame.setVisible(true);
 
     }
@@ -635,6 +640,17 @@ public class GUI implements ActionListener {
                 comboBox4.setSelectedIndex(3);
             }
 
+        }
+         if(e.getSource()==searchbtn){
+
+            if(searchbar.getText().toString().equals("king")){
+            cardlayout.show(MainPanel,"2");}
+            else if(searchbar.getText().toString().equals("queen")){
+                cardlayout.show(MainPanel,"3");
+            } else if (searchbar.getText().toString().equals("suite")) {
+                cardlayout.show(MainPanel,"4");
+
+            }
         }
 
     }
