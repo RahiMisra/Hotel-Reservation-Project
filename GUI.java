@@ -46,12 +46,20 @@ public class GUI implements ActionListener {
 
  private TextField searchbar;
     private JButton searchbtn = new JButton("search");
+    
+    private JButton loginRegisterbtn = new JButton("log in/register");
+    private  JButton logInbtn = new JButton("log in");
+    private JButton forgotPasswordbtn = new JButton("forgot password");
+    private JButton lohOutbtn = new JButton("log out");
+    private  JButton registerBtn = new JButton("register");
+    private  JButton logoutbtn = new JButton("log out");
+    private String Panelmanipulation;
 
     public GUI(){
 
 
 
-
+        Panelmanipulation= "10";
         kingBedImage = new ImageIcon("king.png");
         queenBedImage = new ImageIcon("queen.png");
         suiteBedImage = new ImageIcon("suitecover.png");
@@ -69,6 +77,8 @@ public class GUI implements ActionListener {
         MainPanel.add(reservationDetailPanel(),"7");
         MainPanel.add(UserInfoPanel(),"8");
         MainPanel.add(completedReservationPanel(),"9");
+        MainPanel.add(logInOrRegisterPanel(),Panelmanipulation);
+        MainPanel.add(reservationDetailLogInPanel(),"11");
 
 
         frame.pack();
@@ -91,6 +101,7 @@ public class GUI implements ActionListener {
         topPanel.add(homebtn);
         topPanel.add(roomsbtn);
         topPanel.add(bookbtn);
+        topPanel.add(loginRegisterbtn);
         topPanel.add(searchbar);
         topPanel.add(searchbtn);
 
@@ -101,6 +112,7 @@ public class GUI implements ActionListener {
         roomsbtn.addActionListener(this);
         bookbtn.addActionListener(this);
         searchbtn.addActionListener(this);
+        loginRegisterbtn.addActionListener(this);
         frame.setVisible(true);
 
     }
@@ -151,7 +163,47 @@ public class GUI implements ActionListener {
         kingBedrateBtn.addActionListener(this);
         queenBedrateBtn.addActionListener(this);
         suiteBedrateBtn.addActionListener(this);
+        logInbtn.addActionListener(this);
         return ratesPanel;
+
+    }
+     public JPanel logInOrRegisterPanel()
+    {
+        JPanel Panel = new JPanel(new GridLayout(3,2));
+        JPanel loginOrRegPanel = new JPanel();
+        loginOrRegPanel.setLayout(null);
+
+
+
+            JLabel emailaddr = new JLabel("email address ");
+            JLabel userpasswordlbl = new JLabel("password ");
+            JTextField emailaddrTextFiled = new JTextField();
+            JPasswordField passwrdtextfield = new JPasswordField();
+            registerBtn.setBounds(205, 500, 100, 50);
+            Panel.setBounds(205, 150, 250, 100);
+            Panel.add(emailaddr);
+            Panel.add(emailaddrTextFiled);
+            Panel.add(userpasswordlbl);
+            Panel.add(passwrdtextfield);
+            Panel.add(logInbtn);
+            Panel.add(forgotPasswordbtn);
+            loginOrRegPanel.add(registerBtn);
+
+            loginOrRegPanel.add(Panel);
+            return loginOrRegPanel;
+
+
+
+
+
+
+    }
+    public JPanel reservationDetailLogInPanel(){
+        JPanel reservationsPanel = new JPanel();
+        reservationsPanel.add(logoutbtn);
+        logoutbtn.addActionListener(this);
+
+        return reservationsPanel;
 
     }
     public JPanel bookDatePanel(){
@@ -641,6 +693,20 @@ public class GUI implements ActionListener {
             }
 
         }
+        if (e.getSource() == loginRegisterbtn) {
+            cardlayout.show(MainPanel, Panelmanipulation);
+        }
+        if (e.getSource() == logInbtn) {
+            cardlayout.show(MainPanel, "11");
+            loginRegisterbtn.setText("reservations");
+            Panelmanipulation ="11";
+
+        }
+        if(e.getSource()==logoutbtn){
+            Panelmanipulation = "10";
+            loginRegisterbtn.setText("log in/register");
+            cardlayout.show(MainPanel, "0");
+        }
          if(e.getSource()==searchbtn){
 
             if(searchbar.getText().toString().equals("king")){
@@ -656,7 +722,7 @@ public class GUI implements ActionListener {
     }
     public static void main(String[] args)
     {
-        HotelGUI h = new GUI();
+        GUI h = new GUI();
 
 
     }
