@@ -12,31 +12,31 @@ public class GUI implements ActionListener {
 
     CardLayout cardlayout = new CardLayout();
 
-    JComboBox comboBox;
-    JComboBox comboBox2;
-    JComboBox comboBox3;
-    JComboBox comboBox4;
+    JComboBox<String> comboBox;
+    JComboBox<String> comboBox2;
+    JComboBox<String> comboBox3;
+    JComboBox<String> comboBox4;
     private JButton dateSelectsBtn;
     private JButton kingBedrateBtn;
     private JButton queenBedrateBtn;
     private JButton suiteBedrateBtn;
     private JButton confirmButton;
-    private JButton homebtn = new JButton("home");
-    private  JButton roomsbtn = new JButton("rooms");
-    private  JButton bookbtn = new JButton("book");
-    private JButton kingBedButton = new JButton();
-    private JButton queenBedButton = new JButton();
-    private JButton suiteBedButton = new JButton();
+    private final JButton homebtn = new JButton("home");
+    private final JButton roomsbtn = new JButton("rooms");
+    private final JButton bookbtn = new JButton("book");
+    private final JButton kingBedButton = new JButton();
+    private final JButton queenBedButton = new JButton();
+    private final JButton suiteBedButton = new JButton();
     private JButton proceedBtn;
 
-    private JButton kingBedButton2 = new JButton();
-    private JButton queenBedButton2 = new JButton();
-    private JButton suiteBedButton2 = new JButton();
-    private String[] roomtype = {"all","king","queen","suite"};
+    private final JButton kingBedButton2 = new JButton();
+    private final JButton queenBedButton2 = new JButton();
+    private final JButton suiteBedButton2 = new JButton();
+    private final String[] roomtype = {"all","king","queen","suite"};
 
-    private ImageIcon kingBedImage;
-    private ImageIcon  queenBedImage;
-    private ImageIcon suiteBedImage;
+    private final ImageIcon kingBedImage;
+    private final ImageIcon  queenBedImage;
+    private final ImageIcon suiteBedImage;
     private ImageIcon image;
     private ImageIcon image2;
     private ImageIcon image3;
@@ -44,15 +44,15 @@ public class GUI implements ActionListener {
     private ImageIcon image5;
 
 
- private TextField searchbar;
-    private JButton searchbtn = new JButton("search");
+    private final TextField searchbar;
+    private final JButton searchbtn = new JButton("search");
     
-    private JButton loginRegisterbtn = new JButton("log in/register");
-    private  JButton logInbtn = new JButton("log in");
-    private JButton forgotPasswordbtn = new JButton("forgot password");
-    private JButton lohOutbtn = new JButton("log out");
-    private  JButton registerBtn = new JButton("register");
-    private  JButton logoutbtn = new JButton("log out");
+    private final JButton loginRegisterbtn = new JButton("log in/register");
+    private  final JButton logInbtn = new JButton("log in");
+    private final JButton forgotPasswordbtn = new JButton("forgot password");
+ 
+    private  final JButton registerBtn = new JButton("register");
+    private  final JButton logoutbtn = new JButton("log out");
     private String Panelmanipulation;
 
     public GUI(){
@@ -212,7 +212,7 @@ public class GUI implements ActionListener {
         JPanel datePanel = new JPanel();
         datePanel.setLayout(null);
         String[] num = {"1","2","3","4"};
-        JComboBox guestnum = new JComboBox(num);
+        JComboBox<String> guestnum = new JComboBox<>(num);
 
         JLabel numberOfGuest = new JLabel("number of guest");
         JLabel checkindate = new JLabel("check in date ");
@@ -336,7 +336,7 @@ public class GUI implements ActionListener {
         kinglabel.setIcon(kingBedImage);
         queenlabel.setIcon(queenBedImage);
         suitelabel.setIcon(suiteBedImage);
-        comboBox = new JComboBox(roomtype);
+        comboBox = new JComboBox<>(roomtype);
 
         //combobox
         comboBox.setSelectedIndex(0);
@@ -389,7 +389,7 @@ public class GUI implements ActionListener {
         kinglabel.setIcon(kingBedImage);
 
         //combobox for king panel
-        comboBox2 = new JComboBox((roomtype));
+        comboBox2 = new JComboBox<>((roomtype));
         comboBox2.setSelectedIndex(1);
         //bounds
         comboBox2.setBounds(800,0,100,50);
@@ -422,13 +422,13 @@ public class GUI implements ActionListener {
     {
         JPanel panelQueenOnly = new JPanel();
         //labels
-        JLabel RoomBannerLabel = new JLabel();
+        
         JLabel queenlabel = new JLabel();
         JLabel queenDescriptionLaabel = new JLabel("<html>364 square feet of space<br>two Queen beds <br>" +
                 " 55 inch LED high definition television<br> In-room safe<br>Maximum occupancy: 4 </html>");
         queenlabel.setIcon(queenBedImage);
         //combobox
-        comboBox3 = new JComboBox((roomtype));
+        comboBox3 = new JComboBox<>((roomtype));
         comboBox3.setSelectedIndex(2);
 
         // bounds
@@ -464,7 +464,7 @@ public class GUI implements ActionListener {
                 " 55 inch LED high definition television<br> In-room safe<br>Wireless Internet access<br>Sofa and seating area for 4 </html>");
 
         //combobox for suite panel
-        comboBox4 = new JComboBox(roomtype);
+        comboBox4 = new JComboBox<>(roomtype);
         comboBox4.setSelectedIndex(3);
         //bounds
         comboBox4.setBounds(800,0,100,50);
@@ -499,21 +499,21 @@ public class GUI implements ActionListener {
         JPanel panel = new JPanel();
 
 
-        if(name == "king")
+        if(name.equals("king"))
         {
             image = new ImageIcon("kingbedroom.png");
             image2 = new ImageIcon("kingbedroom2.png");
             image3 = new ImageIcon("kingrestroom.png");
             image4 = new ImageIcon("kingrestroom2.png");
         }
-        if(name == "queen")
+        if(name.equals("queen"))
         {
             image = new ImageIcon("queenbedroom.png");
             image2 = new ImageIcon("queenbedroom2.png");
             image3 = new ImageIcon("queenrestroom.png");
             image4 = new ImageIcon("queenrestroom2.png");
         }
-        if(name == "suite")
+        if(name.equals("suite"))
         {
             image = new ImageIcon("suitebedroom.png");
             image2 = new ImageIcon("suitebedroom2.png");
@@ -538,7 +538,7 @@ public class GUI implements ActionListener {
         panel.add(label2);
         panel.add(label3);
         panel.add(label4);
-        if(name == "suite")
+        if(name.equals("suite"))
         {
             JLabel label5 = new JLabel();
             label5.setIcon(image5);
@@ -559,62 +559,62 @@ public class GUI implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        
+        //switch pannels base on selection
         if(e.getSource()==homebtn){
             cardlayout.show(MainPanel, "0");
         }
-        if(e.getSource()==roomsbtn){
+        else if(e.getSource()==roomsbtn){
             cardlayout.show(MainPanel, "1");
         }
-        if(e.getSource()==bookbtn){
+        else if(e.getSource()==bookbtn){
             cardlayout.show(MainPanel,"5");
         }
-        if(e.getSource()==dateSelectsBtn){
+        else if(e.getSource()==dateSelectsBtn){
             cardlayout.show(MainPanel,"6");
         }
-        if(e.getSource()==kingBedrateBtn){
+        else if(e.getSource()==kingBedrateBtn){
             cardlayout.show(MainPanel,"7");
         }
-        if(e.getSource()==queenBedrateBtn){
+        else if(e.getSource()==queenBedrateBtn){
             cardlayout.show(MainPanel,"7");
         }
-        if(e.getSource()==suiteBedrateBtn){
+       else if(e.getSource()==suiteBedrateBtn){
             cardlayout.show(MainPanel,"7");
         }
-        if(e.getSource()==proceedBtn){
-            cardlayout.show(MainPanel,"8");
-        }
-        if(e.getSource()==confirmButton){
+        else if(e.getSource()==confirmButton){
             cardlayout.show(MainPanel,"9");
         }
 
 
 
-
+        // for when user wants to see more photos of roomtype
         if(e.getSource()==kingBedButton2) {
-            //frame.dispose();
+            
             RoomChoice("king");
         }
-        if(e.getSource()==queenBedButton2) {
-            //frame.dispose();
+        else if(e.getSource()==queenBedButton2) {
+            
             RoomChoice("queen");
         }
-        if(e.getSource()==suiteBedButton2) {
-            //frame.dispose();
+        else if(e.getSource()==suiteBedButton2) {
+            
             RoomChoice("suite");
         }
-        if(e.getSource()==kingBedButton) {
-            //frame.dispose();
+        else if(e.getSource()==kingBedButton) {
+            
             RoomChoice("king");
         }
-        if(e.getSource()==queenBedButton) {
-            //frame.dispose();
+        else if(e.getSource()==queenBedButton) {
+            
             RoomChoice("queen");
         }
-        if(e.getSource()==suiteBedButton) {
-            //frame.dispose();
+        else if(e.getSource()==suiteBedButton) {
+            
             RoomChoice("suite");
         }
+        
+        //combobox listeners, dropdown room view choice.
         if(e.getSource()==comboBox) {
             if (comboBox.getSelectedIndex() == 0) {
                 cardlayout.show(MainPanel, "1");
@@ -629,11 +629,9 @@ public class GUI implements ActionListener {
                 cardlayout.show(MainPanel, "4");
                 comboBox.setSelectedIndex(0);
             }
-            if(e.getSource()==proceedBtn){
-                cardlayout.show(MainPanel,"7");
-            }
+            
         }
-        if(e.getSource()==comboBox2){
+        else if(e.getSource()==comboBox2){
             if(comboBox2.getSelectedIndex()==0)
             {
                 cardlayout.show(MainPanel, "1");
@@ -653,7 +651,7 @@ public class GUI implements ActionListener {
             }
 
         }
-        if(e.getSource()==comboBox3){
+        else if(e.getSource()==comboBox3){
             if(comboBox3.getSelectedIndex()==0)
             {
                 cardlayout.show(MainPanel, "1");
@@ -673,7 +671,7 @@ public class GUI implements ActionListener {
             }
 
         }
-        if(e.getSource()==comboBox4){
+        else if(e.getSource()==comboBox4){
             if(comboBox4.getSelectedIndex()==0)
             {
                 cardlayout.show(MainPanel, "1");
@@ -691,8 +689,13 @@ public class GUI implements ActionListener {
                 cardlayout.show(MainPanel, "4");
                 comboBox4.setSelectedIndex(3);
             }
-
+            
         }
+        //button selections
+        if(e.getSource()==proceedBtn){
+                cardlayout.show(MainPanel,"8");
+            }
+        
         if (e.getSource() == loginRegisterbtn) {
             cardlayout.show(MainPanel, Panelmanipulation);
         }
@@ -709,11 +712,11 @@ public class GUI implements ActionListener {
         }
          if(e.getSource()==searchbtn){
 
-            if(searchbar.getText().toString().equals("king")){
+            if(searchbar.getText().equals("king")){
             cardlayout.show(MainPanel,"2");}
-            else if(searchbar.getText().toString().equals("queen")){
+            else if(searchbar.getText().equals("queen")){
                 cardlayout.show(MainPanel,"3");
-            } else if (searchbar.getText().toString().equals("suite")) {
+            } else if (searchbar.getText().equals("suite")) {
                 cardlayout.show(MainPanel,"4");
 
             }
