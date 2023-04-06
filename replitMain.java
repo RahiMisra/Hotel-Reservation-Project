@@ -1,66 +1,94 @@
-/*
- * import java.io.BufferedWriter; import java.io.FileWriter; import
- * java.io.IOException; import java.sql.Connection; import java.util.Scanner;
- * 
- * class replitMain extends DatabaseMethods {
- * 
- * public static void main(String[] args) {
- * 
- * //makes a connection to the database server Connection con = getConnection();
- * // check if the database connects if (testDatabaseconnection(con)) {
- * System.out.println("Database connection successful!"); } else {
- * System.out.println("Database connection failed."); }
- * 
- * Scanner KB = new Scanner(System.in);
- * 
- * boolean menu = true;
- * 
- * while (menu) { String selection; System.out.println();
- * 
- * System.out.println("WELCOME TO THE BUG-BYTE HOTEL RESERVATION SYSTEM");
- * System.out.println("-------------------------------------------------");
- * System.out.println("Please select from the menu below");
- * System.out.println("A.Book a room");
- * System.out.println("B.Check room availability");
- * 
- * System.out.print("Enter Selection: ");
- * 
- * selection = KB.next();
- * 
- * selection = selection.toUpperCase();
- * 
- * switch (selection) { case "A": bookRoom(); break; default:
- * System.out.println("Invaild Selection"); } } KB.close();
- * 
- * }
- * 
- * public static void Room() {
- * 
- * int roomNum;
- * 
- * }
- * 
- * public static void bookRoom() { try { BufferedWriter writer = new
- * BufferedWriter(new FileWriter("HotelInput.txt"));
- * 
- * Scanner KB = new Scanner(System.in);
- * 
- * System.out.print("Please enter your full name separated by '_': "); String
- * name = KB.next();
- * 
- * System.out.print("Please enter your mobile number: "); int phoneNum =
- * KB.nextInt();
- * 
- * System.out.print("Please enter your email address: "); String email =
- * KB.next();
- * 
- * writer.write(name + ", "); writer.write(String.valueOf(phoneNum) + ", ");
- * writer.write(email);
- * 
- * System.out.println("You have entered " + name + ", " + phoneNum + ", and " +
- * email);
- * 
- * KB.close(); writer.close(); } catch (IOException e) { e.printStackTrace(); }
- * } }
- * 
+
+/*import javax.swing.*;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.*;
+
+
+public class HotelReservationSystem extends JFrame {
+    private JButton loginButton, createAccountButton;
+    private JLabel welcomeLabel, usernameLabel, passwordLabel;
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+
+    public HotelReservationSystem() {
+        setTitle("Bug-Byte Hotel Reservation System");
+        setSize(400, 300);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+    
+        welcomeLabel = new JLabel("Welcome to Bug-Byte Hotel Reservation System");
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        usernameLabel = new JLabel("Username:");
+        passwordLabel = new JLabel("Password:");
+        usernameField = new JTextField(20);
+        passwordField = new JPasswordField(20);
+        loginButton = new JButton("Log In");
+        createAccountButton = new JButton("Create Account");
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.insets = new Insets(10, 10, 30, 10);
+        panel.add(welcomeLabel, c);
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.insets = new Insets(10, 10, 10, 10);
+        panel.add(usernameLabel, c);
+        c.gridx = 1;
+        panel.add(usernameField, c);
+        c.gridx = 0;
+        c.gridy = 2;
+        panel.add(passwordLabel, c);
+        c.gridx = 1;
+        panel.add(passwordField, c);
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 2;
+        panel.add(loginButton, c);
+        c.gridx = 0;
+        c.gridy = 4;
+        panel.add(createAccountButton, c);
+        add(panel);
+
+        //event listener 
+        loginButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                login();
+            }
+        });
+
+        createAccountButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                createAccount();
+            }
+        });
+    }
+
+    private void login() {
+        String username = usernameField.getText();
+        String password = String.valueOf(passwordField.getPassword());
+
+
+        JOptionPane.showMessageDialog(this, "You have successfully logged in.");
+    }
+
+    private void createAccount() {
+        String username = usernameField.getText();
+        String password = String.valueOf(passwordField.getPassword());
+
+        JOptionPane.showMessageDialog(this, "You have created a new account.");
+    }
+
+    public static void main(String[] args) {
+        HotelReservationSystem app = new HotelReservationSystem();
+        app.setVisible(true);
+    }
+}
  */
