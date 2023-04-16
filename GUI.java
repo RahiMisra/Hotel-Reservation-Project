@@ -2,9 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 
 public class GUI implements ActionListener {
+
+    roomSearch roomtester = new roomSearch();
+   // logintester = new login();
+    roomRates rates = new roomRates();
+
+
+
     JFrame frame = new JFrame("hotel");
 
     JPanel centerPanel = new JPanel();
@@ -12,15 +22,15 @@ public class GUI implements ActionListener {
 
     CardLayout cardlayout = new CardLayout();
 
-    JComboBox<String> comboBox;
-    JComboBox<String> comboBox2;
-    JComboBox<String> comboBox3;
-    JComboBox<String> comboBox4;
+    JComboBox<String> comboBoxForAllRoomsPanel;
+    JComboBox<String> comboBoxForKingBedroomPanel;
+    JComboBox<String> comboBoxForQueenBedroomPanel;
+    JComboBox<String> comboBoxForSuiteBedroomPanel;
     private JButton dateSelectsBtn;
     private JButton kingBedrateBtn;
     private JButton queenBedrateBtn;
     private JButton suiteBedrateBtn;
-    private JButton confirmButton;
+    private final JButton confirmButton = new JButton("confirm and pay");
     private final JButton homebtn = new JButton("home");
     private final JButton roomsbtn = new JButton("rooms");
     private final JButton bookbtn = new JButton("book");
@@ -34,9 +44,9 @@ public class GUI implements ActionListener {
     private final JButton suiteBedButton2 = new JButton();
     private final String[] roomtype = {"all","king","queen","suite"};
 
-    private final ImageIcon kingBedImage;
-    private final ImageIcon  queenBedImage;
-    private final ImageIcon suiteBedImage;
+    private final ImageIcon kingBedImage = new ImageIcon("king.png");
+    private final ImageIcon  queenBedImage = new ImageIcon("queen.png");
+    private final ImageIcon suiteBedImage = new ImageIcon("suitecover.png");
     private ImageIcon image;
     private ImageIcon image2;
     private ImageIcon image3;
@@ -44,55 +54,80 @@ public class GUI implements ActionListener {
     private ImageIcon image5;
 
 
-    private final TextField searchbar;
+    private final TextField searchbar = new TextField(20);
     private final JButton searchbtn = new JButton("search");
-    
-    private final JButton loginRegisterbtn = new JButton("log in/register");
+    private JTextField usernameTextFiled = new JTextField();
+    private JPasswordField passwrdtextfield = new JPasswordField();
+
+    private final JButton loginOrRegisterbtn = new JButton("log in/register");
     private  final JButton logInbtn = new JButton("log in");
     private final JButton forgotPasswordbtn = new JButton("forgot password");
- 
+
     private  final JButton registerBtn = new JButton("register");
     private  final JButton logoutbtn = new JButton("log out");
-    private String Panelmanipulation;
+    private String Panelmanipulation= "logout";
+
+    JTextField kingratefield = new JTextField();
+    JTextField queenratefield = new JTextField();
+    JTextField suiteratefield = new JTextField();
+
+
+    private String username;
+    private String password;
+    JTextField checkinTextFiled = new JTextField();
+    JTextField checkoutTextField = new JTextField();
+    String[] num = {"1","2","3","4"};
+    JComboBox<String> guestnum = new JComboBox<>(num);
+
+
+
 
     public GUI(){
 
 
 
-        Panelmanipulation= "logInReservationsPage-logOutRegister";
-        kingBedImage = new ImageIcon("king.png");
-        queenBedImage = new ImageIcon("queen.png");
-        suiteBedImage = new ImageIcon("suitecover.png");
-        searchbar = new TextField(20);
+
+
+
+
+
+
+        JPanel MainPanel = new JPanel(new BorderLayout(8,6));
+
 
         centerPanel.setLayout(cardlayout);
-
         centerPanel.add(homePanel(),"home");
         centerPanel.add(AllroomsPannel(),"allrooms");
         centerPanel.add(kingOnlyPannel(),"kingroom");
         centerPanel.add(queenOnlyPannel(),"queenroom");
         centerPanel.add(suiteOnlyPannel(),"suiteroom");
-        centerPanel.add(bookDatePanel(),"datePanel");
-        centerPanel.add(ratePanel(),"rates");
+        centerPanel.add(SelectDatePanel(),"datePanel");
+        centerPanel.add(ratesPanel(),"rates");
         centerPanel.add(reservationDetailPanel(),"summaryPanel");
-        centerPanel.add(UserInfoPanel(),"infoPanel");
+        centerPanel.add(UserInfoAndPaymentPanel(),"infoPanel");
         centerPanel.add(completedReservationPanel(),"completedReservationPanel");
         centerPanel.add(logInOrRegisterPanel(),Panelmanipulation);
-        centerPanel.add(reservationDetailLogInPanel(),"reservationsPageWhenLogIn");
+        centerPanel.add(accountPanel(),"account");
 
 
+
+
+        MainPanel.setBackground (Color.green);
+
+
+
+        MainPanel.add(TopPanel(), BorderLayout.NORTH);
+        MainPanel.add(centerPanel,BorderLayout.CENTER);
+
+        frame.add(MainPanel);
         frame.pack();
         frame.setSize(1025, 1000);
         frame.setLocation(100, 100);
         frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 
-
-
-
-        JPanel mainpanel = new JPanel(new BorderLayout(8,6));
-        frame.add(mainpanel);
-        mainpanel.setBackground (Color.green);
-
+    }
+    public JPanel TopPanel(){
         //Panel Top
         JPanel topPanel = new JPanel();
 
@@ -101,20 +136,17 @@ public class GUI implements ActionListener {
         topPanel.add(homebtn);
         topPanel.add(roomsbtn);
         topPanel.add(bookbtn);
-        topPanel.add(loginRegisterbtn);
+        topPanel.add(loginOrRegisterbtn);
         topPanel.add(searchbar);
         topPanel.add(searchbtn);
-
-        mainpanel.add(topPanel, BorderLayout.NORTH);
-        mainpanel.add(centerPanel,BorderLayout.CENTER);
 
         homebtn.addActionListener(this);
         roomsbtn.addActionListener(this);
         bookbtn.addActionListener(this);
         searchbtn.addActionListener(this);
-        loginRegisterbtn.addActionListener(this);
-        frame.setVisible(true);
+        loginOrRegisterbtn.addActionListener(this);
 
+        return topPanel;
     }
     public JPanel homePanel(){
         JPanel home = new JPanel();
@@ -124,7 +156,14 @@ public class GUI implements ActionListener {
         return home;
 
     }
-    public JPanel ratePanel(){
+    public JPanel ratesPanel(){
+        //kingratefield.setText("king bedroom rate $"+ rates.getKingBedroomPrice());
+       // queenratefield.setText("queen bedroom rate $"+ rates.getQueenBedroomPrice());
+       // suiteratefield.setText("suite bedroom rate $"+ rates.getSuiteBedroomPrice());
+
+        kingratefield.setEditable(false);
+        queenratefield.setEditable(false);
+        suiteratefield.setEditable(false);
         ImageIcon kingRateImage = new ImageIcon("kingrate.png");
         ImageIcon queenRateImage = new ImageIcon("queenrate.png");
         ImageIcon suiterateimage = new ImageIcon("suiterate.png");
@@ -134,40 +173,41 @@ public class GUI implements ActionListener {
         kingimage.setIcon(kingRateImage);
         queenimage.setIcon(queenRateImage);
         suiteimage.setIcon(suiterateimage);
-        JPanel grid = new JPanel(new GridLayout(3,2,100,100));
+        JPanel grid = new JPanel(new GridLayout(3,2,10,120));
         JPanel ratesPanel = new JPanel();
         ratesPanel.setLayout(null);
-        JLabel kingBedratelnl = new JLabel("king bedroom rate?? ");
-        JLabel queenBedratelbl = new JLabel("queen bedroom rate?? ");
-        JLabel suiteBedratelbl = new JLabel("suite bedroom rate??");
 
         kingBedrateBtn = new JButton("select");
         queenBedrateBtn = new JButton("select");
         suiteBedrateBtn = new JButton("select");
-        kingimage.setBounds(50,150,200,200);
-        queenimage.setBounds(50,270,200,200);
-        suiteimage.setBounds(50,385,200,200);
+        kingimage.setBounds(150,150,200,200);
+        queenimage.setBounds(150,300,200,200);
+        suiteimage.setBounds(150,450,200,200);
         ratesPanel.add(kingimage);
         ratesPanel.add(queenimage);
         ratesPanel.add(suiteimage);
         ratesPanel.add(kingimage);
-        grid.setBounds(300,170,400,400);
+        grid.setBounds(400,250,400,300);
 
-        grid.add(kingBedratelnl);
+
+        grid.add(kingratefield);
         grid.add(kingBedrateBtn);
-        grid.add(queenBedratelbl);
+
+
+        grid.add(queenratefield);
         grid.add(queenBedrateBtn);
-        grid.add(suiteBedratelbl);
+
+        grid.add(suiteratefield);
         grid.add(suiteBedrateBtn);
         ratesPanel.add(grid);
         kingBedrateBtn.addActionListener(this);
         queenBedrateBtn.addActionListener(this);
         suiteBedrateBtn.addActionListener(this);
-        logInbtn.addActionListener(this);
+
         return ratesPanel;
 
     }
-     public JPanel logInOrRegisterPanel()
+    public JPanel logInOrRegisterPanel()
     {
         JPanel Panel = new JPanel(new GridLayout(3,2));
         JPanel loginOrRegPanel = new JPanel();
@@ -175,30 +215,27 @@ public class GUI implements ActionListener {
 
 
 
-            JLabel emailaddr = new JLabel("email address ");
-            JLabel userpasswordlbl = new JLabel("password ");
-            JTextField emailaddrTextFiled = new JTextField();
-            JPasswordField passwrdtextfield = new JPasswordField();
-            registerBtn.setBounds(205, 500, 100, 50);
-            Panel.setBounds(205, 150, 250, 100);
-            Panel.add(emailaddr);
-            Panel.add(emailaddrTextFiled);
-            Panel.add(userpasswordlbl);
-            Panel.add(passwrdtextfield);
-            Panel.add(logInbtn);
-            Panel.add(forgotPasswordbtn);
-            loginOrRegPanel.add(registerBtn);
-
-            loginOrRegPanel.add(Panel);
-            return loginOrRegPanel;
+        JLabel emailaddr = new JLabel("username ");
+        JLabel userpasswordlbl = new JLabel("password ");
 
 
+        registerBtn.setBounds(205, 500, 100, 50);
+        Panel.setBounds(205, 150, 250, 100);
+        Panel.add(emailaddr);
+        Panel.add(usernameTextFiled);
+        Panel.add(userpasswordlbl);
+        Panel.add(passwrdtextfield);
+        Panel.add(logInbtn);
+        Panel.add(forgotPasswordbtn);
+        loginOrRegPanel.add(registerBtn);
+        logInbtn.addActionListener(this);
 
-
+        loginOrRegPanel.add(Panel);
+        return loginOrRegPanel;
 
 
     }
-    public JPanel reservationDetailLogInPanel(){
+    public JPanel accountPanel(){
         JPanel reservationsPanel = new JPanel();
         reservationsPanel.add(logoutbtn);
         logoutbtn.addActionListener(this);
@@ -206,19 +243,18 @@ public class GUI implements ActionListener {
         return reservationsPanel;
 
     }
-    public JPanel bookDatePanel(){
+    public JPanel SelectDatePanel(){
 
         JPanel gridPanel = new JPanel(new GridLayout(6,1));
+
         JPanel datePanel = new JPanel();
         datePanel.setLayout(null);
-        String[] num = {"1","2","3","4"};
-        JComboBox<String> guestnum = new JComboBox<>(num);
+
 
         JLabel numberOfGuest = new JLabel("number of guest");
         JLabel checkindate = new JLabel("check in date ");
         JLabel checkoutdate = new JLabel("checkout date ");
-        JTextField checkinTextFiled = new JTextField();
-        JTextField checkoutTextField = new JTextField();
+
         dateSelectsBtn = new JButton("check rates for selected dates");
 
 
@@ -255,7 +291,7 @@ public class GUI implements ActionListener {
 
 
     }
-    public JPanel UserInfoPanel(){
+    public JPanel UserInfoAndPaymentPanel(){
         JPanel gridPanel = new JPanel(new GridLayout(17,1,10,10));
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(null);
@@ -278,7 +314,7 @@ public class GUI implements ActionListener {
         JTextField ExperactionDatetextfield = new JTextField();
         JTextField CVCnumbertextfield = new JTextField();
 
-        confirmButton = new JButton("confirm and pay");
+
 
         gridPanel.setBounds(205,150,300,500);
 
@@ -336,13 +372,13 @@ public class GUI implements ActionListener {
         kinglabel.setIcon(kingBedImage);
         queenlabel.setIcon(queenBedImage);
         suitelabel.setIcon(suiteBedImage);
-        comboBox = new JComboBox<>(roomtype);
+        comboBoxForAllRoomsPanel = new JComboBox<>(roomtype);
 
         //combobox
-        comboBox.setSelectedIndex(0);
+        comboBoxForAllRoomsPanel.setSelectedIndex(0);
 
         //bounds
-        comboBox.setBounds(800,0,100,50);
+        comboBoxForAllRoomsPanel.setBounds(800,0,100,50);
         kingBedButton2.setBounds(265,275,100,15);
         queenBedButton2.setBounds(225,575,150,15);
         suiteBedButton2.setBounds(225,875,150,15);
@@ -364,7 +400,7 @@ public class GUI implements ActionListener {
         panelAllRooms.add(kingDescriptionLabel);
         panelAllRooms.add(queenDescriptionLaabel);
         panelAllRooms.add(suiteDescriptionLabel);
-        panelAllRooms.add(comboBox);
+        panelAllRooms.add(comboBoxForAllRoomsPanel);
 
         panelAllRooms.setLayout(null);
 
@@ -372,7 +408,7 @@ public class GUI implements ActionListener {
         kingBedButton2.addActionListener(this);
         queenBedButton2.addActionListener(this);
         suiteBedButton2.addActionListener(this);
-        comboBox.addActionListener(this);
+        comboBoxForAllRoomsPanel.addActionListener(this);
 
         return panelAllRooms;
     }
@@ -389,10 +425,10 @@ public class GUI implements ActionListener {
         kinglabel.setIcon(kingBedImage);
 
         //combobox for king panel
-        comboBox2 = new JComboBox<>((roomtype));
-        comboBox2.setSelectedIndex(1);
+        comboBoxForKingBedroomPanel = new JComboBox<>((roomtype));
+        comboBoxForKingBedroomPanel.setSelectedIndex(1);
         //bounds
-        comboBox2.setBounds(800,0,100,50);
+        comboBoxForKingBedroomPanel.setBounds(800,0,100,50);
         kingBedButton.setBounds(265,285,125,25);
         kinglabel.setBounds(100,0,500,300);
         kingDescriptionLaabel.setBounds(600,0,500,300);
@@ -406,14 +442,14 @@ public class GUI implements ActionListener {
         panelkingOnly.add(kingBedButton);
         panelkingOnly.add(kinglabel);
         panelkingOnly.add(kingDescriptionLaabel);
-        panelkingOnly.add(comboBox2);
+        panelkingOnly.add(comboBoxForKingBedroomPanel);
 
         panelkingOnly.setLayout(null);
 
 
         //action listeners
         kingBedButton.addActionListener(this);
-        comboBox2.addActionListener(this);
+        comboBoxForKingBedroomPanel.addActionListener(this);
 
         return panelkingOnly;
 
@@ -422,17 +458,17 @@ public class GUI implements ActionListener {
     {
         JPanel panelQueenOnly = new JPanel();
         //labels
-        
+
         JLabel queenlabel = new JLabel();
         JLabel queenDescriptionLaabel = new JLabel("<html>364 square feet of space<br>two Queen beds <br>" +
                 " 55 inch LED high definition television<br> In-room safe<br>Maximum occupancy: 4 </html>");
         queenlabel.setIcon(queenBedImage);
         //combobox
-        comboBox3 = new JComboBox<>((roomtype));
-        comboBox3.setSelectedIndex(2);
+        comboBoxForQueenBedroomPanel = new JComboBox<>((roomtype));
+        comboBoxForQueenBedroomPanel.setSelectedIndex(2);
 
         // bounds
-        comboBox3.setBounds(800,0,100,50);
+        comboBoxForQueenBedroomPanel.setBounds(800,0,100,50);
         queenBedButton.setBounds(265,285,125,25);
         queenlabel.setBounds(100,0,500,300);
         queenDescriptionLaabel.setBounds(600,0,500,300);
@@ -446,11 +482,11 @@ public class GUI implements ActionListener {
 
         panelQueenOnly.add(queenlabel);
         panelQueenOnly.add(queenDescriptionLaabel);
-        panelQueenOnly.add(comboBox3);
+        panelQueenOnly.add(comboBoxForQueenBedroomPanel);
 
         // listeners
         queenBedButton.addActionListener(this);
-        comboBox3.addActionListener(this);
+        comboBoxForQueenBedroomPanel.addActionListener(this);
 
         return panelQueenOnly;
 
@@ -464,10 +500,10 @@ public class GUI implements ActionListener {
                 " 55 inch LED high definition television<br> In-room safe<br>Wireless Internet access<br>Sofa and seating area for 4 </html>");
 
         //combobox for suite panel
-        comboBox4 = new JComboBox<>(roomtype);
-        comboBox4.setSelectedIndex(3);
+        comboBoxForSuiteBedroomPanel = new JComboBox<>(roomtype);
+        comboBoxForSuiteBedroomPanel.setSelectedIndex(3);
         //bounds
-        comboBox4.setBounds(800,0,100,50);
+        comboBoxForSuiteBedroomPanel.setBounds(800,0,100,50);
         suitelabel.setBounds(100,0,500,300);
         panelSuiteOnly.setBackground(new Color(255,218,185));
         suiteDescriptionLabel.setBounds(600,0,500,300);
@@ -478,7 +514,7 @@ public class GUI implements ActionListener {
         panelSuiteOnly.add(suiteBedButton);
         suitelabel.setIcon(suiteBedImage);
         //add combobox to suite panel
-        panelSuiteOnly.add(comboBox4);
+        panelSuiteOnly.add(comboBoxForSuiteBedroomPanel);
         panelSuiteOnly.add(suitelabel);
         panelSuiteOnly.add(suiteDescriptionLabel);
 
@@ -488,7 +524,7 @@ public class GUI implements ActionListener {
         //action listeners
         suiteBedButton.addActionListener(this);
 
-        comboBox4.addActionListener(this);
+        comboBoxForSuiteBedroomPanel.addActionListener(this);
 
         return panelSuiteOnly;
     }
@@ -559,7 +595,7 @@ public class GUI implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+
         //switch pannels base on selection
         if(e.getSource()==homebtn){
             cardlayout.show(centerPanel, "home");
@@ -570,156 +606,216 @@ public class GUI implements ActionListener {
         else if(e.getSource()==bookbtn){
             cardlayout.show(centerPanel,"datePanel");
         }
-        else if(e.getSource()==dateSelectsBtn){
-            cardlayout.show(centerPanel,"rates");
+        if(e.getSource()==dateSelectsBtn){
+
+            try {
+                LocalDate currentDate = LocalDate.now();
+                LocalDate Indate = LocalDate.parse(checkinTextFiled.getText());
+                LocalDate Outdate = LocalDate.parse(checkoutTextField.getText());
+                int dateCompareCheckinToCurrent = Indate.compareTo(currentDate);
+                int dateComapreCheckoutToIn = Outdate.compareTo(Indate);
+                if(dateCompareCheckinToCurrent<0 || dateComapreCheckoutToIn<0 || dateComapreCheckoutToIn==0){
+                    JOptionPane.showMessageDialog(frame, "date passed or checkout<checkin or equal dates");
+                }
+                else{
+                    roomtester.setCheckInCheckOut(Indate,Outdate);
+                    if(roomtester.checkForAllroomTypes()){
+
+                        cardlayout.show(centerPanel,"rates");
+
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(frame, "no rooms available for dates selected");
+                    }
+
+                }
+
+            } catch (DateTimeParseException ex) {
+                JOptionPane.showMessageDialog(frame, "no date entered or bad input");
+            }
+
         }
-        else if(e.getSource()==kingBedrateBtn){
-            cardlayout.show(centerPanel,"summaryPanel");
-        }
-        else if(e.getSource()==queenBedrateBtn){
-            cardlayout.show(centerPanel,"summaryPanel");
-        }
-       else if(e.getSource()==suiteBedrateBtn){
-            cardlayout.show(centerPanel,"summaryPanel");
-        }
-        else if(e.getSource()==confirmButton){
-            cardlayout.show(centerPanel,"completedReservationPanel");
-        }
+
+        if (roomtester.checkForIndividalroom( "king")) {
+            kingBedrateBtn.setText("select");
+            if (e.getSource() == kingBedrateBtn) {
+                roomtester.setroomchoice(1);
+                cardlayout.show(centerPanel, "summaryPanel");
+
+            }
+        } else kingBedrateBtn.setText("out");
+
+        if (roomtester.checkForIndividalroom("queen")) {
+            queenBedrateBtn.setText("select");
+            if (e.getSource() == queenBedrateBtn) {
+                roomtester.setroomchoice(2);
+                cardlayout.show(centerPanel, "summaryPanel");
+
+            }
+        } else queenBedrateBtn.setText("out");
+
+        if (roomtester.checkForIndividalroom("suite")) {
+            suiteBedrateBtn.setText("select");
+            if (e.getSource() == suiteBedrateBtn) {
+                roomtester.setroomchoice(3);
+                cardlayout.show(centerPanel, "summaryPanel");
+
+            }
+        } else suiteBedrateBtn.setText("out");
+
 
 
 
         // for when user wants to see more photos of roomtype
         if(e.getSource()==kingBedButton2) {
-            
+
             RoomChoice("king");
         }
         else if(e.getSource()==queenBedButton2) {
-            
+
             RoomChoice("queen");
         }
         else if(e.getSource()==suiteBedButton2) {
-            
+
             RoomChoice("suite");
         }
         else if(e.getSource()==kingBedButton) {
-            
+
             RoomChoice("king");
         }
         else if(e.getSource()==queenBedButton) {
-            
+
             RoomChoice("queen");
         }
         else if(e.getSource()==suiteBedButton) {
-            
+
             RoomChoice("suite");
         }
-        
+
         //combobox listeners, dropdown room view choice.
-        if(e.getSource()==comboBox) {
-            if (comboBox.getSelectedIndex() == 0) {
+        if(e.getSource()==comboBoxForAllRoomsPanel) {
+            if (comboBoxForAllRoomsPanel.getSelectedIndex() == 0) {
                 cardlayout.show(centerPanel, "allrooms");
                 //comboBox.setSelectedIndex(0);
-            } else if (comboBox.getSelectedIndex() == 1) {
+            } else if (comboBoxForAllRoomsPanel.getSelectedIndex() == 1) {
                 cardlayout.show(centerPanel, "kingroom");
-                comboBox.setSelectedIndex(0);
-            } else if (comboBox.getSelectedIndex() == 2) {
+                comboBoxForAllRoomsPanel.setSelectedIndex(0);
+            } else if (comboBoxForAllRoomsPanel.getSelectedIndex() == 2) {
                 cardlayout.show(centerPanel, "queenroom");
-                comboBox.setSelectedIndex(0);
-            } else if (comboBox.getSelectedIndex() == 3) {
+                comboBoxForAllRoomsPanel.setSelectedIndex(0);
+            } else if (comboBoxForAllRoomsPanel.getSelectedIndex() == 3) {
                 cardlayout.show(centerPanel, "suiteroom");
-                comboBox.setSelectedIndex(0);
-            }
-            
-        }
-        else if(e.getSource()==comboBox2){
-            if(comboBox2.getSelectedIndex()==0)
-            {
-                cardlayout.show(centerPanel, "allrooms");
-                comboBox2.setSelectedIndex(1);
-            }
-            else if(comboBox2.getSelectedIndex()==1){
-                cardlayout.show(centerPanel, "kingroom");
-                comboBox2.setSelectedIndex(1);
-            }
-            else if(comboBox2.getSelectedIndex()==2){
-                cardlayout.show(centerPanel, "queenroom");
-                comboBox2.setSelectedIndex(1);
-            }
-            else if(comboBox2.getSelectedIndex()==3){
-                cardlayout.show(centerPanel, "suiteroom");
-                comboBox2.setSelectedIndex(1);
+                comboBoxForAllRoomsPanel.setSelectedIndex(0);
             }
 
         }
-        else if(e.getSource()==comboBox3){
-            if(comboBox3.getSelectedIndex()==0)
+        else if(e.getSource()==comboBoxForKingBedroomPanel){
+            if(comboBoxForKingBedroomPanel.getSelectedIndex()==0)
             {
                 cardlayout.show(centerPanel, "allrooms");
-                comboBox3.setSelectedIndex(2);
+                comboBoxForKingBedroomPanel.setSelectedIndex(1);
             }
-            else if(comboBox3.getSelectedIndex()==1){
+            else if(comboBoxForKingBedroomPanel.getSelectedIndex()==1){
                 cardlayout.show(centerPanel, "kingroom");
-                comboBox3.setSelectedIndex(2);
+                comboBoxForKingBedroomPanel.setSelectedIndex(1);
             }
-            else if(comboBox3.getSelectedIndex()==2){
+            else if(comboBoxForKingBedroomPanel.getSelectedIndex()==2){
                 cardlayout.show(centerPanel, "queenroom");
-                comboBox3.setSelectedIndex(2);
+                comboBoxForKingBedroomPanel.setSelectedIndex(1);
             }
-            else if(comboBox3.getSelectedIndex()==3){
+            else if(comboBoxForKingBedroomPanel.getSelectedIndex()==3){
                 cardlayout.show(centerPanel, "suiteroom");
-                comboBox3.setSelectedIndex(2);
+                comboBoxForKingBedroomPanel.setSelectedIndex(1);
             }
 
         }
-        else if(e.getSource()==comboBox4){
-            if(comboBox4.getSelectedIndex()==0)
+        else if(e.getSource()==comboBoxForQueenBedroomPanel){
+            if(comboBoxForQueenBedroomPanel.getSelectedIndex()==0)
             {
                 cardlayout.show(centerPanel, "allrooms");
-                comboBox4.setSelectedIndex(3);
+                comboBoxForQueenBedroomPanel.setSelectedIndex(2);
             }
-            else if(comboBox4.getSelectedIndex()==1){
+            else if(comboBoxForQueenBedroomPanel.getSelectedIndex()==1){
                 cardlayout.show(centerPanel, "kingroom");
-                comboBox4.setSelectedIndex(3);
+                comboBoxForQueenBedroomPanel.setSelectedIndex(2);
             }
-            else if(comboBox4.getSelectedIndex()==2){
+            else if(comboBoxForQueenBedroomPanel.getSelectedIndex()==2){
                 cardlayout.show(centerPanel, "queenroom");
-                comboBox4.setSelectedIndex(3);
+                comboBoxForQueenBedroomPanel.setSelectedIndex(2);
             }
-            else if(comboBox4.getSelectedIndex()==3){
+            else if(comboBoxForQueenBedroomPanel.getSelectedIndex()==3){
                 cardlayout.show(centerPanel, "suiteroom");
-                comboBox4.setSelectedIndex(3);
+                comboBoxForQueenBedroomPanel.setSelectedIndex(2);
             }
-            
+
+        }
+        else if(e.getSource()==comboBoxForSuiteBedroomPanel){
+            if(comboBoxForSuiteBedroomPanel.getSelectedIndex()==0)
+            {
+                cardlayout.show(centerPanel, "allrooms");
+                comboBoxForSuiteBedroomPanel.setSelectedIndex(3);
+            }
+            else if(comboBoxForSuiteBedroomPanel.getSelectedIndex()==1){
+                cardlayout.show(centerPanel, "kingroom");
+                comboBoxForSuiteBedroomPanel.setSelectedIndex(3);
+            }
+            else if(comboBoxForSuiteBedroomPanel.getSelectedIndex()==2){
+                cardlayout.show(centerPanel, "queenroom");
+                comboBoxForSuiteBedroomPanel.setSelectedIndex(3);
+            }
+            else if(comboBoxForSuiteBedroomPanel.getSelectedIndex()==3){
+                cardlayout.show(centerPanel, "suiteroom");
+                comboBoxForSuiteBedroomPanel.setSelectedIndex(3);
+            }
+
         }
         //button selections
         if(e.getSource()==proceedBtn){
-                cardlayout.show(centerPanel,"infoPanel");
-            }
-        
-        if (e.getSource() == loginRegisterbtn) {
+            cardlayout.show(centerPanel,"infoPanel");
+        }
+
+        if (e.getSource() == loginOrRegisterbtn) {
+
             cardlayout.show(centerPanel, Panelmanipulation);
         }
         if (e.getSource() == logInbtn) {
-            cardlayout.show(centerPanel, "reservationsPageWhenLogIn");
-            loginRegisterbtn.setText("reservations");
-            Panelmanipulation ="reservationsPageWhenLogIn";
+            username = "abc";
+            password = "123";
+
+            if(username.equals(usernameTextFiled.getText()) && password.equals(passwrdtextfield.getText())){
+                usernameTextFiled.setText("");
+                passwrdtextfield.setText("");
+                cardlayout.show(centerPanel, "account");
+                loginOrRegisterbtn.setText("account");
+                Panelmanipulation ="account";
+            }
+            else {
+                JOptionPane.showMessageDialog(frame, "wrong ussername or password to test login use username:abc password:123");
+
+            }
+
 
         }
         if(e.getSource()==logoutbtn){
-            Panelmanipulation = "logInReservationsPage-logOutRegister";
-            loginRegisterbtn.setText("log in/register");
+            Panelmanipulation = "logout";
+            loginOrRegisterbtn.setText("log in/register");
             cardlayout.show(centerPanel, "home");
         }
-         if(e.getSource()==searchbtn){
+        if(e.getSource()==searchbtn){
 
-            if(searchbar.getText().equals("king")){
-            cardlayout.show(centerPanel,"kingroom");}
-            else if(searchbar.getText().equals("queen")){
+            if(searchbar.getText().toLowerCase().contains("king")){
+                cardlayout.show(centerPanel,"kingroom");}
+            else if(searchbar.getText().toLowerCase().contains("queen")){
                 cardlayout.show(centerPanel,"queenroom");
-            } else if (searchbar.getText().equals("suite")) {
+            } else if (searchbar.getText().toLowerCase().contains("suite")){
                 cardlayout.show(centerPanel,"suiteroom");
 
             }
+        }
+        if(e.getSource()==confirmButton){
+            roomtester.reserveRoom(roomtester.getroomtypeChoice());
+
+            cardlayout.show(centerPanel,"completedReservationPanel");
         }
 
     }
