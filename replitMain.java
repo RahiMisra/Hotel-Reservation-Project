@@ -67,6 +67,88 @@ public class HotelReservationSystem extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 createAccount();
             }
+
+            private void createAccount() {
+                JTextField firstNameField = new JTextField(20);
+                JTextField lastNameField = new JTextField(20);
+                JTextField phoneNumberField = new JTextField(20);
+                JTextField emailField = new JTextField(20);
+                JPasswordField passwordField = new JPasswordField(20);
+                JComboBox<String> paymentMethodCombo = new JComboBox<>(new String[]{"Credit Card", "PayPal"});
+                
+                JPanel panel = new JPanel(new GridBagLayout());
+                GridBagConstraints c = new GridBagConstraints();
+                c.gridx = 0;
+                c.gridy = 0;
+                c.gridwidth = 2;
+                c.insets = new Insets(10, 10, 30, 10);
+                panel.add(new JLabel("Create Account"), c);
+            
+                c.gridx = 0;
+                c.gridy = 1;
+                c.gridwidth = 1;
+                c.insets = new Insets(10, 10, 10, 10);
+                panel.add(new JLabel("First Name:"), c);
+                c.gridx = 1;
+                panel.add(firstNameField, c);
+            
+                c.gridx = 0;
+                c.gridy = 2;
+                panel.add(new JLabel("Last Name:"), c);
+                c.gridx = 1;
+                panel.add(lastNameField, c);
+            
+                c.gridx = 0;
+                c.gridy = 3;
+                panel.add(new JLabel("Phone Number:"), c);
+                c.gridx = 1;
+                panel.add(phoneNumberField, c);
+            
+                c.gridx = 0;
+                c.gridy = 4;
+                panel.add(new JLabel("Email:"), c);
+                c.gridx = 1;
+                panel.add(emailField, c);
+            
+                c.gridx = 0;
+                c.gridy = 5;
+                panel.add(new JLabel("Password:"), c);
+                c.gridx = 1;
+                panel.add(passwordField, c);
+            
+                c.gridx = 0;
+                c.gridy = 6;
+                panel.add(new JLabel("Payment Method:"), c);
+                c.gridx = 1;
+                panel.add(paymentMethodCombo, c);
+            
+                c.gridx = 0;
+                c.gridy = 7;
+                c.gridwidth = 2;
+                panel.add(new JButton("Create Account"), c);
+            
+                int result = JOptionPane.showConfirmDialog(null, panel, "Create Account",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            
+                if (result == JOptionPane.OK_OPTION) {
+                    String firstName = firstNameField.getText();
+                    String lastName = lastNameField.getText();
+                    String phoneNumber = phoneNumberField.getText();
+                    String email = emailField.getText();
+                    String password = String.valueOf(passwordField.getPassword());
+                    String paymentMethod = (String) paymentMethodCombo.getSelectedItem();
+                    
+                    // Add this to database 
+                    System.out.println("Account created:");
+                    System.out.println("First Name: " + firstName);
+                    System.out.println("Last Name: " + lastName);
+                    System.out.println("Phone Number: " + phoneNumber);
+                    System.out.println("Email: " + email);
+                    System.out.println("Password: " + password);
+                    System.out.println("Payment Method: " + paymentMethod);
+                }
+            }
+            
         });
     }
 
@@ -138,5 +220,6 @@ public class HotelReservationSystem extends JFrame {
         app.setVisible(true);
     }
 }
+    
     
  */
