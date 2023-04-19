@@ -1,7 +1,10 @@
 import java.sql.Connection;
 import java.sql.SQLException;
 
-
+/**
+ * the main file is the basis from which all of the other functions launch
+ * @author Rahi Misra
+ */
 class Main extends DatabaseMethods {
 	
 	UserInfo user = new UserInfo();

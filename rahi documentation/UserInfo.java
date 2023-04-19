@@ -1,4 +1,7 @@
-
+/**
+ * UserInfo is the class that stores the user's account info locally
+ * @author Rahi Misra
+ */
 public class UserInfo {
 	
 	private String name;

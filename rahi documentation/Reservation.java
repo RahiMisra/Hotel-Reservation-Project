@@ -1,4 +1,7 @@
-
+/**
+ * Reservation is the class that stores the reservation info locally
+ * @author Rahi Misra
+ */
 public class Reservation {
 	private int room;
 	private String date;

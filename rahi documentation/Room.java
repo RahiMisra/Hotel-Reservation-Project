@@ -1,4 +1,7 @@
-
+/**
+ * Room is the class that stores the information for each room locally
+ * @author Rahi Misra
+ */
 
 public class Room {
 	 int room;
