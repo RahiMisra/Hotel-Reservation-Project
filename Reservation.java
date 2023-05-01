@@ -30,7 +30,7 @@ public class Reservation {
 	/**
 	 * The total price of the reservation.
 	 */
-	private int totalPrice;
+	private double totalPrice;
 	/**
 	 * The confirmation number for the reservation.
 	 */
@@ -39,10 +39,26 @@ public class Reservation {
 	 * The room number selected for the reservation.
 	 */
 	private int roomNumber;
+	
+	private String roomType;
 	/**
 	 * The room selected for the reservation.
 	 */
-	private Room reservedRoom = new Room(roomNumber);
+	//private Room reservedRoom = new Room(roomNumber);
+	private roomSearch roomsearch = roomSearch.getInstance();
+	
+	
+	public Reservation(){
+        this.checkInDate = LocalDate.parse("2023-05-05");
+        this.checkOutDate = LocalDate.parse("2023-05-06");
+        this.nightsReserved = checkInDate.until(checkOutDate).getDays();
+        this.guests = 1;
+        this.roomNumber = 1;
+        this.confirmationNumber = generateConfirmationNumber();
+        roomsearch.checkinDate(getCheckInDate());
+        roomsearch.setNights(getNightsReserved());
+
+    }
 
 	/**
 	 * Constructs a new Reservation object with the given check-in date, check-out
@@ -70,6 +86,38 @@ public class Reservation {
 		// reservedRoom.setOccupied(true); // once order is completed, done in GUI if
 		// all fields are inputted properly
 	}
+	     public void setCheckInDate(LocalDate checkInDate){
+        	this.checkInDate = checkInDate;
+   	 }
+   	   public void setCheckOutDate(LocalDate checkOutDate){
+        	this.checkOutDate = checkOutDate;
+       		 this.nightsReserved =  getCheckInDate().until(checkOutDate).getDays();
+    	}
+	 public  void setGuests(int guests){
+                 this.guests = guests;
+        }
+	 public void reserveRoom(String roomtype) {
+
+        if (checkforroom(roomtype)) {
+            System.out.println("suceddfully added "+ roomtype +" room"); //delete after testing
+            roomsearch.getArray().get(roomsearch.getDay()).reserveRoom(roomtype);
+
+            roomsearch.checkForAllroomTypes(); //DELETE AFTER TESTING
+        }
+        
+    }
+    public boolean checkforroom(String roomtype)
+    {
+        return roomsearch.checkForIndividalroom(roomtype);
+    }
+    public void setRoomType(String roomType){
+        this.roomType = roomType;
+    }
+    public String getRoomType(){
+        return roomType;
+
+    }
+	
 
 	/**
 	 * Calculates the total price of the reservation based on the room's price per
@@ -78,7 +126,7 @@ public class Reservation {
 	 * @return the total price of the reservation
 	 */
 	private int calculateTotalPrice() {
-		totalPrice = reservedRoom.getPricePerNight() * nightsReserved;
+		totalPrice = (roomsearch.getPricePerNight(getRoomType()) ) * nightsReserved;
 		return totalPrice;
 	}
 
@@ -135,7 +183,7 @@ public class Reservation {
 	 * @return a double value representing the total price
 	 */
 	public double getTotalPrice() {
-		return totalPrice;
+		return calculateTotalPrice();
 	}
 
 	/**
