@@ -21,9 +21,7 @@ public class AvailableRooms {
     private double kingBedroomRate;
     private double queenBedroomRate;
     private double suiteBedroomRate;
-    kingBedroomRate = 250;
-        queenBedroomRate = 275;
-        suiteBedroomRate = 800;
+    
 
     /**
      * Constructs an AvailableRooms object with default values.
@@ -37,6 +35,9 @@ public class AvailableRooms {
         kingBedsOccupied = 0;
         queenBedsOccupied = 0;
         suiteBedsOccupied = 0;
+        kingBedroomRate = 250;
+        queenBedroomRate = 275;
+        suiteBedroomRate = 800;
         
     }
 
