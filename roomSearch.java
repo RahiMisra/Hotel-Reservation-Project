@@ -5,27 +5,27 @@ import java.util.ArrayList;
 
 public class roomSearch {
     private static roomSearch instance;
-    private ArrayList<AvailableRooms> roomsArray; // an array list of rooms
+    private ArrayList<AvailableRooms> roomsList; // an array list of rooms
 
     private int nights; // the number of nights of stay
     private int day; // the day of the year of the check-in date
-  
+
 
     private roomSearch(){
-        roomsArray = new ArrayList<>();
+        roomsList = new ArrayList<>();
         for (int i = 0; i < 365; i++) {
-            roomsArray.add(new AvailableRooms());
+            roomsList.add(new AvailableRooms());
         }
 
 
 
 
     }
-    
-public ArrayList<AvailableRooms> getArray(){
-    return roomsArray;
-}
-    public static synchronized roomSearch getInstance(){
+
+    public ArrayList<AvailableRooms> getArray(){
+        return roomsList;
+    }
+    public static  roomSearch getInstance(){
         if(instance==null){
             instance = new roomSearch();
         }
@@ -45,7 +45,7 @@ public ArrayList<AvailableRooms> getArray(){
     public void setNights(int nights){
         this.nights = nights;
     }
-   
+
 
 
     public boolean checkForAllroomTypes() {
@@ -54,7 +54,7 @@ public ArrayList<AvailableRooms> getArray(){
         boolean roomsAvailable = true;
 
         for (int i = getDay(); i < getDay() + getnumNights(); i++) {
-            if (!(roomsArray.get(i).isRoomTypeAvailable("king") || roomsArray.get(i).isRoomTypeAvailable("queen") || roomsArray.get(i).isRoomTypeAvailable("suite"))) {
+            if (!(roomsList.get(i).isRoomTypeAvailable("king") || roomsList.get(i).isRoomTypeAvailable("queen") || roomsList.get(i).isRoomTypeAvailable("suite"))) {
                 roomsAvailable = false;
                 break;
             }
@@ -62,7 +62,7 @@ public ArrayList<AvailableRooms> getArray(){
         }
         for (int i = getDay(); i < getDay() + getnumNights(); i++) {
 
-            System.out.println(roomsArray.get(i).roomsAvailable());
+            System.out.println(roomsList.get(i).roomsAvailable());
         }
         return roomsAvailable;
 
@@ -75,16 +75,22 @@ public ArrayList<AvailableRooms> getArray(){
 
         for(int i = getDay(); i < getDay() + getnumNights(); i++) {
 
-                if (!(roomsArray.get(i).isRoomTypeAvailable(roomtype))) {
-                    Available = false;
-                    break;
-                 }
-
-
+            if (!(roomsList.get(i).isRoomTypeAvailable(roomtype))) {
+                Available = false;
+                break;
             }
+
+
+        }
 
 
 
         return Available;
     }
+    public double getPricePerNight(String roomType){
+        System.out.println(roomsList.get(getDay()).getRoomRate(roomType));
+        return roomsList.get(getDay()).getRoomRate(roomType);
+
+    }
+
 }
