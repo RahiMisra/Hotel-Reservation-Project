@@ -125,7 +125,7 @@ public class Reservation {
 	 * 
 	 * @return the total price of the reservation
 	 */
-	private int calculateTotalPrice() {
+	private double calculateTotalPrice() {
 		totalPrice = (roomsearch.getPricePerNight(getRoomType()) ) * nightsReserved;
 		return totalPrice;
 	}
