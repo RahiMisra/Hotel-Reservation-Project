@@ -18,6 +18,12 @@ public class AvailableRooms {
     private int kingBedsOccupied;
     private int queenBedsOccupied;
     private int suiteBedsOccupied;
+    private double kingBedroomRate;
+    private double queenBedroomRate;
+    private double suiteBedroomRate;
+    kingBedroomRate = 250;
+        queenBedroomRate = 275;
+        suiteBedroomRate = 800;
 
     /**
      * Constructs an AvailableRooms object with default values.
@@ -31,6 +37,7 @@ public class AvailableRooms {
         kingBedsOccupied = 0;
         queenBedsOccupied = 0;
         suiteBedsOccupied = 0;
+        
     }
 
     /**
@@ -51,6 +58,39 @@ public class AvailableRooms {
         this.kingBedsOccupied = kingBedsOccupied;
         this.queenBedsOccupied = queenBedsOccupied;
         this.suiteBedsOccupied = suiteBedsOccupied;
+        kingBedroomRate = 250;
+        queenBedroomRate = 275;
+        suiteBedroomRate = 800;
+    }
+     public void setRoomRate(String roomType, double BedroomRate) {
+        if(roomType.equals("king")){
+            kingBedroomRate = BedroomRate;
+        } else if (roomType.equals("queen")) {
+            queenBedroomRate = BedroomRate;
+
+        } else if (roomType.equals("suite")) {
+            suiteBedroomRate = BedroomRate;
+
+        }
+
+
+    }
+
+    public double getRoomRate(String roomType){
+
+        if(roomType.equals("king")){
+            return kingBedroomRate;
+        } else if (roomType.equals("queen")) {
+            return queenBedroomRate;
+
+        } else if (roomType.equals("suite")) {
+            return suiteBedroomRate;
+
+        }
+        else
+        {
+            throw new IllegalArgumentException("Invalid room type: " + roomType);
+        }
     }
 
     /**
