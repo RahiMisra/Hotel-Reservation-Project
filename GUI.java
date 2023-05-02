@@ -58,6 +58,7 @@ public class GUI implements ActionListener {
     JButton cartloginBtn = new JButton("Login");
 
     private boolean camefromSummaryPanel = false;
+    JButton adminLogOutbtn;
     JLabel kinglabel;
     JLabel queenlabel;
     JLabel suitelabel ;
@@ -90,11 +91,24 @@ public class GUI implements ActionListener {
     JComboBox<String> roomComboBox;
     JTextArea guestListTextArea;
     JTextField adminNameTextfield;
-    JTextField adminLoginTextfield;
+    JPasswordField adminLoginTextfield;
+
     JButton adminLoginBtn;
     JTextArea completedReservationTextArea;
     JTextArea accountTextArea;
     int numberOfRoomClicks = 0;
+    JTextField firstnameTextfield = new JTextField();
+    JTextField lastnameTextfield = new JTextField();
+    JTextField emailTextfield = new JTextField();
+    JTextField phoneTextfield = new JTextField();
+    JTextField NameOnCardtextfield = new JTextField();
+    JPasswordField CardNumberTextField = new JPasswordField();
+    JTextField ExperactionDatetextfield = new JTextField();
+    JTextField CVCnumbertextfield = new JTextField();
+    JTextField addressTextfield = new JTextField();
+    JTextField cityTextField = new JTextField();
+    JTextField stateTextField = new JTextField();
+    JTextField zipcodeTextField = new JTextField();
 
 
     public GUI(){
@@ -166,7 +180,7 @@ public class GUI implements ActionListener {
 
         adminLoginBtn = new JButton("log-in");
         adminNameTextfield = new JTextField();
-        adminLoginTextfield = new JTextField();
+        adminLoginTextfield = new JPasswordField();
         adminNameTextfield.setPreferredSize(new Dimension(200, adminNameTextfield.getPreferredSize().height));
         adminLoginTextfield.setPreferredSize(new Dimension(200, adminLoginTextfield.getPreferredSize().height));
 
@@ -214,7 +228,7 @@ public class GUI implements ActionListener {
         guestListTextArea = new JTextArea();
         guestListTextArea.setEditable(false);
         JScrollPane scrollPane  = new JScrollPane(guestListTextArea);
-
+         adminLogOutbtn = new JButton("log-out");
 
         guestList.setLayout(new GridBagLayout());
         //guestListTextArea.setPreferredSize(new Dimension(426, 279));
@@ -232,6 +246,15 @@ public class GUI implements ActionListener {
         gridbagConCart.gridy = 1;
         gridbagConCart.anchor = GridBagConstraints.EAST;
         guestList.add(new JScrollPane(scrollPane), gridbagConCart);
+        gridbagConCart.gridx = 0;
+        gridbagConCart.gridy = 2;
+        gridbagConCart.anchor = GridBagConstraints.CENTER;
+        guestList.add(adminLogOutbtn, gridbagConCart);
+
+        adminLogOutbtn.addActionListener(this);
+
+
+
 
         return guestList;
 
@@ -459,27 +482,21 @@ public class GUI implements ActionListener {
 
     }
     public JPanel UserInfoAndPaymentPanel(){
-        JPanel gridPanel = new JPanel(new GridLayout(17,1,10,10));
+        JPanel gridPanel = new JPanel(new GridLayout(7,4,50,10));
         JPanel infoPanel = new JPanel();
 
 
-        JLabel firstNamelnl = new JLabel("First Name");
-        JLabel lastNamelbl= new JLabel("Lat Name");
-        JLabel emailAdrrLbl = new JLabel("e-mail");
-        JLabel phoneNumberlbl = new JLabel("phone number");
+        JLabel firstNamelnl = new JLabel("First Name:");
+        JLabel lastNamelbl= new JLabel("Last Name:");
+
+        JLabel emailAdrrLbl = new JLabel("e-mail:");
+        JLabel phoneNumberlbl = new JLabel("phone number:");
         JLabel NameOnCardLbl = new JLabel("name on card:");
         JLabel CardNumberLbl = new JLabel("card number:");
         JLabel ExperationDateLbl = new JLabel("experation date:");
         JLabel CVCnumberLbl = new JLabel("CVC code:");
 
-        JTextField firstnameTextfield = new JTextField();
-        JTextField lastnameTextfield = new JTextField();
-        JTextField emailTextfield = new JTextField();
-        JTextField phoneTextfield = new JTextField();
-        JTextField NameOnCardtextfield = new JTextField();
-        JPasswordField CardNumberTextField = new JPasswordField();
-        JTextField ExperactionDatetextfield = new JTextField();
-        JTextField CVCnumbertextfield = new JTextField();
+
 
 
 
@@ -489,6 +506,14 @@ public class GUI implements ActionListener {
         gridPanel.add(firstnameTextfield);
         gridPanel.add(lastNamelbl);
         gridPanel.add(lastnameTextfield);
+        gridPanel.add(new JLabel("Address:"));
+        gridPanel.add(addressTextfield);
+        gridPanel.add(new JLabel("City:"));
+        gridPanel.add(cityTextField);
+        gridPanel.add(new JLabel("State:"));
+        gridPanel.add(stateTextField);
+        gridPanel.add(new JLabel("Zip code:"));
+        gridPanel.add(zipcodeTextField);
         gridPanel.add(emailAdrrLbl);
         gridPanel.add(emailTextfield);
         gridPanel.add(phoneNumberlbl);
@@ -505,6 +530,7 @@ public class GUI implements ActionListener {
         infoPanel.add(gridPanel);
 
         confirmButton.addActionListener(this);
+
 
 
         return infoPanel;
@@ -738,7 +764,7 @@ public class GUI implements ActionListener {
                     JOptionPane.showMessageDialog(frame, "Date passed or checkout <= checkin");
                 } else {
                     // use method of Reservation to set data, make a constructor with no parameters and make methods to set data
-
+                    reservation = new Reservation();
                     reservation.setCheckInDate(Indate);
                     reservation.setCheckOutDate(Outdate);
                     reservation.setGuests(partySizeComboBox.getSelectedIndex() + 1);
@@ -780,7 +806,7 @@ public class GUI implements ActionListener {
                 reservation.setRoomType("suite");
                 cartTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "+reservation.getCheckOutDate()+
                         "\nParty size: "+ reservation.getGuests());
-                cartTextArea.append("\nroomtpye:"+ reservation.getRoomType()+ "\ntotal price: "+reservation.getTotalPrice());
+                cartTextArea.append("\nroomType:"+ reservation.getRoomType()+ "\ntotal price: "+reservation.getTotalPrice());
                 cardlayout.show(centerPanel, "summaryPanel");
             }
         }
@@ -855,16 +881,26 @@ public class GUI implements ActionListener {
             cardlayout.show(centerPanel, "home");
         }  else if (e.getSource() == confirmButton) {
 
+
+            String name = firstnameTextfield.getText();
+            String lastName = lastnameTextfield.getText();
+
+
+
+
             if(numberOfRoomClicks>1){
                 completedReservationTextArea.setText("");
             }
-            completedReservationTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "
+
+
+
+                completedReservationTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "
                     +reservation.getCheckOutDate()+ "\nParty size: "+ reservation.getGuests()+"\nRoomType: "+reservation.getRoomType()+
                     "\nreservation number: "+ reservation.getConfirmationNumber());
-                reservation.reserveRoom(reservation.getRoomType());
-            FileWriter writer;
+                     reservation.reserveRoom(reservation.getRoomType());
+                    FileWriter writer;
             try {
-                // Pass true as the second parameter to append to the file
+
                 writer = new FileWriter("output.txt", true);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -887,7 +923,7 @@ public class GUI implements ActionListener {
             }
             cardlayout.show(centerPanel, "completedReservationPanel");
         } else if (e.getSource()==cartloginBtn) {
-            cardlayout.show(centerPanel,"logInOrRegister");
+
             camefromSummaryPanel=true;
 
         }
@@ -938,6 +974,7 @@ public class GUI implements ActionListener {
                 cardlayout.show(centerPanel,"addminLogin");
 
             }
+            searchbar.setText("");
 
            }
            if(e.getSource()==adminLoginBtn){
@@ -966,21 +1003,26 @@ public class GUI implements ActionListener {
                        throw new RuntimeException(ex);
                    }
 
-
+                   adminNameTextfield.setText("");
+                   adminLoginTextfield.setText("");
                    cardlayout.show(centerPanel, "guestList");
 
 
                }
 
            }
+           if(e.getSource()==adminLogOutbtn){
+               cardlayout.show(centerPanel,"home");
+           }
     }
-
-
-
     public static void main(String[] args)
     {
         GUI h = new GUI();
 
 
     }
+
+
+
+
 }
