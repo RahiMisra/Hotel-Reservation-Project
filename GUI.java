@@ -1,5 +1,4 @@
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,23 +10,23 @@ import java.io.*;
 
 public class GUI implements ActionListener {
     //default constructor for Reservation needed
-    Reservation reservation = new Reservation();
-    roomSearch getRatesFromRoomSrch = roomSearch.getInstance();
+    private Reservation reservation = new Reservation();
+    private roomSearch getRatesFromRoomSrch = roomSearch.getInstance();
 
 
-    JFrame frame = new JFrame("hotel");
+    private JFrame frame = new JFrame("hotel");
 
-    JPanel centerPanel = new JPanel();
+    private JPanel centerPanel = new JPanel();
 
 
-    CardLayout cardlayout = new CardLayout();
+    private CardLayout cardlayout = new CardLayout();
 
 
     private JButton dateSelectsBtn;
     private JButton kingBedrateBtn;
     private JButton queenBedrateBtn;
     private JButton suiteBedrateBtn;
-    private final JButton confirmButton = new JButton("confirm and pay");
+    private final JButton payAsGuestButton = new JButton("confirm and pay");
     private final JButton homebtn = new JButton("home");
     private final JButton roomsbtn = new JButton("rooms");
     private final JButton bookbtn = new JButton("book");
@@ -35,6 +34,7 @@ public class GUI implements ActionListener {
 
 
     private JButton proceedBtn;
+    private JButton completeReservationAsMemberButton = new JButton("pay");
     private final JTextArea cartTextArea = new JTextArea();
 
 
@@ -48,20 +48,20 @@ public class GUI implements ActionListener {
     private ImageIcon image3;
     private ImageIcon image4;
     private ImageIcon image5;
-    JPanel btnPanel = new JPanel();
+    private JPanel btnPanel = new JPanel();
 
     private final JButton kingbedbutton = new JButton();
     private final JButton queenbedbutton = new JButton();
     private final JButton suitebedbutton = new JButton();
     private boolean isLogin = false;
-    GridBagConstraints gridbagConCart = new GridBagConstraints();
-    JButton cartloginBtn = new JButton("Login");
+    private GridBagConstraints gridbagConCart = new GridBagConstraints();
+    private JButton cartloginBtn = new JButton("Login");
 
     private boolean camefromSummaryPanel = false;
-    JButton adminLogOutbtn;
-    JLabel kinglabel;
-    JLabel queenlabel;
-    JLabel suitelabel ;
+    private JButton adminLogOutbtn;
+    private JLabel kinglabel;
+    private JLabel queenlabel;
+    private JLabel suitelabel ;
 
 
     private final TextField searchbar = new TextField(20);
@@ -69,7 +69,7 @@ public class GUI implements ActionListener {
     private final JTextField usernameTextFiled = new JTextField();
     private final JPasswordField passwrdtextfield = new JPasswordField();
 
-    JPanel detailsPanel = new JPanel();
+    private JPanel detailsPanel = new JPanel();
 
     private final JButton loginOrRegisterbtn = new JButton("log in/register");
     private  final JButton logInbtn = new JButton("log in");
@@ -78,37 +78,44 @@ public class GUI implements ActionListener {
     private  final JButton registerBtn = new JButton("register");
     private  final JButton logoutbtn = new JButton("log out");
 
-    JTextField kingratefield = new JTextField();
-    JTextField queenratefield = new JTextField();
-    JTextField suiteratefield = new JTextField();
 
-    JTextField checkinTextFiled = new JTextField();
-    JTextField checkoutTextField = new JTextField();
-    String[] num = {"1","2","3","4"};
-    JComboBox<String> partySizeComboBox = new JComboBox<>(num);
-    GridBagConstraints gridbagCon = new GridBagConstraints();
-    JPanel roomsPanel = new JPanel();
-    JComboBox<String> roomComboBox;
-    JTextArea guestListTextArea;
-    JTextField adminNameTextfield;
-    JPasswordField adminLoginTextfield;
+    private JTextField kingratefield = new JTextField();
+    private JTextField queenratefield = new JTextField();
+    private JTextField suiteratefield = new JTextField();
 
-    JButton adminLoginBtn;
-    JTextArea completedReservationTextArea;
-    JTextArea accountTextArea;
-    int numberOfRoomClicks = 0;
-    JTextField firstnameTextfield = new JTextField();
-    JTextField lastnameTextfield = new JTextField();
-    JTextField emailTextfield = new JTextField();
-    JTextField phoneTextfield = new JTextField();
-    JTextField NameOnCardtextfield = new JTextField();
-    JPasswordField CardNumberTextField = new JPasswordField();
-    JTextField ExperactionDatetextfield = new JTextField();
-    JTextField CVCnumbertextfield = new JTextField();
-    JTextField addressTextfield = new JTextField();
-    JTextField cityTextField = new JTextField();
-    JTextField stateTextField = new JTextField();
-    JTextField zipcodeTextField = new JTextField();
+    private JTextField checkinTextFiled = new JTextField();
+    private JTextField checkoutTextField = new JTextField();
+    private String[] num = {"1","2","3","4"};
+    private JComboBox<String> partySizeComboBox = new JComboBox<>(num);
+    private GridBagConstraints gridbagCon = new GridBagConstraints();
+    private JPanel roomsPanel = new JPanel();
+    private JComboBox<String> roomComboBox;
+    private JTextArea guestListTextArea;
+    private JTextField adminNameTextfield;
+    private JPasswordField adminLoginTextfield;
+
+    private JButton adminLoginBtn;
+    private JTextArea completedReservationTextArea;
+    private JTextArea accountTextArea;
+    private int numberOfRoomClicks = 0;
+    private  JTextField firstnameTextfield = new JTextField();
+    private JTextField lastnameTextfield = new JTextField();
+    private JTextField emailTextfield = new JTextField();
+    private JTextField phoneTextfield = new JTextField();
+    private JTextField NameOnCardtextfield = new JTextField();
+    private JPasswordField CardNumberTextField = new JPasswordField();
+    private JTextField ExperactionDatetextfield = new JTextField();
+    private  JTextField CVCnumbertextfield = new JTextField();
+    private  JTextField addressTextfield = new JTextField();
+    private JTextField cityTextField = new JTextField();
+    private  JTextField stateTextField = new JTextField();
+    private  JTextField zipcodeTextField = new JTextField();
+    private JButton loginButton, createAccountButton, contactStaffButton;
+    private JLabel welcomeLabel, usernameLabel, passwordLabel;
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private JButton UpcomingReservationsButton = new JButton("Upcoming Reservations");
+    private JButton logOutButtonEditAccount = new JButton("LogOut");
 
 
     public GUI(){
@@ -125,10 +132,12 @@ public class GUI implements ActionListener {
         centerPanel.add(CartSummaryPanel(),"summaryPanel");
         centerPanel.add(new JScrollPane(UserInfoAndPaymentPanel()) ,"infoPanel");
         centerPanel.add(completedReservationPanel(),"completedReservationPanel");
-        centerPanel.add(logInOrRegisterPanel(),"logInOrRegister");
-        centerPanel.add(accountPanel(),"account");
+        centerPanel.add(HotelReservationSystem(),"logInOrRegister");
+        centerPanel.add(accountPanel(),"UpcomingReservations");
         centerPanel.add(GuestList(), "guestList");
         centerPanel.add(adminLogin(),"addminLogin");
+
+
 
 
 
@@ -148,7 +157,7 @@ public class GUI implements ActionListener {
         frame.setVisible(true);
 
     }
-    public JPanel TopPanel(){
+    private JPanel TopPanel(){
         //Panel Top
         JPanel topPanel = new JPanel();
 
@@ -168,7 +177,7 @@ public class GUI implements ActionListener {
 
         return topPanel;
     }
-    public JPanel homePanel(){
+    private JPanel homePanel(){
         JPanel home = new JPanel();
         JLabel homelbl = new JLabel("welcome ");
         home.add(homelbl);
@@ -176,7 +185,7 @@ public class GUI implements ActionListener {
         return home;
 
     }
-    public JPanel adminLogin(){
+    private JPanel adminLogin(){
 
         adminLoginBtn = new JButton("log-in");
         adminNameTextfield = new JTextField();
@@ -223,7 +232,7 @@ public class GUI implements ActionListener {
 
 
     }
-    public JPanel GuestList(){
+    private JPanel GuestList(){
         JPanel guestList = new JPanel();
         guestListTextArea = new JTextArea();
         guestListTextArea.setEditable(false);
@@ -260,7 +269,7 @@ public class GUI implements ActionListener {
 
 
     }
-    public JPanel ratesPanel(){
+    private JPanel ratesPanel(){
 
 
 
@@ -335,7 +344,7 @@ public class GUI implements ActionListener {
         return ratesPanel;
 
     }
-    public JPanel logInOrRegisterPanel()
+    private JPanel logInOrRegisterPanel()
     {
         JPanel Panel = new JPanel(new GridLayout(3,2));
         JPanel loginOrRegPanel = new JPanel();
@@ -366,7 +375,350 @@ public class GUI implements ActionListener {
 
 
     }
-    public JPanel accountPanel(){
+    private JPanel HotelReservationSystem() {
+        //setTitle("Bug-Byte Hotel Reservation System");
+        //setSize(1000, 600);
+        //setLocationRelativeTo(null);
+        //setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        welcomeLabel = new JLabel("Welcome to Bug-Byte Hotel Reservation System");
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        usernameLabel = new JLabel("Username:");
+        passwordLabel = new JLabel("Password:");
+        usernameField = new JTextField(20);
+        passwordField = new JPasswordField(20);
+        loginButton = new JButton("Log In");
+        createAccountButton = new JButton("Create Account");
+        contactStaffButton = new JButton("Contact Staff");
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.insets = new Insets(10, 10, 30, 10);
+        panel.add(welcomeLabel, c);
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.insets = new Insets(10, 10, 10, 10);
+        panel.add(usernameLabel, c);
+        c.gridx = 1;
+        panel.add(usernameField, c);
+        c.gridx = 0;
+        c.gridy = 2;
+        panel.add(passwordLabel, c);
+        c.gridx = 1;
+        panel.add(passwordField, c);
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 2;
+        panel.add(loginButton, c);
+        c.gridx = 0;
+        c.gridy = 4;
+        panel.add(createAccountButton, c);
+        c.gridx = 0;
+        c.gridy = 5;
+        panel.add(contactStaffButton, c);
+        //add(panel);
+
+
+        /**
+         *Add action listeners to buttons
+         */
+        loginButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                centerPanel.add(login(),"login");
+                cardlayout.show(centerPanel,"login");
+
+
+
+                isLogin = true;
+
+
+
+                File file = new File("f");
+                if (!file.exists()) {
+                    try {
+                        file.createNewFile();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+                BufferedReader reader = null;
+                try {
+                    reader = new BufferedReader(new FileReader(file));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        accountTextArea.append(line + "\n");
+                    }
+                } catch (FileNotFoundException ex) {
+                    System.err.println("File not found: " + ex.getMessage());
+                } catch (IOException ex) {
+                    System.err.println("IO Exception: " + ex.getMessage());
+                } finally {
+                    try {
+                        if (reader != null) {
+                            reader.close();
+                        }
+                    } catch (IOException ex) {
+                        System.err.println("Error closing reader: " + ex.getMessage());
+                    }
+                }
+
+                btnPanel.remove(cartloginBtn);
+                btnPanel.remove(proceedBtn);
+                btnPanel.add(completeReservationAsMemberButton);
+
+                detailsPanel.repaint();
+                //usernameTextFiled.setText("");
+                passwrdtextfield.setText("");
+                loginOrRegisterbtn.setText("account");
+
+                if(!(camefromSummaryPanel)) {
+                    cardlayout.show(centerPanel, "account");
+                }else {
+                    cartTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "+reservation.getCheckOutDate()+
+                            "\nParty size: "+ reservation.getGuests());
+                    cartTextArea.append("\nroomtpye:"+ reservation.getRoomType()+ "\ntotal price: "+reservation.getTotalPrice());
+                    cardlayout.show(centerPanel, "summaryPanel");
+                }
+
+
+
+
+            }
+        });
+
+        createAccountButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                createAccount();
+            }
+        });
+
+        contactStaffButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                contactStaff();
+            }
+        });
+        return panel;
+    }
+
+    /**
+     *Opens a new window for editing the user's account information after successful *login.
+     */
+    private JPanel login() {
+        String username = usernameField.getText();
+        String password = String.valueOf(passwordField.getPassword());
+
+        JOptionPane.showMessageDialog(frame, "You have successfully logged in.");
+
+        JFrame editAccountFrame = new JFrame("Edit Account Information");
+        editAccountFrame.setSize(400, 400);
+        editAccountFrame.setLocationRelativeTo(null);
+
+        JPanel editAccountPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.insets = new Insets(10, 10, 30, 10);
+        editAccountPanel.add(new JLabel("Edit Account Information"), c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.insets = new Insets(10, 10, 10, 10);
+        editAccountPanel.add(new JLabel("Name:"), c);
+        c.gridx = 1;
+        editAccountPanel.add(new JTextField(20), c);
+        c.gridx = 0;
+        c.gridy = 2;
+        editAccountPanel.add(new JLabel("Phone Number:"), c);
+        c.gridx = 1;
+        editAccountPanel.add(new JTextField(20), c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        editAccountPanel.add(new JLabel("Email:"), c);
+        c.gridx = 1;
+        editAccountPanel.add(new JTextField(20), c);
+
+        c.gridx = 0;
+        c.gridy = 4;
+        editAccountPanel.add(new JLabel("Payment Method:"), c);
+        c.gridx = 1;
+        editAccountPanel.add(new JComboBox<>(new String[]{"Credit Card", "PayPal"}), c);
+
+        c.gridx = 0;
+        c.gridy = 5;
+        c.gridwidth = 2;
+        c.anchor = GridBagConstraints.WEST;
+        editAccountPanel.add(new JButton("Save Changes"), c);
+        c.gridx = 1;
+        c.gridy = 5;
+        c.anchor = GridBagConstraints.CENTER;
+        editAccountPanel.add(UpcomingReservationsButton, c);
+        c.gridx = 2;
+        c.gridy = 5;
+        c.anchor = GridBagConstraints.EAST;
+        editAccountPanel.add(logOutButtonEditAccount, c);
+
+        UpcomingReservationsButton.addActionListener(this);
+        logOutButtonEditAccount.addActionListener(this);
+
+
+
+
+        //editAccountFrame.add(editAccountPanel);
+
+        //editAccountFrame.setVisible(true);
+        return  editAccountPanel;
+    }
+
+    /**
+     *Creates JFrame for creating account.
+     *Creates a new account by prompting the user to enter their personal information *and payment method.
+     *The information entered by the user is then displayed in the console temporarily *but will be used in SQL DB.
+     */
+    private void createAccount() {
+
+        JTextField firstNameField = new JTextField(20);
+        JTextField lastNameField = new JTextField(20);
+        JTextField phoneNumberField = new JTextField(20);
+        JTextField emailField = new JTextField(20);
+        JPasswordField passwordField = new JPasswordField(20);
+        JComboBox<String> paymentMethodCombo = new JComboBox<>(new String[]{"Credit Card", "PayPal"});
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.insets = new Insets(10, 10, 30, 10);
+        panel.add(new JLabel("Create Account"), c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.insets = new Insets(10, 10, 10, 10);
+        panel.add(new JLabel("First Name:"), c);
+        c.gridx = 1;
+        panel.add(firstNameField, c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        panel.add(new JLabel("Last Name:"), c);
+        c.gridx = 1;
+        panel.add(lastNameField, c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        panel.add(new JLabel("Phone Number:"), c);
+        c.gridx = 1;
+        panel.add(phoneNumberField, c);
+
+        c.gridx = 0;
+        c.gridy = 4;
+        panel.add(new JLabel("Email:"), c);
+        c.gridx = 1;
+        panel.add(emailField, c);
+
+        c.gridx = 0;
+        c.gridy = 5;
+        panel.add(new JLabel("Password:"), c);
+        c.gridx = 1;
+        panel.add(passwordField, c);
+
+        c.gridx = 0;
+        c.gridy = 6;
+        panel.add(new JLabel("Payment Method:"), c);
+        c.gridx = 1;
+        panel.add(paymentMethodCombo, c);
+
+        c.gridx = 0;
+        c.gridy = 7;
+        c.gridwidth = 2;
+        panel.add(new JButton("Create Account"), c);
+
+        int result = JOptionPane.showConfirmDialog(frame, panel, "Create Account",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String phoneNumber = phoneNumberField.getText();
+            String email = emailField.getText();
+            String password = String.valueOf(passwordField.getPassword());
+            String paymentMethod = (String) paymentMethodCombo.getSelectedItem();
+
+            // Add this to database
+            System.out.println("Account created:");
+            System.out.println("First Name: " + firstName);
+            System.out.println("Last Name: " + lastName);
+            System.out.println("Phone Number: " + phoneNumber);
+            System.out.println("Email: " + email);
+            System.out.println("Password: " + password);
+            System.out.println("Payment Method: " + paymentMethod);
+        }
+    }
+
+    /**
+     *Creates a JFrame with a form to contact the staff.
+     *Allows the user to input their name, email and message.
+     *The message can be sent to the staff through the "Send Message" button.
+     */
+
+
+
+    private void contactStaff() {
+        JFrame contactStaffFrame = new JFrame("Contact Staff");
+        contactStaffFrame.setSize(600, 500);
+        contactStaffFrame.setLocationRelativeTo(frame);
+
+        JPanel contactStaffPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.insets = new Insets(10, 10, 30, 10);
+        contactStaffPanel.add(new JLabel("Contact Staff"), c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.insets = new Insets(10, 10, 10, 10);
+        contactStaffPanel.add(new JLabel("Name:"), c);
+        c.gridx = 1;
+        contactStaffPanel.add(new JTextField(20), c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        contactStaffPanel.add(new JLabel("Email:"), c);
+        c.gridx = 1;
+        contactStaffPanel.add(new JTextField(20), c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        contactStaffPanel.add(new JLabel("Message:"), c);
+        c.gridx = 1;
+        contactStaffPanel.add(new JTextArea(5, 20), c);
+
+        c.gridx = 0;
+        c.gridy = 4;
+        c.gridwidth = 2;
+        contactStaffPanel.add(new JButton("Send Message"), c);
+
+
+        contactStaffFrame.add(contactStaffPanel);
+
+        contactStaffFrame.setVisible(true);
+    }
+
+
+
+
+    private JPanel accountPanel(){
         JPanel reservationsPanel = new JPanel();
         accountTextArea = new JTextArea();
         accountTextArea.setEditable(false);
@@ -399,7 +751,7 @@ public class GUI implements ActionListener {
         return reservationsPanel;
 
     }
-    public JPanel SelectDatePanel(){
+    private JPanel SelectDatePanel(){
 
 
 
@@ -448,10 +800,11 @@ public class GUI implements ActionListener {
 
         return gridPanel;
     }
-    public JPanel CartSummaryPanel(){
+    private JPanel CartSummaryPanel(){
 
         cartTextArea.setEditable(false);
         proceedBtn = new JButton("guest checkout");
+
 
         detailsPanel.setLayout(new GridBagLayout());
         cartTextArea.setPreferredSize(new Dimension(426, 279));
@@ -460,6 +813,7 @@ public class GUI implements ActionListener {
         JLabel cartSummaryLabel = new JLabel("Cart Summary");
         btnPanel.add(cartloginBtn);
         btnPanel.add(proceedBtn);
+        btnPanel.add(completeReservationAsMemberButton);
 
         gridbagConCart.gridx = 0;
         gridbagConCart.gridy=0;
@@ -476,12 +830,13 @@ public class GUI implements ActionListener {
         detailsPanel.add(btnPanel, gridbagConCart);
 
         proceedBtn.addActionListener(this);
+        completeReservationAsMemberButton.addActionListener(this);
         cartloginBtn.addActionListener(this);
 
         return detailsPanel;
 
     }
-    public JPanel UserInfoAndPaymentPanel(){
+    private JPanel UserInfoAndPaymentPanel(){
         JPanel gridPanel = new JPanel(new GridLayout(7,4,50,10));
         JPanel infoPanel = new JPanel();
 
@@ -526,16 +881,16 @@ public class GUI implements ActionListener {
         gridPanel.add(ExperactionDatetextfield);
         gridPanel.add(CVCnumberLbl);
         gridPanel.add(CVCnumbertextfield);
-        gridPanel.add(confirmButton);
+        gridPanel.add(payAsGuestButton);
         infoPanel.add(gridPanel);
 
-        confirmButton.addActionListener(this);
+        payAsGuestButton.addActionListener(this);
 
 
 
         return infoPanel;
     }
-    public JPanel completedReservationPanel()
+    private JPanel completedReservationPanel()
     {
 
         JPanel completReservationPanel = new JPanel();
@@ -564,7 +919,7 @@ public class GUI implements ActionListener {
 
         return completReservationPanel;
     }
-    public JPanel RoomsPanel(){
+    private JPanel RoomsPanel(){
 
 
         roomsPanel.setLayout(new GridBagLayout());
@@ -610,7 +965,7 @@ public class GUI implements ActionListener {
 
         return roomsPanel;
     }
-    public void addRoomToPanel(JLabel rooomLable, JButton btnName ){
+    private void addRoomToPanel(JLabel rooomLable, JButton btnName ){
 
         gridbagCon.gridx = 0;
         gridbagCon.gridy = 1;
@@ -626,7 +981,7 @@ public class GUI implements ActionListener {
         roomsPanel.repaint();
 
     }
-    public void removeRoomsFromPanel(JLabel roomlbl1,JButton roombtn1,JLabel roomlbl2,JButton roombtn2)
+    private void removeRoomsFromPanel(JLabel roomlbl1,JButton roombtn1,JLabel roomlbl2,JButton roombtn2)
     {
         roomsPanel.remove(roomlbl1);
         roomsPanel.remove(roombtn1);
@@ -635,7 +990,7 @@ public class GUI implements ActionListener {
         roomsPanel.revalidate();
         roomsPanel.repaint();
     }
-    public void showAlleooms()
+    private void showAlleooms()
     {
         gridbagCon.gridx = 0;
         gridbagCon.gridy = 1;
@@ -675,7 +1030,7 @@ public class GUI implements ActionListener {
 
 
 // show additional room images
-    public void RoomChoice(String name){
+    private void RoomChoice(String name){
 
         JFrame popUpRoomTypeFrame = new JFrame("ROOMS");
         JPanel panel = new JPanel();
@@ -742,8 +1097,12 @@ public class GUI implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+
         if(numberOfRoomClicks>0){
             cartTextArea.setText("");
+        }
+        if(!(isLogin)){
+            btnPanel.remove(completeReservationAsMemberButton);
         }
 
         if (e.getSource() == homebtn) {
@@ -837,9 +1196,7 @@ public class GUI implements ActionListener {
 
 
         if (e.getSource() == proceedBtn) {
-            if(isLogin){
-                cardlayout.show(centerPanel, "completedReservationPanel");
-            }else
+
                  cardlayout.show(centerPanel, "infoPanel");
         } else if (e.getSource() == loginOrRegisterbtn) {
             if(isLogin==false){
@@ -847,84 +1204,25 @@ public class GUI implements ActionListener {
                 cardlayout.show(centerPanel, "logInOrRegister");
 
             }
-            else cardlayout.show(centerPanel, "account");
+            else cardlayout.show(centerPanel, "login");
 
-        } else if (e.getSource() == logInbtn) {
-            String usernameInput = usernameTextFiled.getText();
-            String passwordInput = passwrdtextfield.getText();
-            if ("abc".equals(usernameInput) && "123".equals(passwordInput)) {
-                isLogin = true;
-                btnPanel.remove(cartloginBtn);
-                detailsPanel.repaint();
-                usernameTextFiled.setText("");
-                passwrdtextfield.setText("");
-                loginOrRegisterbtn.setText("account");
-                proceedBtn.setText("complete");
-                if(!(camefromSummaryPanel)) {
-                    cardlayout.show(centerPanel, "account");
-                }else cardlayout.show(centerPanel,"summaryPanel");
-
-
-            } else {
-                JOptionPane.showMessageDialog(frame, "Wrong username or password. To test login, use username: abc, password: 123.");
-            }
-        } else if (e.getSource() == logoutbtn) {
+        }
+        else if (e.getSource() == logoutbtn) {
             loginOrRegisterbtn.setText("log in/register");
             proceedBtn.setText("guest checkout");
             isLogin = false;
             camefromSummaryPanel=false;
-            btnPanel.remove(proceedBtn);
+            usernameTextFiled.setText("");
+
             btnPanel.add(cartloginBtn);
             btnPanel.add(proceedBtn);
 
 
             cardlayout.show(centerPanel, "home");
-        }  else if (e.getSource() == confirmButton) {
-
-
-            String name = firstnameTextfield.getText();
-            String lastName = lastnameTextfield.getText();
-
-
-
-
-            if(numberOfRoomClicks>1){
-                completedReservationTextArea.setText("");
-            }
-
-
-
-                completedReservationTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "
-                    +reservation.getCheckOutDate()+ "\nParty size: "+ reservation.getGuests()+"\nRoomType: "+reservation.getRoomType()+
-                    "\nreservation number: "+ reservation.getConfirmationNumber());
-                     reservation.reserveRoom(reservation.getRoomType());
-                    FileWriter writer;
-            try {
-
-                writer = new FileWriter("output.txt", true);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-
-// Write some text to the file
-            try {
-                writer.write("Check in date: "+ reservation.getCheckInDate()+"\nCheck out date: " +reservation.getCheckOutDate()+
-                        "\nParty size: "+ reservation.getGuests()+"\nRoomType: "+ reservation.getRoomType()+
-                        "\nreservation number: "+ reservation.getConfirmationNumber()+"\n\n");
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-
-// Close the writer to free up resources
-            try {
-                writer.close();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            cardlayout.show(centerPanel, "completedReservationPanel");
-        } else if (e.getSource()==cartloginBtn) {
+        }   else if (e.getSource()==cartloginBtn) {
 
             camefromSummaryPanel=true;
+            cardlayout.show(centerPanel,"logInOrRegister");
 
         }
         if(e.getSource()==roomComboBox) {
@@ -983,44 +1281,181 @@ public class GUI implements ActionListener {
                if(adminNameTextfield.getText().equals("csun") && adminLoginTextfield.getText().equals("123")){
 
                    File file = new File("output.txt");
+                   if (!file.exists()) {
+                       try {
+                           file.createNewFile();
+                       } catch (IOException ex) {
+                           throw new RuntimeException(ex);
+                       }
+                   }
                    BufferedReader reader = null;
                    try {
                        reader = new BufferedReader(new FileReader(file));
-                   } catch (FileNotFoundException ex) {
-                       throw new RuntimeException(ex);
-                   }
-                   String line;
-                   try {
+                       String line;
                        while ((line = reader.readLine()) != null) {
                            guestListTextArea.append(line + "\n");
                        }
+                   } catch (FileNotFoundException ex) {
+                       System.err.println("File not found: " + ex.getMessage());
                    } catch (IOException ex) {
-                       throw new RuntimeException(ex);
+                       System.err.println("IO Exception: " + ex.getMessage());
+                   } finally {
+                       try {
+                           if (reader != null) {
+                               reader.close();
+                           }
+                       } catch (IOException ex) {
+                           System.err.println("Error closing reader: " + ex.getMessage());
+                       }
                    }
-                   try {
-                       reader.close();
-                   } catch (IOException ex) {
-                       throw new RuntimeException(ex);
-                   }
-
-                   adminNameTextfield.setText("");
-                   adminLoginTextfield.setText("");
-                   cardlayout.show(centerPanel, "guestList");
 
 
                }
+               adminNameTextfield.setText("");
+               adminLoginTextfield.setText("");
+               cardlayout.show(centerPanel, "guestList");
 
            }
            if(e.getSource()==adminLogOutbtn){
                cardlayout.show(centerPanel,"home");
            }
+           if(e.getSource()==UpcomingReservationsButton){
+               cardlayout.show(centerPanel,"UpcomingReservations");
+           }
+           if(e.getSource()==logOutButtonEditAccount){
+               cardlayout.show(centerPanel,"home");
+               loginOrRegisterbtn.setText("log in/register");
+               isLogin=false;
+               btnPanel.add(cartloginBtn);
+               btnPanel.add(proceedBtn);
+           }
+        if (e.getSource()==completeReservationAsMemberButton) {
+            if(numberOfRoomClicks>0){
+                completedReservationTextArea.setText("");
+            }
+
+
+            accountTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "
+                    +reservation.getCheckOutDate()+ "\nParty size: "+ reservation.getGuests()+"\nRoomType: "+reservation.getRoomType()+
+                    "\nreservation number: "+ reservation.getConfirmationNumber());
+
+
+            completedReservationTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "
+                    +reservation.getCheckOutDate()+ "\nParty size: "+ reservation.getGuests()+"\nRoomType: "+reservation.getRoomType()+
+                    "\nreservation number: "+ reservation.getConfirmationNumber());
+            reservation.reserveRoom(reservation.getRoomType());
+
+            if(isLogin){
+
+                File file2 = new File(usernameField.getText()+".txt");
+                if (!file2.exists()) {
+                    try {
+                        file2.createNewFile();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+
+                FileWriter writer;
+                try {
+                    writer = new FileWriter(file2, true);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+// Write some text to the file
+                try {
+
+                    writer.write("Check in date: " + reservation.getCheckInDate() + "\nCheck out date: " + reservation.getCheckOutDate() +
+                            "\nParty size: " + reservation.getGuests() + "\nRoomType: " + reservation.getRoomType() +
+                            "\nreservation number: " + reservation.getConfirmationNumber() + "\n\n");
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+// Close the writer to free up resources
+                try {
+                    writer.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+
+
+
+            cardlayout.show(centerPanel,"completedReservationPanel");
+
+        }else if (e.getSource() == payAsGuestButton) {
+            String firstName = firstnameTextfield.getText();
+            String lastName = lastnameTextfield.getText();
+            String address = addressTextfield.getText();
+            String city = cityTextField.getText();
+            String state = zipcodeTextField.getText();
+            String Zipcode = zipcodeTextField.getText();
+            String email = emailTextfield.getText();
+            String phone = phoneTextfield.getText();
+            String nameOnCard = NameOnCardtextfield.getName();
+            String cardNumber= CardNumberTextField.getText();
+            String experationDate = ExperactionDatetextfield.getText();
+            String CVC = CVCnumbertextfield.getText();
+
+
+
+            if(numberOfRoomClicks>0){
+                completedReservationTextArea.setText("");
+            }
+
+
+            completedReservationTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "
+                    +reservation.getCheckOutDate()+ "\nParty size: "+ reservation.getGuests()+"\nRoomType: "+reservation.getRoomType()+
+                    "\nreservation number: "+ reservation.getConfirmationNumber());
+            reservation.reserveRoom(reservation.getRoomType());
+
+            File file = new File("output.txt");
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+
+            FileWriter writer;
+            try {
+                writer = new FileWriter(file, true);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+// Write some text to the file
+            try {
+                writer.write("Check in date: " + reservation.getCheckInDate() + "\nCheck out date: " + reservation.getCheckOutDate() +
+                        "\nParty size: " + reservation.getGuests() + "\nRoomType: " + reservation.getRoomType() +
+                        "\nreservation number: " + reservation.getConfirmationNumber() + "\n\n");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+// Close the writer to free up resources
+            try {
+                writer.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            cardlayout.show(centerPanel, "completedReservationPanel");
+        }
+
+
+
+
     }
-    public static void main(String[] args)
-    {
+    public static void main(String[] args){
         GUI h = new GUI();
 
-
     }
+
 
 
 
