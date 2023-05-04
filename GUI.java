@@ -72,7 +72,7 @@ public class GUI implements ActionListener {
     private JPanel detailsPanel = new JPanel();
 
     private final JButton loginOrRegisterbtn = new JButton("log in/register");
-    private  final JButton logInbtn = new JButton("log in");
+   
     private final JButton forgotPasswordbtn = new JButton("forgot password");
 
     private  final JButton registerBtn = new JButton("register");
@@ -344,37 +344,7 @@ public class GUI implements ActionListener {
         return ratesPanel;
 
     }
-    private JPanel logInOrRegisterPanel()
-    {
-        JPanel Panel = new JPanel(new GridLayout(3,2));
-        JPanel loginOrRegPanel = new JPanel();
-        loginOrRegPanel.setLayout(null);
 
-
-
-        JLabel emailaddr = new JLabel("username ");
-        JLabel userpasswordlbl = new JLabel("password ");
-
-
-        registerBtn.setBounds(205, 500, 100, 50);
-        Panel.setBounds(205, 150, 250, 100);
-        Panel.add(emailaddr);
-        Panel.add(usernameTextFiled);
-        Panel.add(userpasswordlbl);
-        Panel.add(passwrdtextfield);
-        Panel.add(logInbtn);
-        Panel.add(forgotPasswordbtn);
-        loginOrRegPanel.add(registerBtn);
-        logInbtn.addActionListener(this);
-
-        loginOrRegPanel.add(Panel);
-
-
-
-            return loginOrRegPanel;
-
-
-    }
     private JPanel HotelReservationSystem() {
         //setTitle("Bug-Byte Hotel Reservation System");
         //setSize(1000, 600);
@@ -430,62 +400,7 @@ public class GUI implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 centerPanel.add(login(),"login");
                 cardlayout.show(centerPanel,"login");
-
-
-
-                isLogin = true;
-
-
-
-                File file = new File("f");
-                if (!file.exists()) {
-                    try {
-                        file.createNewFile();
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-                BufferedReader reader = null;
-                try {
-                    reader = new BufferedReader(new FileReader(file));
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        accountTextArea.append(line + "\n");
-                    }
-                } catch (FileNotFoundException ex) {
-                    System.err.println("File not found: " + ex.getMessage());
-                } catch (IOException ex) {
-                    System.err.println("IO Exception: " + ex.getMessage());
-                } finally {
-                    try {
-                        if (reader != null) {
-                            reader.close();
-                        }
-                    } catch (IOException ex) {
-                        System.err.println("Error closing reader: " + ex.getMessage());
-                    }
-                }
-
-                btnPanel.remove(cartloginBtn);
-                btnPanel.remove(proceedBtn);
-                btnPanel.add(completeReservationAsMemberButton);
-
-                detailsPanel.repaint();
-                //usernameTextFiled.setText("");
-                passwrdtextfield.setText("");
-                loginOrRegisterbtn.setText("account");
-
-                if(!(camefromSummaryPanel)) {
-                    cardlayout.show(centerPanel, "account");
-                }else {
-                    cartTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "+reservation.getCheckOutDate()+
-                            "\nParty size: "+ reservation.getGuests());
-                    cartTextArea.append("\nroomtpye:"+ reservation.getRoomType()+ "\ntotal price: "+reservation.getTotalPrice());
-                    cardlayout.show(centerPanel, "summaryPanel");
-                }
-
-
-
+                appendToTextAreaAndRemoveButtons();
 
             }
         });
@@ -799,6 +714,60 @@ public class GUI implements ActionListener {
         dateSelectsBtn.addActionListener(this);
 
         return gridPanel;
+    }
+    private void appendToTextAreaAndRemoveButtons(){
+        isLogin = true;
+
+
+
+        File file = new File(  usernameField.getText()+".txt");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                accountTextArea.append(line + "\n");
+            }
+        } catch (FileNotFoundException ex) {
+            System.err.println("File not found: " + ex.getMessage());
+        } catch (IOException ex) {
+            System.err.println("IO Exception: " + ex.getMessage());
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException ex) {
+                System.err.println("Error closing reader: " + ex.getMessage());
+            }
+        }
+
+        btnPanel.remove(cartloginBtn);
+        btnPanel.remove(proceedBtn);
+        btnPanel.add(completeReservationAsMemberButton);
+
+        detailsPanel.repaint();
+        //usernameTextFiled.setText("");
+        passwrdtextfield.setText("");
+        loginOrRegisterbtn.setText("account");
+
+        if(!(camefromSummaryPanel)) {
+            cardlayout.show(centerPanel, "account");
+        }else {
+            cartTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "+reservation.getCheckOutDate()+
+                    "\nParty size: "+ reservation.getGuests());
+            cartTextArea.append("\nroomtpye:"+ reservation.getRoomType()+ "\ntotal price: "+reservation.getTotalPrice());
+            cardlayout.show(centerPanel, "summaryPanel");
+        }
+
+
     }
     private JPanel CartSummaryPanel(){
 
