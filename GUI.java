@@ -2,27 +2,29 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-
 import java.time.format.DateTimeParseException;
 import java.io.*;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 
 public class GUI implements ActionListener {
     //default constructor for Reservation needed
     private Reservation reservation = new Reservation();
-    private roomSearch getRatesFromRoomSrch = roomSearch.getInstance();
+    private final roomSearch getRatesFromRoomSrch = roomSearch.getInstance();
 
 
-    private JFrame frame = new JFrame("hotel");
+    private final JFrame frame = new JFrame("hotel");
 
-    private JPanel centerPanel = new JPanel();
-
-
-    private CardLayout cardlayout = new CardLayout();
+    private final JPanel centerPanel = new JPanel();
 
 
-    private JButton dateSelectsBtn;
+    private final CardLayout cardlayout = new CardLayout();
+
+
+    private  JButton dateSelectsBtn;
     private JButton kingBedrateBtn;
     private JButton queenBedrateBtn;
     private JButton suiteBedrateBtn;
@@ -34,7 +36,7 @@ public class GUI implements ActionListener {
 
 
     private JButton proceedBtn;
-    private JButton completeReservationAsMemberButton = new JButton("pay");
+    private final JButton completeReservationAsMemberButton = new JButton("pay");
     private final JTextArea cartTextArea = new JTextArea();
 
 
@@ -72,8 +74,8 @@ public class GUI implements ActionListener {
     private JPanel detailsPanel = new JPanel();
 
     private final JButton loginOrRegisterbtn = new JButton("log in/register");
-   
-    private final JButton forgotPasswordbtn = new JButton("forgot password");
+
+
 
     private  final JButton registerBtn = new JButton("register");
     private  final JButton logoutbtn = new JButton("log out");
@@ -105,7 +107,7 @@ public class GUI implements ActionListener {
     private JTextField NameOnCardtextfield = new JTextField();
     private JPasswordField CardNumberTextField = new JPasswordField();
     private JTextField ExperactionDatetextfield = new JTextField();
-    private  JTextField CVCnumbertextfield = new JTextField();
+    private  JPasswordField CVCnumbertextfield = new JPasswordField();
     private  JTextField addressTextfield = new JTextField();
     private JTextField cityTextField = new JTextField();
     private  JTextField stateTextField = new JTextField();
@@ -237,7 +239,7 @@ public class GUI implements ActionListener {
         guestListTextArea = new JTextArea();
         guestListTextArea.setEditable(false);
         JScrollPane scrollPane  = new JScrollPane(guestListTextArea);
-         adminLogOutbtn = new JButton("log-out");
+        adminLogOutbtn = new JButton("log-out");
 
         guestList.setLayout(new GridBagLayout());
         //guestListTextArea.setPreferredSize(new Dimension(426, 279));
@@ -817,7 +819,7 @@ public class GUI implements ActionListener {
         JLabel phoneNumberlbl = new JLabel("phone number:");
         JLabel NameOnCardLbl = new JLabel("name on card:");
         JLabel CardNumberLbl = new JLabel("card number:");
-        JLabel ExperationDateLbl = new JLabel("experation date:");
+        JLabel ExperationDateLbl = new JLabel("experation date MM/YY:");
         JLabel CVCnumberLbl = new JLabel("CVC code:");
 
 
@@ -834,7 +836,7 @@ public class GUI implements ActionListener {
         gridPanel.add(addressTextfield);
         gridPanel.add(new JLabel("City:"));
         gridPanel.add(cityTextField);
-        gridPanel.add(new JLabel("State:"));
+        gridPanel.add(new JLabel("State e.g, CA:"));
         gridPanel.add(stateTextField);
         gridPanel.add(new JLabel("Zip code:"));
         gridPanel.add(zipcodeTextField);
@@ -998,7 +1000,7 @@ public class GUI implements ActionListener {
     }
 
 
-// show additional room images
+    // show additional room images
     private void RoomChoice(String name){
 
         JFrame popUpRoomTypeFrame = new JFrame("ROOMS");
@@ -1086,11 +1088,17 @@ public class GUI implements ActionListener {
                 LocalDate currentDate = LocalDate.now();
                 LocalDate Indate = LocalDate.parse(checkinTextFiled.getText());
                 LocalDate Outdate = LocalDate.parse(checkoutTextField.getText());
-                int dateCompareCheckinToCurrent = Indate.compareTo(currentDate);
+
                 int dateCompareCheckoutToIn = Outdate.compareTo(Indate);
-                if (dateCompareCheckinToCurrent < 0 || dateCompareCheckoutToIn <= 0) {
-                    JOptionPane.showMessageDialog(frame, "Date passed or checkout <= checkin");
-                } else {
+                long daysBetween = ChronoUnit.DAYS.between(currentDate, Indate);
+                if (daysBetween < 0 || daysBetween > 182) {
+                    JOptionPane.showMessageDialog(frame, "can only make reservations in the next 6 months.");
+                }
+
+                else if(dateCompareCheckoutToIn <= 0){
+                    JOptionPane.showMessageDialog(frame, "checkout date cannot be before check in date");
+                }
+                else {
                     // use method of Reservation to set data, make a constructor with no parameters and make methods to set data
                     reservation = new Reservation();
                     reservation.setCheckInDate(Indate);
@@ -1116,7 +1124,7 @@ public class GUI implements ActionListener {
                 reservation.setRoomType("king");
                 cartTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "+reservation.getCheckOutDate()+
                         "\nParty size: "+ reservation.getGuests());
-                    cartTextArea.append("\nroomtpye:"+ reservation.getRoomType()+ "\ntotal price: "+reservation.getTotalPrice());
+                cartTextArea.append("\nroomtpye:"+ reservation.getRoomType()+ "\ntotal price: "+reservation.getTotalPrice());
                 cardlayout.show(centerPanel, "summaryPanel");
             }
         } else if (e.getSource() == queenBedrateBtn) {
@@ -1143,8 +1151,8 @@ public class GUI implements ActionListener {
         // handle room availability buttons
         kingBedrateBtn.setEnabled(reservation.checkforroom("king"));
         kingBedrateBtn.setText(kingBedrateBtn.isEnabled() ? "Select" : "out");
-         if (reservation.getGuests()>2) {
-             kingBedrateBtn.setEnabled(false);
+        if (reservation.getGuests()>2) {
+            kingBedrateBtn.setEnabled(false);
             kingBedrateBtn.setText("Max Party: 2");
         }
 
@@ -1166,7 +1174,7 @@ public class GUI implements ActionListener {
 
         if (e.getSource() == proceedBtn) {
 
-                 cardlayout.show(centerPanel, "infoPanel");
+            cardlayout.show(centerPanel, "infoPanel");
         } else if (e.getSource() == loginOrRegisterbtn) {
             if(isLogin==false){
 
@@ -1213,7 +1221,7 @@ public class GUI implements ActionListener {
             }
 
         }
-           if ( e.getSource()==searchbtn) {
+        if ( e.getSource()==searchbtn) {
             String searchInput = searchbar.getText().toLowerCase();
             if( searchInput.contains("king")){
                 roomComboBox.setSelectedIndex(1);
@@ -1243,61 +1251,61 @@ public class GUI implements ActionListener {
             }
             searchbar.setText("");
 
-           }
-           if(e.getSource()==adminLoginBtn){
+        }
+        if(e.getSource()==adminLoginBtn){
 
 
-               if(adminNameTextfield.getText().equals("csun") && adminLoginTextfield.getText().equals("123")){
+            if(adminNameTextfield.getText().equals("csun") && adminLoginTextfield.getText().equals("123")){
 
-                   File file = new File("output.txt");
-                   if (!file.exists()) {
-                       try {
-                           file.createNewFile();
-                       } catch (IOException ex) {
-                           throw new RuntimeException(ex);
-                       }
-                   }
-                   BufferedReader reader = null;
-                   try {
-                       reader = new BufferedReader(new FileReader(file));
-                       String line;
-                       while ((line = reader.readLine()) != null) {
-                           guestListTextArea.append(line + "\n");
-                       }
-                   } catch (FileNotFoundException ex) {
-                       System.err.println("File not found: " + ex.getMessage());
-                   } catch (IOException ex) {
-                       System.err.println("IO Exception: " + ex.getMessage());
-                   } finally {
-                       try {
-                           if (reader != null) {
-                               reader.close();
-                           }
-                       } catch (IOException ex) {
-                           System.err.println("Error closing reader: " + ex.getMessage());
-                       }
-                   }
+                File file = new File("output.txt");
+                if (!file.exists()) {
+                    try {
+                        file.createNewFile();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+                BufferedReader reader = null;
+                try {
+                    reader = new BufferedReader(new FileReader(file));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        guestListTextArea.append(line + "\n");
+                    }
+                } catch (FileNotFoundException ex) {
+                    System.err.println("File not found: " + ex.getMessage());
+                } catch (IOException ex) {
+                    System.err.println("IO Exception: " + ex.getMessage());
+                } finally {
+                    try {
+                        if (reader != null) {
+                            reader.close();
+                        }
+                    } catch (IOException ex) {
+                        System.err.println("Error closing reader: " + ex.getMessage());
+                    }
+                }
 
 
-               }
-               adminNameTextfield.setText("");
-               adminLoginTextfield.setText("");
-               cardlayout.show(centerPanel, "guestList");
+            }
+            adminNameTextfield.setText("");
+            adminLoginTextfield.setText("");
+            cardlayout.show(centerPanel, "guestList");
 
-           }
-           if(e.getSource()==adminLogOutbtn){
-               cardlayout.show(centerPanel,"home");
-           }
-           if(e.getSource()==UpcomingReservationsButton){
-               cardlayout.show(centerPanel,"UpcomingReservations");
-           }
-           if(e.getSource()==logOutButtonEditAccount){
-               cardlayout.show(centerPanel,"home");
-               loginOrRegisterbtn.setText("log in/register");
-               isLogin=false;
-               btnPanel.add(cartloginBtn);
-               btnPanel.add(proceedBtn);
-           }
+        }
+        if(e.getSource()==adminLogOutbtn){
+            cardlayout.show(centerPanel,"home");
+        }
+        if(e.getSource()==UpcomingReservationsButton){
+            cardlayout.show(centerPanel,"UpcomingReservations");
+        }
+        if(e.getSource()==logOutButtonEditAccount){
+            cardlayout.show(centerPanel,"home");
+            loginOrRegisterbtn.setText("log in/register");
+            isLogin=false;
+            btnPanel.add(cartloginBtn);
+            btnPanel.add(proceedBtn);
+        }
         if (e.getSource()==completeReservationAsMemberButton) {
             if(numberOfRoomClicks>0){
                 completedReservationTextArea.setText("");
@@ -1332,7 +1340,7 @@ public class GUI implements ActionListener {
                     throw new RuntimeException(ex);
                 }
 
-// Write some text to the file
+
                 try {
 
                     writer.write("Check in date: " + reservation.getCheckInDate() + "\nCheck out date: " + reservation.getCheckOutDate() +
@@ -1342,7 +1350,7 @@ public class GUI implements ActionListener {
                     throw new RuntimeException(ex);
                 }
 
-// Close the writer to free up resources
+
                 try {
                     writer.close();
                 } catch (IOException ex) {
@@ -1356,20 +1364,73 @@ public class GUI implements ActionListener {
             cardlayout.show(centerPanel,"completedReservationPanel");
 
         }else if (e.getSource() == payAsGuestButton) {
-            String firstName = firstnameTextfield.getText();
-            String lastName = lastnameTextfield.getText();
-            String address = addressTextfield.getText();
-            String city = cityTextField.getText();
-            String state = zipcodeTextField.getText();
-            String Zipcode = zipcodeTextField.getText();
-            String email = emailTextfield.getText();
-            String phone = phoneTextfield.getText();
-            String nameOnCard = NameOnCardtextfield.getName();
-            String cardNumber= CardNumberTextField.getText();
-            String experationDate = ExperactionDatetextfield.getText();
-            String CVC = CVCnumbertextfield.getText();
+
+            try {
+                String firstName = firstnameTextfield.getText();
+                String lastName = lastnameTextfield.getText();
+                String address = addressTextfield.getText();
+                String city = cityTextField.getText();
+                String state = stateTextField.getText();
+                String Zipcode = zipcodeTextField.getText();
+                String email = emailTextfield.getText();
+                String phone = phoneTextfield.getText();
+                String nameOnCard = NameOnCardtextfield.getName();
+                String cardNumber= CardNumberTextField.getText();
+                String experationDate = ExperactionDatetextfield.getText();
+                String CVC = CVCnumbertextfield.getText();
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/yy");
+                simpleDateFormat.setLenient(false);
+                Date expiry = simpleDateFormat.parse(experationDate);
+                boolean expired= expiry.before(new Date());
 
 
+                if (!firstName.matches("[a-zA-Z]+")) {
+                    JOptionPane.showMessageDialog(frame, "enter a valid first name.");
+                } else if (!lastName.matches("[a-zA-Z]+")) {
+                    JOptionPane.showMessageDialog(frame, " enter a valid last name.");
+                } else if (!address.matches("\\d+\\s+([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)")) {
+                    JOptionPane.showMessageDialog(frame, "enter a valid address.");
+                } else if (!city.matches( "^[a-zA-Z]+(?:[\\s-][a-zA-Z]+)*$")) {
+                    JOptionPane.showMessageDialog(frame, "enter a valid city.");
+                } else if (!state.matches("[a-zA-Z]{2}")) {
+                    JOptionPane.showMessageDialog(frame, "enter a valid state abbreviation (e.g. CA).");
+                } else if (!Zipcode.matches("\\d{5}")) {
+                    JOptionPane.showMessageDialog(frame, "enter a valid 5-digit zip code.");
+                } else if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
+                    JOptionPane.showMessageDialog(frame, "enter a valid email address.");
+                } else if (!phone.matches("\\d{10}")) {
+                    JOptionPane.showMessageDialog(frame, "enter a valid 10-digit phone number.");
+                } else if (!CVC.matches("\\d{3}")) {
+                    JOptionPane.showMessageDialog(frame, "enter a valid 3-digit CVC number.");
+                } else if (expired) {
+                    JOptionPane.showMessageDialog(frame, "The card has expired.");
+                } else if(!cardNumber.matches("^(?:(?<visa>4[0-9]{12}(?:[0-9]{3})?)|)")){
+                    JOptionPane.showMessageDialog(frame, "enter a valid card number Visa : 13 or 16 digits begins with 4");
+                }
+                else {
+                    // Feed data to a class
+                    reservation.reserveRoom(reservation.getRoomType());
+                    cardlayout.show(centerPanel, "completedReservationPanel");
+
+                    //clear textfields
+                    firstnameTextfield.setText("");
+                     lastnameTextfield.setText("");
+                     addressTextfield.setText("");
+                    cityTextField.setText("");
+                    stateTextField.setText("");
+                    zipcodeTextField.setText("");
+                    emailTextfield.setText("");
+                    phoneTextfield.setText("");
+                    NameOnCardtextfield.setText("");
+                    CardNumberTextField.setText("");
+                    ExperactionDatetextfield.setText("");
+                    CVCnumbertextfield.setText("");
+
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, "missing one or more fields or wrong type of data entered.");
+            }
 
             if(numberOfRoomClicks>0){
                 completedReservationTextArea.setText("");
@@ -1379,7 +1440,7 @@ public class GUI implements ActionListener {
             completedReservationTextArea.append("\nCheck in date: "+ reservation.getCheckInDate() + "\nCheck out date: "
                     +reservation.getCheckOutDate()+ "\nParty size: "+ reservation.getGuests()+"\nRoomType: "+reservation.getRoomType()+
                     "\nreservation number: "+ reservation.getConfirmationNumber());
-            reservation.reserveRoom(reservation.getRoomType());
+
 
             File file = new File("output.txt");
             if (!file.exists()) {
@@ -1397,7 +1458,7 @@ public class GUI implements ActionListener {
                 throw new RuntimeException(ex);
             }
 
-// Write some text to the file
+
             try {
                 writer.write("Check in date: " + reservation.getCheckInDate() + "\nCheck out date: " + reservation.getCheckOutDate() +
                         "\nParty size: " + reservation.getGuests() + "\nRoomType: " + reservation.getRoomType() +
@@ -1406,27 +1467,20 @@ public class GUI implements ActionListener {
                 throw new RuntimeException(ex);
             }
 
-// Close the writer to free up resources
+
             try {
                 writer.close();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
 
-            cardlayout.show(centerPanel, "completedReservationPanel");
         }
-
-
-
 
     }
     public static void main(String[] args){
         GUI h = new GUI();
 
     }
-
-
-
 
 
 }
