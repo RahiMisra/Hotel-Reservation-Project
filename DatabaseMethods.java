@@ -760,5 +760,8 @@ public static void deleteRoom(Connection con, int room) {
 		System.out.println("failed to delete room");
 	}
 }
+public static void createAccount(Connection con, String firstName, String lastName, String phoneNumber, String email,
+        String password, String paymentMethod) {
+}
 
 }
