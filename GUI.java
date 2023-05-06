@@ -1286,11 +1286,14 @@ public class GUI implements ActionListener {
                     }
                 }
 
-
+                adminNameTextfield.setText("");
+                adminLoginTextfield.setText("");
+                cardlayout.show(centerPanel, "guestList");
             }
-            adminNameTextfield.setText("");
-            adminLoginTextfield.setText("");
-            cardlayout.show(centerPanel, "guestList");
+            else{
+                JOptionPane.showMessageDialog(frame, "wrong login Info.");
+            }
+
 
         }
         if(e.getSource()==adminLogOutbtn){
