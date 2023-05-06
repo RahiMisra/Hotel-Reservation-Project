@@ -3,7 +3,7 @@
  * The PaymentInfo class represents the payment information of a customer.
  * 
  * It contains the card name, card number, CVC, expiration date, billing
- * address, and shipping address.
+ * address, and shipping address. Last updated 4/18 by Dalton Wiggins
  */
 public class PaymentInfo {
 

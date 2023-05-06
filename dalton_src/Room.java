@@ -1,60 +1,53 @@
-/**
- * 
- * This class represents a room in a hotel and all of its attributes
- */
+import java.util.ArrayList;
+
 public class Room {
 
-	/**
-	 * 
-	 * The room number of the room.
-	 */
+	// roomNumber is passed in through the reservation class
+	// Based on the roomtype, the room number takes the next available integer
+	// within that type
+	// ie. King bed -> 1, then 2, up to 20, then it can't do king any more
 	private int roomNumber;
-	/**
-	 * 
-	 * The type of room (Master Suite, Family Suite, Queen Suite).
-	 */
-	private RoomType roomType;
-	/**
-	 * 
-	 * The number of beds in the room (1 or 2).
-	 */
+	// bedCount, bedType, pricePerNight, maxGuests, and roomType are all tied to the
+	// RoomType, and
+	// initialized when a room number is passed in
 	private int bedCount;
-	/**
-	 * 
-	 * The type of bed in the room (1 = King, 2 = Queen).
-	 */
 	private int bedType;
-	/**
-	 * 
-	 * The price per night for the room.
-	 */
 	private int pricePerNight;
-	/**
-	 * 
-	 * The maximum number of guests that can occupy the room.
-	 */
 	private int maxGuests;
-	/**
-	 * 
-	 * A boolean indicating whether the room is currently occupied or not.
-	 */
+	private RoomType roomType;
+	// dateReserved and totalNights passed in from the reservation method, only when
+	// reserved
+	// private int checkIn;
+	// private int checkOut;
+	// private int totalNights;
+	// isOccupied passed into the calendar array; true at i when someone reserves
+	// that day
 	private boolean isOccupied;
-	/**
-	 * 
-	 * The number of available master suites in the hotel.
-	 */
-	private int availableMaster = 20;
-	/**
-	 * 
-	 * The number of available family suites in the hotel.
-	 */
-	private int availableFamily = 20;
-	/**
-	 * 
-	 * The number of available queen suites in the hotel.
-	 */
-	private int availableQueen = 10;
+	// Number of available rooms for each type
+	// private int availableKing = 20;
+	// private int availableQueen = 20;
+	// private int availableSuite = 10;
+	// Rate per room per night
+	private int kingRoomRate = 250;
+	private int queenRoomRate = 200;
+	private int suiteRoomRate = 300;
+	// roomCalendar acts as a 365 index array tied to a room
+	// It can be used if you pass in a date to a room to check if it is booked or
+	// not
+	private boolean[] roomCalendar = new boolean[365]; // starting from 2023-01-01 to 2023-12-31
+	// to convert a date into a number, just find dayNumber = (int)
+	// LocalDate.parse("2023-01-01").until(checkOutDate).getDays();
+	// roomArray adds a room to the general array, and can be used to show all
+	// current booked rooms
+	public ArrayList<Room> roomArray;
 
+	public Room() {
+	}
+
+	// We want to store the available variables in the database and access from
+	// there
+	// We also want to store the reservation in the database, with a room attached
+	// and the date too
 	/**
 	 * 
 	 * Constructs a Room object with the given room number.
@@ -63,29 +56,33 @@ public class Room {
 	 */
 	public Room(int roomNumber) {
 		this.roomNumber = roomNumber;
-		this.isOccupied = false;
 
 		if (roomNumber <= 20 && roomNumber > 0) { // 20 King suites
 			bedCount = 1;
 			bedType = 1; // 1 for King bed
 			maxGuests = 4;
-			this.pricePerNight = 140; // $125 per night
-			this.roomType = RoomType.MasterSuite;
+			this.pricePerNight = kingRoomRate; // $125 per night
+			this.roomType = RoomType.KingRoom;
 		} else if (roomNumber <= 40 && roomNumber > 20) { // 20 Family suites
 			bedCount = 2;
 			bedType = 2; // 2 for Queen bed
 			maxGuests = 6;
-			this.pricePerNight = 175; // $175 per night
-			this.roomType = RoomType.FamilySuite;
+			this.pricePerNight = queenRoomRate; // $175 per night
+			this.roomType = RoomType.QueenRoom;
 		} else if (roomNumber <= 50 && roomNumber > 40) { // 10 Queen suites
 			bedCount = 1;
 			bedType = 2; // 2 for Queen bed
 			maxGuests = 3;
-			this.pricePerNight = 120; // $120 per night
-			this.roomType = RoomType.QueenSuite;
+			this.pricePerNight = suiteRoomRate; // $120 per night
+			this.roomType = RoomType.SuiteRoom;
 		} else {
-// GUI.roomNumberErrorMessage(); //display an error message from the GUI
+			// GUI.roomNumberErrorMessage(); //display an error message from the GUI
 		}
+	}
+
+	public void addRoom(int roomNumber) {
+		roomArray = new ArrayList<>();
+		roomArray.add(new Room(roomNumber));
 	}
 
 	/**
@@ -114,7 +111,13 @@ public class Room {
 	 * 
 	 * @return true if the room is currently occupied, false otherwise
 	 */
-	public boolean getIsOccupied() {
+	public boolean getIsOccupied(int dateReserved) { // find a way to convert the date into an integer that lines up
+														// with the calendar array
+		if (roomCalendar[dateReserved] == true) {
+			isOccupied = true;
+		} else {
+			isOccupied = false;
+		}
 		return isOccupied;
 	}
 
@@ -123,17 +126,8 @@ public class Room {
 	 * Reserves the room if it's available and of the requested type. If the room is
 	 * reserved successfully, decrement the available rooms count.
 	 */
-	public void reserveRoom() {
-		if (roomType == RoomType.MasterSuite && availableMaster >= 1 && !isOccupied) {
-			isOccupied = true;
-			availableMaster--;
-		} else if (roomType == RoomType.FamilySuite && availableFamily >= 1 && !isOccupied) {
-			isOccupied = true;
-			availableFamily--;
-		} else if (roomType == RoomType.QueenSuite && availableQueen >= 1 && !isOccupied) {
-			isOccupied = true;
-			availableQueen--;
-		}
+	public void setIsOccupied(int dateReserved) {
+		roomCalendar[dateReserved] = true;
 	}
 
 	/**
@@ -141,17 +135,8 @@ public class Room {
 	 * Releases the room if it's currently occupied and of the requested type. If
 	 * the room is released successfully, increment the available rooms count.
 	 */
-	public void releaseRoom() {
-		if (roomType == RoomType.MasterSuite && isOccupied) {
-			isOccupied = false;
-			availableMaster++;
-		} else if (roomType == RoomType.FamilySuite && isOccupied) {
-			isOccupied = false;
-			availableFamily++;
-		} else if (roomType == RoomType.QueenSuite && isOccupied) {
-			isOccupied = false;
-			availableQueen++;
-		}
+	public void releaseRoom(int dateReserved) {
+		roomCalendar[dateReserved] = false;
 	}
 
 	/**
@@ -193,6 +178,19 @@ public class Room {
 	public int getMaxGuests() {
 		return maxGuests;
 	}
+
+	public int getKingRoomRate() {
+		return kingRoomRate;
+	}
+
+	public int getQueenRoomRate() {
+		return queenRoomRate;
+	}
+
+	public int getSuiteRoomRate() {
+		return suiteRoomRate;
+	}
+
 }
 
 /**
@@ -200,5 +198,5 @@ public class Room {
  * Enumeration of the possible room types.
  */
 enum RoomType {
-	MasterSuite, FamilySuite, QueenSuite
+	KingRoom, QueenRoom, SuiteRoom
 }

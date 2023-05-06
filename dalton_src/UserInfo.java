@@ -6,7 +6,7 @@ import java.util.Random;
  * create an account, and if they are an admin they can provide the correct
  * admin password to access additional functionality. This class is used to tie
  * reservations to an account and add a viewReservations ability in the GUI that
- * uses this and reservation.
+ * uses this and reservation. Last updated 4/18 by Dalton Wiggins
  */
 public class UserInfo {
 	/**
