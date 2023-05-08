@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Room {
@@ -24,36 +25,22 @@ public class Room {
 	// that day
 	private boolean isOccupied;
 	// Number of available rooms for each type
-	// private int availableKing = 20;
-	// private int availableQueen = 20;
-	// private int availableSuite = 10;
+	private int availableKing = 20;
+	private int availableQueen = 20;
+	private int availableSuite = 10;
 	// Rate per room per night
 	private int kingRoomRate = 250;
 	private int queenRoomRate = 200;
 	private int suiteRoomRate = 300;
-	// roomCalendar acts as a 365 index array tied to a room
-	// It can be used if you pass in a date to a room to check if it is booked or
-	// not
-	private boolean[] roomCalendar = new boolean[365]; // starting from 2023-01-01 to 2023-12-31
-	// to convert a date into a number, just find dayNumber = (int)
-	// LocalDate.parse("2023-01-01").until(checkOutDate).getDays();
-	// roomArray adds a room to the general array, and can be used to show all
-	// current booked rooms
+	// roomCalendar acts as a 365 index array tied to a room, it can be used if you
+	// pass in a date to a room to check if it is booked or not
+	// Use .getDayOfYear() to find the calendar index
+	private boolean[] roomCalendar = new boolean[365];
 	public ArrayList<Room> roomArray;
 
 	public Room() {
 	}
 
-	// We want to store the available variables in the database and access from
-	// there
-	// We also want to store the reservation in the database, with a room attached
-	// and the date too
-	/**
-	 * 
-	 * Constructs a Room object with the given room number.
-	 * 
-	 * @param roomNumber the room number of the room
-	 */
 	public Room(int roomNumber) {
 		this.roomNumber = roomNumber;
 
@@ -85,96 +72,54 @@ public class Room {
 		roomArray.add(new Room(roomNumber));
 	}
 
-	/**
-	 * 
-	 * Gets the room number of the room.
-	 * 
-	 * @return the room number of the room
-	 */
-	public int getRoomNumber() {
-		return roomNumber;
-	}
+	public boolean getIsOccupied(LocalDate checkInDate, LocalDate checkOutDate) {
+		int dayNumber = checkInDate.getDayOfYear() - 1;
+		int nightsReserved = checkInDate.until(checkOutDate).getDays();
 
-	/**
-	 * 
-	 * Gets the type of room.
-	 * 
-	 * @return the type of room
-	 */
-	public RoomType getRoomType() {
-		return roomType;
-	}
-
-	/**
-	 * 
-	 * Gets whether the room is currently occupied.
-	 * 
-	 * @return true if the room is currently occupied, false otherwise
-	 */
-	public boolean getIsOccupied(int dateReserved) { // find a way to convert the date into an integer that lines up
-														// with the calendar array
-		if (roomCalendar[dateReserved] == true) {
-			isOccupied = true;
-		} else {
-			isOccupied = false;
+		for (int i = 0; i <= nightsReserved; i++) {
+			if (roomCalendar[dayNumber] == true) {
+				isOccupied = true;
+				break;
+			} else {
+				isOccupied = false;
+			}
 		}
 		return isOccupied;
 	}
 
-	/**
-	 * 
-	 * Reserves the room if it's available and of the requested type. If the room is
-	 * reserved successfully, decrement the available rooms count.
-	 */
-	public void setIsOccupied(int dateReserved) {
-		roomCalendar[dateReserved] = true;
+	public void setIsOccupied(LocalDate checkInDate, LocalDate checkOutDate) {
+		int dayNumber = checkInDate.getDayOfYear() - 1;
+		int nightsReserved = checkInDate.until(checkOutDate).getDays();
+
+		for (int i = 0; i <= nightsReserved; i++) {
+			roomCalendar[dayNumber + i] = true;
+		}
 	}
 
-	/**
-	 * 
-	 * Releases the room if it's currently occupied and of the requested type. If
-	 * the room is released successfully, increment the available rooms count.
-	 */
 	public void releaseRoom(int dateReserved) {
 		roomCalendar[dateReserved] = false;
 	}
 
-	/**
-	 * 
-	 * Returns the price per night of the room.
-	 * 
-	 * @return the price per night of the room
-	 */
+	public RoomType getRoomType() {
+		return roomType;
+	}
+
+	public int getRoomNumber() {
+		return roomNumber;
+	}
+
 	public int getPricePerNight() {
 		return pricePerNight;
 	}
 
-	/**
-	 * 
-	 * Returns the number of beds in the room.
-	 * 
-	 * @return the number of beds in the room
-	 */
 	public double getBedCount() {
 		return bedCount;
 	}
 
-	/**
-	 * 
-	 * Returns the type of the beds in the room.
-	 * 
-	 * @return the type of the beds in the room
-	 */
 	public double getBedType() {
 		return bedType;
 	}
 
-	/**
-	 * 
-	 * Returns the maximum number of guests allowed in the room.
-	 * 
-	 * @return the maximum number of guests allowed in the room
-	 */
 	public int getMaxGuests() {
 		return maxGuests;
 	}
@@ -190,7 +135,6 @@ public class Room {
 	public int getSuiteRoomRate() {
 		return suiteRoomRate;
 	}
-
 }
 
 /**

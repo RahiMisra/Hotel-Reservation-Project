@@ -10,7 +10,6 @@ public class Reservation {
 	// totalPrice is nightsReserved * room.pricePerNight
 	// nightsReserved = (int) ChronoUnit.DAYS.between(checkInDate, checkOutDate);
 	private int nightsReserved;
-	private int dayNumber;
 	private int totalPrice;
 	// totalGuests and roomType are inputs from the customer
 	private int totalGuests;
@@ -21,92 +20,140 @@ public class Reservation {
 	private boolean available;
 	private int confirmationNumber;
 	private int roomNumber;
+	Room r = new Room();
 
 	public Reservation() {
 
 	}
 
 	public void reserveRoom(LocalDate checkInDate, LocalDate checkOutDate, int totalGuests, String roomType) {
-		dayNumber = checkInDate.getDayOfYear() - 1;
-		nightsReserved = checkInDate.until(checkOutDate).getDays();
 
-		if (checkAvailable(checkInDate, checkOutDate, roomType)) {
-			Room reservedRoom = new Room(roomNumber);
-			reservedRoom.addRoom(roomNumber);
-			totalPrice = calculateTotalPrice(reservedRoom.getPricePerNight());
+		if (!r.getIsOccupied(checkInDate, checkOutDate)) {
+			setRoomNumber(checkInDate, checkOutDate, roomType);
+			roomNumber = getRoomNumber();
+			r.addRoom(roomNumber);
+			totalPrice = calculateTotalPrice(r.getPricePerNight());
 			confirmationNumber = generateConfirmationNumber();
-			for (int i = 0; i <= nightsReserved; i++) {
-				reservedRoom.setIsOccupied(dayNumber + i);
-			}
+			r.setIsOccupied(checkInDate, checkOutDate);
 		} else {
 			// gui.error message
 		}
 	}
 
-	public boolean checkAvailable(LocalDate checkInDate, LocalDate checkOutDate, String roomType) {
-		Room r = new Room();
-
+	public void setRoomNumber(LocalDate checkInDate, LocalDate checkOutDate, String roomType) {
 		if (roomType.equals("king")) {
 			roomNumber = 1;
-			if (r.roomArray.size() == 0) {
-				available = true;
+			if (r.roomArray == null) {
+				r.addRoom(roomNumber);
 			} else {
 				for (int i = 0; i < r.roomArray.size(); i++) {
 					if (r.roomArray.get(i).getRoomNumber() > 0 && r.roomArray.get(i).getRoomNumber() < 20) {
-						for (int j = 0; j <= nightsReserved; j++) {
-							if (r.roomArray.get(i).getIsOccupied(dayNumber + j)) {
-								roomNumber++;
-								available = false;
+						if (r.roomArray.get(i).getIsOccupied(checkInDate, checkOutDate)) {
+							if (roomNumber > 20) {
 								break;
-							} else {
-								available = true;
 							}
+							roomNumber++;
 						}
 					}
 				}
 			}
 		} else if (roomType.equals("queen")) {
 			roomNumber = 21;
-			if (r.roomArray.size() == 0) {
-				available = true;
+			if (r.roomArray == null) {
+				r.addRoom(roomNumber);
 			} else {
 				for (int i = 0; i < r.roomArray.size(); i++) {
 					if (r.roomArray.get(i).getRoomNumber() > 20 && r.roomArray.get(i).getRoomNumber() <= 40) {
-						roomNumber = 21;
-						for (int j = 0; j <= nightsReserved; j++) {
-							if (r.roomArray.get(i).getIsOccupied(dayNumber + j)) {
-								roomNumber++;
-								available = false;
+						if (r.roomArray.get(i).getIsOccupied(checkInDate, checkOutDate)) {
+							if (roomNumber > 40) {
 								break;
-							} else {
-								available = true;
 							}
+							roomNumber++;
 						}
 					}
 				}
 			}
 		} else {
 			roomNumber = 41;
-			if (r.roomArray.size() == 0) {
+			if (r.roomArray == null) {
+				r.addRoom(roomNumber);
+			} else {
+				for (int i = 0; i < r.roomArray.size(); i++) {
+					if (r.roomArray.get(i).getRoomNumber() > 40 && r.roomArray.get(i).getRoomNumber() <= 50) {
+						if (r.roomArray.get(i).getIsOccupied(checkInDate, checkOutDate)) {
+							if (roomNumber > 50) {
+								break;
+							}
+							roomNumber++;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public boolean checkAvailable(LocalDate checkInDate, LocalDate checkOutDate, String roomType) {
+		int cutoff;
+		if (roomType.equals("king")) {
+			if (r.roomArray == null) {
+				available = true;
+			} else {
+				for (int i = 0; i < r.roomArray.size(); i++) {
+					if (r.roomArray.get(i).getRoomNumber() > 0 && r.roomArray.get(i).getRoomNumber() < 20) {
+						if (r.roomArray.get(i).getIsOccupied(checkInDate, checkOutDate)) {
+							available = false;
+						} else {
+							cutoff = r.roomArray.get(i).getRoomNumber();
+							if (cutoff > 20) {
+								break;
+							}
+							available = true;
+						}
+					}
+				}
+			}
+		} else if (roomType.equals("queen")) {
+			if (r.roomArray == null) {
+				available = true;
+			} else {
+				for (int i = 0; i < r.roomArray.size(); i++) {
+					if (r.roomArray.get(i).getRoomNumber() > 20 && r.roomArray.get(i).getRoomNumber() <= 40) {
+						if (r.roomArray.get(i).getIsOccupied(checkInDate, checkOutDate)) {
+							available = false;
+						} else {
+							cutoff = r.roomArray.get(i).getRoomNumber();
+							if (cutoff > 40) {
+								break;
+							}
+							available = true;
+						}
+					}
+				}
+			}
+		} else {
+			if (r.roomArray == null) {
 				available = true;
 			} else {
 				for (int i = 0; i < r.roomArray.size(); i++) {
 					if (r.roomArray.get(i).getRoomNumber() > 40 && r.roomArray.get(i).getRoomNumber() <= 50) {
-						roomNumber = 41;
-						for (int j = 0; j <= nightsReserved; j++) {
-							if (r.roomArray.get(i).getIsOccupied(dayNumber + j)) {
-								roomNumber++;
-								available = false;
+						if (r.roomArray.get(i).getIsOccupied(checkInDate, checkOutDate)) {
+							available = false;
+						} else {
+							cutoff = r.roomArray.get(i).getRoomNumber();
+							if (cutoff > 20) {
 								break;
-							} else {
-								available = true;
 							}
+							available = true;
 						}
 					}
 				}
 			}
 		}
 		return available;
+	}
+
+	public int getRoomNumber() {
+		return roomNumber;
 	}
 
 	public void setCheckInDate(LocalDate checkInDate) {

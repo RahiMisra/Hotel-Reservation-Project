@@ -41,7 +41,7 @@ public class GUI implements ActionListener {
 	Reservation reservation = new Reservation();
 	Room room = new Room();
 
-	private final JFrame frame = new JFrame("hotel");
+	private final JFrame frame = new JFrame("Bug-Byte League Hotel");
 
 	private final JPanel centerPanel = new JPanel();
 
@@ -51,13 +51,13 @@ public class GUI implements ActionListener {
 	private JButton kingBedrateBtn;
 	private JButton queenBedrateBtn;
 	private JButton suiteBedrateBtn;
-	private final JButton payAsGuestButton = new JButton("confirm and pay");
-	private final JButton homebtn = new JButton("home");
-	private final JButton roomsbtn = new JButton("rooms");
-	private final JButton bookbtn = new JButton("book");
+	private final JButton payAsGuestButton = new JButton("Confirm and Pay");
+	private final JButton homebtn = new JButton("Home");
+	private final JButton roomsbtn = new JButton("Rooms");
+	private final JButton bookbtn = new JButton("Book");
 
 	private JButton proceedBtn;
-	private final JButton completeReservationAsMemberButton = new JButton("pay");
+	private final JButton completeReservationAsMemberButton = new JButton("Pay");
 	private final JTextArea cartTextArea = new JTextArea();
 
 	private final String[] roomtype = { "all", "king", "queen", "suite" };
@@ -86,16 +86,16 @@ public class GUI implements ActionListener {
 	private JLabel suitelabel;
 
 	private final TextField searchbar = new TextField(20);
-	private final JButton searchbtn = new JButton("search");
+	private final JButton searchbtn = new JButton("Search");
 	private final JTextField usernameTextFiled = new JTextField();
 	private final JPasswordField passwrdtextfield = new JPasswordField();
 
 	private JPanel detailsPanel = new JPanel();
 
-	private final JButton loginOrRegisterbtn = new JButton("log in/register");
+	private final JButton loginOrRegisterbtn = new JButton("Login/Register");
 
 	// private final JButton registerBtn = new JButton("register");
-	private final JButton logoutbtn = new JButton("log out");
+	private final JButton logoutbtn = new JButton("Logout");
 
 	private JTextField kingratefield = new JTextField();
 	private JTextField queenratefield = new JTextField();
@@ -133,7 +133,7 @@ public class GUI implements ActionListener {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private JButton UpcomingReservationsButton = new JButton("Upcoming Reservations");
-	private JButton logOutButtonEditAccount = new JButton("LogOut");
+	private JButton logOutButtonEditAccount = new JButton("Logout");
 
 	public GUI() {
 
@@ -189,7 +189,7 @@ public class GUI implements ActionListener {
 
 	private JPanel homePanel() {
 		JPanel home = new JPanel();
-		JLabel homelbl = new JLabel("welcome ");
+		JLabel homelbl = new JLabel("Welcome to the Bug-Byte League Hotel!");
 		home.add(homelbl);
 
 		return home;
@@ -198,7 +198,7 @@ public class GUI implements ActionListener {
 
 	private JPanel adminLogin() {
 
-		adminLoginBtn = new JButton("log-in");
+		adminLoginBtn = new JButton("Login");
 		adminNameTextfield = new JTextField();
 		adminLoginTextfield = new JPasswordField();
 		adminNameTextfield.setPreferredSize(new Dimension(200, adminNameTextfield.getPreferredSize().height));
@@ -210,14 +210,14 @@ public class GUI implements ActionListener {
 
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
-		addminLoginPanel.add(new JLabel("user "), gridBagConstraints);
+		addminLoginPanel.add(new JLabel("Username:"), gridBagConstraints);
 
 		gridBagConstraints.gridx = 1;
 		addminLoginPanel.add(adminNameTextfield, gridBagConstraints);
 
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 2;
-		addminLoginPanel.add(new JLabel("password "), gridBagConstraints);
+		addminLoginPanel.add(new JLabel("Password:"), gridBagConstraints);
 
 		gridBagConstraints.gridx = 1;
 		addminLoginPanel.add(adminLoginTextfield, gridBagConstraints);
@@ -238,13 +238,13 @@ public class GUI implements ActionListener {
 		guestListTextArea = new JTextArea();
 		guestListTextArea.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(guestListTextArea);
-		adminLogOutbtn = new JButton("log-out");
+		adminLogOutbtn = new JButton("Logout");
 
 		guestList.setLayout(new GridBagLayout());
 		// guestListTextArea.setPreferredSize(new Dimension(426, 279));
 		scrollPane.setPreferredSize(new Dimension(400, 300));
 
-		JLabel guestSummaryLabel = new JLabel("Guest List");
+		JLabel guestSummaryLabel = new JLabel("Guests:");
 
 		gridbagConCart.gridx = 0;
 		gridbagConCart.gridy = 0;
@@ -266,17 +266,17 @@ public class GUI implements ActionListener {
 
 	private JPanel ratesPanel() {
 
-		kingratefield.setText("king bedroom rate $" + room.getKingRoomRate());
-		queenratefield.setText("queen bedroom rate $" + room.getQueenRoomRate());
-		suiteratefield.setText("suite bedroom rate $" + room.getSuiteRoomRate());
+		kingratefield.setText("King Bedroom Rate: $" + room.getKingRoomRate());
+		queenratefield.setText("Queen Bedroom Rate: $" + room.getQueenRoomRate());
+		suiteratefield.setText("Suite Bedroom Rate: $" + room.getSuiteRoomRate());
 
 		kingratefield.setEditable(false);
 		queenratefield.setEditable(false);
 		suiteratefield.setEditable(false);
 
-		kingBedrateBtn = new JButton("select");
-		queenBedrateBtn = new JButton("select");
-		suiteBedrateBtn = new JButton("select");
+		kingBedrateBtn = new JButton("Select");
+		queenBedrateBtn = new JButton("Select");
+		suiteBedrateBtn = new JButton("Select");
 
 		ImageIcon kingRateImage = new ImageIcon("images/kingrate.png");
 		ImageIcon queenRateImage = new ImageIcon("images/queenrate.png");
@@ -349,7 +349,7 @@ public class GUI implements ActionListener {
 		passwordLabel = new JLabel("Password:");
 		usernameField = new JTextField(20);
 		passwordField = new JPasswordField(20);
-		loginButton = new JButton("Log In");
+		loginButton = new JButton("Login");
 		createAccountButton = new JButton("Create Account");
 		contactStaffButton = new JButton("Contact Staff");
 
@@ -646,7 +646,7 @@ public class GUI implements ActionListener {
 
 	private JPanel SelectDatePanel() {
 
-		dateSelectsBtn = new JButton("check rates for selected dates");
+		dateSelectsBtn = new JButton("Rates for Selected Dates");
 		checkinTextFiled.setPreferredSize(new Dimension(150, checkinTextFiled.getPreferredSize().height));
 		checkoutTextField.setPreferredSize(new Dimension(150, checkoutTextField.getPreferredSize().height));
 
@@ -656,21 +656,21 @@ public class GUI implements ActionListener {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-		gridPanel.add(new JLabel("number of guests:"), gridBagConstraints);
+		gridPanel.add(new JLabel("Number of Guests:"), gridBagConstraints);
 
 		gridBagConstraints.gridx = 1;
 		gridPanel.add(partySizeComboBox, gridBagConstraints);
 
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
-		gridPanel.add(new JLabel("check in date yyyy-mm-dd "), gridBagConstraints);
+		gridPanel.add(new JLabel("Check In Date (yyyy-mm-dd):"), gridBagConstraints);
 
 		gridBagConstraints.gridx = 1;
 		gridPanel.add(checkinTextFiled, gridBagConstraints);
 
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 2;
-		gridPanel.add(new JLabel("check out date yyyy-mm-dd "), gridBagConstraints);
+		gridPanel.add(new JLabel("Check Out Date (yyyy-mm-dd):"), gridBagConstraints);
 
 		gridBagConstraints.gridx = 1;
 		gridPanel.add(checkoutTextField, gridBagConstraints);
@@ -855,16 +855,16 @@ public class GUI implements ActionListener {
 		roomsPanel.setLayout(new GridBagLayout());
 
 		// labels
-		kingbedbutton.setText("view more king Bedroom images");
-		queenbedbutton.setText("view more Queen Bedroom images");
-		suitebedbutton.setText("view more suite bedroom images");
-		kinglabel = new JLabel("<html>364 square feet of space<br>One King size bed <br>"
-				+ " 55 inch LED high definition television<br> In-room safe<br>Sofa<br>Maximum occupancy: 2 </html>");
-		queenlabel = new JLabel("<html>364 square feet of space<br>two Queen beds <br>"
-				+ " 55 inch LED high definition television<br> In-room safe<br>Maximum occupancy: 4 </html>");
+		kingbedbutton.setText("More King Bedroom Images");
+		queenbedbutton.setText("More Queen Bedroom Images");
+		suitebedbutton.setText("More Suite Bedroom Images");
+		kinglabel = new JLabel("<html>364 Square feet of space<br>One king size bed <br>"
+				+ " 55 inch LED high definition television<br>In-room safe<br>Sofa<br>Maximum occupancy: 2 </html>");
+		queenlabel = new JLabel("<html>364 Square feet of space<br>Two queen beds <br>"
+				+ "55 inch LED high definition television<br>In-room safe<br>Maximum occupancy: 4 </html>");
 		suitelabel = new JLabel(
-				"<html>       756 square feet of space<br>Separated living and sleeping area<br>One King size bed <br>"
-						+ " 55 inch LED high definition television<br> In-room safe<br>Wireless Internet access<br>Sofa and seating area for 4 </html>");
+				"<html>756 Square feet of space<br>Separated living and sleeping area<br>One King size bed <br>"
+						+ "55 inch LED high definition television<br>In-room safe<br>Wireless Internet access<br>Sofa and seating area for 4 </html>");
 
 		kinglabel.setIconTextGap(50);
 		queenlabel.setIconTextGap(50);
@@ -1046,7 +1046,6 @@ public class GUI implements ActionListener {
 				} else {
 					// use method of Reservation to set data, make a constructor with no parameters
 					// and make methods to set data
-					reservation = new Reservation();
 					reservation.setCheckInDate(Indate);
 					reservation.setCheckOutDate(Outdate);
 					reservation.setGuests(partySizeComboBox.getSelectedIndex() + 1);
