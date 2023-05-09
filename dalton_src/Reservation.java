@@ -1,36 +1,28 @@
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Reservation {
-	// checkInDate and checkOutDate are inputs passed into java.time.LocalDate
 	private LocalDate checkInDate;
 	private LocalDate checkOutDate;
-	// nightsReserved is an int value of the number of days between two specified
-	// dates
-	// totalPrice is nightsReserved * room.pricePerNight
-	// nightsReserved = (int) ChronoUnit.DAYS.between(checkInDate, checkOutDate);
 	private int nightsReserved;
 	private int totalPrice;
-	// totalGuests and roomType are inputs from the customer
 	private int totalGuests;
 	private String roomType;
-	// confirmationNumber is a randomly generated number
-	// roomNumber is the next available number for a specific roomType, checked by
-	// the room class array of rooms
 	private boolean available;
 	private int confirmationNumber;
 	private int roomNumber;
+	public ArrayList<Reservation> reservationArray;
 	Room r = new Room();
 
 	public Reservation() {
-
 	}
 
 	public void reserveRoom(LocalDate checkInDate, LocalDate checkOutDate, int totalGuests, String roomType) {
+		Room r = new Room(roomType);
+		setRoomNumber(checkInDate, checkOutDate, roomType);
 
-		if (!r.getIsOccupied(checkInDate, checkOutDate)) {
-			setRoomNumber(checkInDate, checkOutDate, roomType);
-			roomNumber = getRoomNumber();
+		if (available && totalGuests < r.getMaxGuests()) {
 			r.addRoom(roomNumber);
 			totalPrice = calculateTotalPrice(r.getPricePerNight());
 			confirmationNumber = generateConfirmationNumber();
@@ -45,14 +37,18 @@ public class Reservation {
 			roomNumber = 1;
 			if (r.roomArray == null) {
 				r.addRoom(roomNumber);
+				available = true;
 			} else {
 				for (int i = 0; i < r.roomArray.size(); i++) {
-					if (r.roomArray.get(i).getRoomNumber() > 0 && r.roomArray.get(i).getRoomNumber() < 20) {
+					if (r.roomArray.get(i).getRoomNumber() > 0 && r.roomArray.get(i).getRoomNumber() <= 20) {
 						if (r.roomArray.get(i).getIsOccupied(checkInDate, checkOutDate)) {
+							available = false;
 							if (roomNumber > 20) {
 								break;
 							}
 							roomNumber++;
+						} else {
+							available = true;
 						}
 					}
 				}
@@ -61,14 +57,18 @@ public class Reservation {
 			roomNumber = 21;
 			if (r.roomArray == null) {
 				r.addRoom(roomNumber);
+				available = true;
 			} else {
 				for (int i = 0; i < r.roomArray.size(); i++) {
 					if (r.roomArray.get(i).getRoomNumber() > 20 && r.roomArray.get(i).getRoomNumber() <= 40) {
 						if (r.roomArray.get(i).getIsOccupied(checkInDate, checkOutDate)) {
+							available = false;
 							if (roomNumber > 40) {
 								break;
 							}
 							roomNumber++;
+						} else {
+							available = true;
 						}
 					}
 				}
@@ -77,14 +77,18 @@ public class Reservation {
 			roomNumber = 41;
 			if (r.roomArray == null) {
 				r.addRoom(roomNumber);
+				available = true;
 			} else {
 				for (int i = 0; i < r.roomArray.size(); i++) {
 					if (r.roomArray.get(i).getRoomNumber() > 40 && r.roomArray.get(i).getRoomNumber() <= 50) {
 						if (r.roomArray.get(i).getIsOccupied(checkInDate, checkOutDate)) {
+							available = false;
 							if (roomNumber > 50) {
 								break;
 							}
 							roomNumber++;
+						} else {
+							available = true;
 						}
 					}
 				}
@@ -99,7 +103,7 @@ public class Reservation {
 				available = true;
 			} else {
 				for (int i = 0; i < r.roomArray.size(); i++) {
-					if (r.roomArray.get(i).getRoomNumber() > 0 && r.roomArray.get(i).getRoomNumber() < 20) {
+					if (r.roomArray.get(i).getRoomNumber() > 0 && r.roomArray.get(i).getRoomNumber() <= 20) {
 						if (r.roomArray.get(i).getIsOccupied(checkInDate, checkOutDate)) {
 							available = false;
 						} else {
@@ -152,6 +156,11 @@ public class Reservation {
 		return available;
 	}
 
+	public void addReservation() {
+		reservationArray = new ArrayList<>();
+		reservationArray.add(new Reservation());
+	}
+
 	public int getRoomNumber() {
 		return roomNumber;
 	}
@@ -175,6 +184,10 @@ public class Reservation {
 
 	public String getRoomType() {
 		return roomType;
+	}
+
+	public boolean getAvailable() {
+		return available;
 	}
 
 	public int calculateTotalPrice(int pricePerNight) {

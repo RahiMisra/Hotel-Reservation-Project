@@ -389,10 +389,18 @@ public class GUI implements ActionListener {
 		 */
 		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				centerPanel.add(login(), "login");
-				cardlayout.show(centerPanel, "login");
-				appendToTextAreaAndRemoveButtons();
+				String username = usernameField.getText();
+				String password = String.valueOf(passwordField.getPassword());
 
+				if (username.equals("") || password.equals("")) {
+					JOptionPane.showMessageDialog(frame, "Please enter valid login information.");
+
+				} else {
+					JOptionPane.showMessageDialog(frame, "You have successfully logged in.");
+					centerPanel.add(login(), "login");
+					cardlayout.show(centerPanel, "login");
+					appendToTextAreaAndRemoveButtons();
+				}
 			}
 		});
 
@@ -415,10 +423,6 @@ public class GUI implements ActionListener {
 	 * successful *login.
 	 */
 	private JPanel login() {
-		String username = usernameField.getText();
-		String password = String.valueOf(passwordField.getPassword());
-
-		JOptionPane.showMessageDialog(frame, "You have successfully logged in.");
 
 		JFrame editAccountFrame = new JFrame("Edit Account Information");
 		editAccountFrame.setSize(400, 400);
@@ -488,6 +492,7 @@ public class GUI implements ActionListener {
 	 */
 	private void createAccount() {
 
+		JTextField userNameField = new JTextField(20);
 		JTextField firstNameField = new JTextField(20);
 		JTextField lastNameField = new JTextField(20);
 		JTextField phoneNumberField = new JTextField(20);
@@ -507,49 +512,53 @@ public class GUI implements ActionListener {
 		c.gridy = 1;
 		c.gridwidth = 1;
 		c.insets = new Insets(10, 10, 10, 10);
+		panel.add(new JLabel("Username:"), c);
+		c.gridx = 1;
+		panel.add(userNameField, c);
+
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		c.insets = new Insets(10, 10, 10, 10);
 		panel.add(new JLabel("First Name:"), c);
 		c.gridx = 1;
 		panel.add(firstNameField, c);
 
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 3;
 		panel.add(new JLabel("Last Name:"), c);
 		c.gridx = 1;
 		panel.add(lastNameField, c);
 
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 4;
 		panel.add(new JLabel("Phone Number:"), c);
 		c.gridx = 1;
 		panel.add(phoneNumberField, c);
 
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 5;
 		panel.add(new JLabel("Email:"), c);
 		c.gridx = 1;
 		panel.add(emailField, c);
 
 		c.gridx = 0;
-		c.gridy = 5;
+		c.gridy = 6;
 		panel.add(new JLabel("Password:"), c);
 		c.gridx = 1;
 		panel.add(passwordField, c);
 
 		c.gridx = 0;
-		c.gridy = 6;
+		c.gridy = 7;
 		panel.add(new JLabel("Payment Method:"), c);
 		c.gridx = 1;
 		panel.add(paymentMethodCombo, c);
-
-		c.gridx = 0;
-		c.gridy = 7;
-		c.gridwidth = 2;
-		panel.add(new JButton("Create Account"), c);
 
 		int result = JOptionPane.showConfirmDialog(frame, panel, "Create Account", JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
 		if (result == JOptionPane.OK_OPTION) {
+			String userName = userNameField.getText();
 			String firstName = firstNameField.getText();
 			String lastName = lastNameField.getText();
 			String phoneNumber = phoneNumberField.getText();
@@ -559,6 +568,7 @@ public class GUI implements ActionListener {
 
 			// Add this to database
 			System.out.println("Account created:");
+			System.out.println("Username: " + userName);
 			System.out.println("First Name: " + firstName);
 			System.out.println("Last Name: " + lastName);
 			System.out.println("Phone Number: " + phoneNumber);
@@ -1071,7 +1081,7 @@ public class GUI implements ActionListener {
 			cartTextArea.append("\nCheck in date: " + reservation.getCheckInDate() + "\nCheck out date: "
 					+ reservation.getCheckOutDate() + "\nParty size: " + reservation.getGuests());
 			cartTextArea.append(
-					"\nroomtpye:" + reservation.getRoomType() + "\ntotal price: " + reservation.getTotalPrice());
+					"\nRoomtype:" + reservation.getRoomType() + "\nTotal price: " + reservation.getTotalPrice());
 			cardlayout.show(centerPanel, "summaryPanel");
 
 		} else if (e.getSource() == queenBedrateBtn) {
@@ -1081,7 +1091,7 @@ public class GUI implements ActionListener {
 					+ reservation.getCheckOutDate() + "\nParty size: " + reservation.getGuests());
 			reservation.setRoomType("queen");
 			cartTextArea.append(
-					"\nroomtpye:" + reservation.getRoomType() + "\ntotal price: " + reservation.getTotalPrice());
+					"\nRoomtype:" + reservation.getRoomType() + "\nTotal price: " + reservation.getTotalPrice());
 			cardlayout.show(centerPanel, "summaryPanel");
 
 		} else if (e.getSource() == suiteBedrateBtn) {
@@ -1091,14 +1101,14 @@ public class GUI implements ActionListener {
 			cartTextArea.append("\nCheck in date: " + reservation.getCheckInDate() + "\nCheck out date: "
 					+ reservation.getCheckOutDate() + "\nParty size: " + reservation.getGuests());
 			cartTextArea.append(
-					"\nroomType:" + reservation.getRoomType() + "\ntotal price: " + reservation.getTotalPrice());
+					"\nRoomtype:" + reservation.getRoomType() + "\nTotal price: " + reservation.getTotalPrice());
 			cardlayout.show(centerPanel, "summaryPanel");
 
 		}
 
 		// handle room availability buttons
 		kingBedrateBtn.setEnabled(true);
-		kingBedrateBtn.setText(kingBedrateBtn.isEnabled() ? "Select" : "out");
+		kingBedrateBtn.setText(kingBedrateBtn.isEnabled() ? "Select" : "Out");
 		if (reservation.getGuests() > 2) {
 			kingBedrateBtn.setEnabled(false);
 			kingBedrateBtn.setText("Max Party: 2");
