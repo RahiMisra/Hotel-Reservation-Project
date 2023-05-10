@@ -26,6 +26,16 @@ public class PaymentInfo {
 	 * @param billingAddress  The billing address of the customer
 	 * @param shippingAddress The shipping address of the customer
 	 */
+	
+	public PaymentInfo() {
+		username = "";
+		cardName = "";
+		cardNumber = "";
+		expirationDate = "";
+		CVC = "";
+		billingAddress = "";
+		shippingAddress = "";
+	}
 	public PaymentInfo(String username, String cardName, String cardNumber, String CVC, String expirationDate, String billingAddress,
 			String shippingAddress) {
 		this.username = username;

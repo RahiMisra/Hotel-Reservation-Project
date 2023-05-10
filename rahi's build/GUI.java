@@ -46,6 +46,7 @@ public class GUI extends JFrame implements ActionListener {
 	
 	// default constructor for Reservation needed
 	Reservation reservation = new Reservation();
+	
 	Room room = new Room();
 
 	private final JFrame frame = new JFrame("Bug-Byte League Hotel");
@@ -84,6 +85,7 @@ public class GUI extends JFrame implements ActionListener {
 	private final JButton suitebedbutton = new JButton();
 	private boolean isLogin = false;
 	UserInfo user = new UserInfo();
+	PaymentInfo payment = new PaymentInfo();
 	private GridBagConstraints gridbagConCart = new GridBagConstraints();
 	private JButton cartloginBtn = new JButton("Login");
 
@@ -124,8 +126,8 @@ public class GUI extends JFrame implements ActionListener {
 	private JTextArea completedReservationTextArea;
 	private JTextArea accountTextArea;
 	private int numberOfRoomClicks = 0;
-	private JTextField nameTextfield = new JTextField();
-	private JTextField usernameTextfield = new JTextField();
+	private JTextField firstTextfield = new JTextField();
+	private JTextField lastTextfield = new JTextField();
 	private JTextField emailTextfield = new JTextField();
 	private JTextField phoneTextfield = new JTextField();
 	private JTextField NameOnCardtextfield = new JTextField();
@@ -144,6 +146,7 @@ public class GUI extends JFrame implements ActionListener {
 	private JButton logOutButtonEditAccount = new JButton("Logout");
 
 	public GUI(Connection con) {
+		reservation.initializeReservations(con);
 		//sets the con in this gui to the connection to use the database methods
 		this.con = con;
 		addWindowListener(new WindowAdapter() {
@@ -155,6 +158,8 @@ public class GUI extends JFrame implements ActionListener {
                 }
             }
         });
+		//initializes the array list of reservations with the reservations in the database so they can be checked locally
+		reservation.initializeReservations(con);
 		
 
 		JPanel MainPanel = new JPanel(new BorderLayout(8, 6));
@@ -443,6 +448,105 @@ public class GUI extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(frame, "Incorrect Account Information");
 		}
 	}
+	
+	private void createPaymentAccount() {
+		JTextField nameField = new JTextField(20);
+		JPasswordField numberField = new JPasswordField(20);
+		JTextField expField = new JTextField(20);
+		JPasswordField cvcField = new JPasswordField(20);
+		JTextField billingField = new JTextField(20);
+		JTextField shippingField = new JTextField(20);
+		JComboBox<String> paymentMethodCombo = new JComboBox<>(new String[] { "Credit Card", "PayPal" });
+
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridwidth = 2;
+		c.insets = new Insets(10, 10, 30, 10);
+		panel.add(new JLabel("Create Payment Account"), c);
+
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		c.insets = new Insets(10, 10, 10, 10);
+		panel.add(new JLabel("Name:"), c);
+		c.gridx = 1;
+		panel.add(nameField, c);
+
+		c.gridx = 0;
+		c.gridy = 3;
+		panel.add(new JLabel("Card Number:"), c);
+		c.gridx = 1;
+		panel.add(numberField, c);
+
+		c.gridx = 0;
+		c.gridy = 4;
+		panel.add(new JLabel("Expiration Date:"), c);
+		c.gridx = 1;
+		panel.add(expField, c);
+
+		c.gridx = 0;
+		c.gridy = 5;
+		panel.add(new JLabel("CVC:"), c);
+		c.gridx = 1;
+		panel.add(cvcField, c);
+
+		c.gridx = 0;
+		c.gridy = 6;
+		panel.add(new JLabel("Billing:"), c);
+		c.gridx = 1;
+		panel.add(billingField, c);
+		
+		c.gridx = 0;
+		c.gridy = 7;
+		panel.add(new JLabel("Shipping:"), c);
+		c.gridx = 1;
+		panel.add(shippingField, c);
+		
+		c.gridx = 0;
+		c.gridy = 1;
+		panel.add(new JLabel("Payment Method:"), c);
+		c.gridx = 1;
+		panel.add(paymentMethodCombo, c);
+		
+		panel.add(createAccountButton, c);
+
+		int result = JOptionPane.showConfirmDialog(frame, panel, "Create Account", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (result == JOptionPane.OK_OPTION) {
+			String name = nameField.getText();
+			String number = String.valueOf(numberField.getPassword());
+			String exp = expField.getText();
+			String cvc = String.valueOf(cvcField.getPassword());;
+			String shipping = shippingField.getText();
+			String billing = shippingField.getText();
+
+			// Add this to database
+			System.out.println("Account created:");
+			System.out.println("Name: " + name);
+			System.out.println("Card Number: " + number);
+			System.out.println("Expiration Date: " + exp);
+			System.out.println("CVC: " + cvc);
+			System.out.println("Billing: " + billing);
+			System.out.println("Shipping: " + shipping);
+			
+			//stores the user info into a local user variable
+			payment.setCardName(name);
+			payment.setUsername(user.getUsername());
+			payment.setCardNumber(number);
+			payment.setExpirationDate(exp);
+			payment.setCVC(cvc);
+			payment.setBillingAddress(billing);
+			payment.setShippingAddress(shipping);
+			
+			//stores the user info into the database
+			DatabaseMethods.makePaymentAccount(con, payment);
+		}
+			
+
+	}
 
 	/**
 	 * Opens a new window for editing the user's account information after
@@ -527,7 +631,6 @@ public class GUI extends JFrame implements ActionListener {
 		JTextField phoneNumberField = new JTextField(20);
 		JTextField emailField = new JTextField(20);
 		JPasswordField passwordField = new JPasswordField(20);
-		JComboBox<String> paymentMethodCombo = new JComboBox<>(new String[] { "Credit Card", "PayPal" });
 
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -569,16 +672,19 @@ public class GUI extends JFrame implements ActionListener {
 		c.gridx = 1;
 		panel.add(passwordField, c);
 
-		c.gridx = 0;
-		c.gridy = 6;
-		panel.add(new JLabel("Payment Method:"), c);
-		c.gridx = 1;
-		panel.add(paymentMethodCombo, c);
 
 		c.gridx = 0;
 		c.gridy = 7;
 		c.gridwidth = 2;
-		panel.add(new JButton("Create Account"), c);
+		panel.add(new JButton("Add Payment Options"), c);
+		createAccountButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // Creates payment account when clicked
+		        createPaymentAccount();
+		    }
+		});
+		panel.add(createAccountButton, c);
 
 		int result = JOptionPane.showConfirmDialog(frame, panel, "Create Account", JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
@@ -589,7 +695,6 @@ public class GUI extends JFrame implements ActionListener {
 			String phoneNumber = phoneNumberField.getText();
 			String email = emailField.getText();
 			String password = String.valueOf(passwordField.getPassword());
-			String paymentMethod = (String) paymentMethodCombo.getSelectedItem();
 
 			// Add this to database
 			System.out.println("Account created:");
@@ -598,7 +703,6 @@ public class GUI extends JFrame implements ActionListener {
 			System.out.println("Phone Number: " + phoneNumber);
 			System.out.println("Email: " + email);
 			System.out.println("Password: " + password);
-			System.out.println("Payment Method: " + paymentMethod);
 			
 			//stores the user info into a local user variable
 			user.setName(name);
@@ -839,9 +943,9 @@ public class GUI extends JFrame implements ActionListener {
 		gridPanel.setBounds(205, 150, 300, 500);
 
 		gridPanel.add(firstNamelnl);
-		gridPanel.add(nameTextfield);
+		gridPanel.add(firstTextfield);
 		gridPanel.add(lastNamelbl);
-		gridPanel.add(usernameTextfield);
+		gridPanel.add(lastTextfield);
 		gridPanel.add(new JLabel("Address:"));
 		gridPanel.add(addressTextfield);
 		gridPanel.add(new JLabel("City:"));
@@ -1353,8 +1457,8 @@ public class GUI extends JFrame implements ActionListener {
 		} else if (e.getSource() == payAsGuestButton) {
 
 			try {
-				String firstName = nameTextfield.getText();
-				String lastName = usernameTextfield.getText();
+				String firstName = firstTextfield.getText();
+				String lastName = lastTextfield.getText();
 				String address = addressTextfield.getText();
 				String city = cityTextField.getText();
 				String state = stateTextField.getText();
@@ -1362,9 +1466,9 @@ public class GUI extends JFrame implements ActionListener {
 				String email = emailTextfield.getText();
 				String phone = phoneTextfield.getText();
 				String nameOnCard = NameOnCardtextfield.getName();
-				String cardNumber = CardNumberTextField.getText();
+				String cardNumber = String.valueOf(CardNumberTextField.getPassword());
 				String experationDate = ExperactionDatetextfield.getText();
-				String CVC = CVCnumbertextfield.getText();
+				String CVC = String.valueOf(CVCnumbertextfield.getPassword());
 
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/yy");
 				simpleDateFormat.setLenient(false);
@@ -1398,11 +1502,12 @@ public class GUI extends JFrame implements ActionListener {
 					// Feed data to a class
 					reservation.reserveRoom(reservation.getCheckInDate(), reservation.getCheckOutDate(),
 							reservation.getGuests(), reservation.getRoomType());
+					DatabaseMethods.makeReservation(con, reservation);
 					cardlayout.show(centerPanel, "completedReservationPanel");
 
 					// clear textfields
-					nameTextfield.setText("");
-					usernameTextfield.setText("");
+					firstTextfield.setText("");
+					lastTextfield.setText("");
 					addressTextfield.setText("");
 					cityTextField.setText("");
 					stateTextField.setText("");

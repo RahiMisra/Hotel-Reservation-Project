@@ -352,14 +352,14 @@ public class DatabaseMethods {
 	//this function allows you to get the username associated with a reservation from the Reservation table
 	//requires the reservation's room number and date
 	public static ArrayList<Reservation> getReservation(Connection con, ArrayList<Reservation> reservationList) {
-		String SQL = "SELECT * FROM reservation_table"; // Replace with your table name
+		String SQL = "SELECT * FROM Reservation"; // Replace with your table name
 		try {
 		    Statement stmt = con.createStatement();
 		    ResultSet rs = stmt.executeQuery(SQL);
 		    while (rs.next()) {
 		        // Get values from ResultSet and create a Reservation object
-		        LocalDate checkInDate = rs.getDate("CheckInDate").toLocalDate();
-		        LocalDate checkOutDate = rs.getDate("CheckOutDate").toLocalDate();
+		        LocalDate checkInDate = rs.getDate("CheckIn").toLocalDate();
+		        LocalDate checkOutDate = rs.getDate("CheckOut").toLocalDate();
 		        int totalGuests = rs.getInt("Guests");
 		        int confirmationNumber = rs.getInt("Confirmation");
 		        String roomType = rs.getString("RoomType");
