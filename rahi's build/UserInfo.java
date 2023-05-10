@@ -119,7 +119,7 @@ public class UserInfo {
 	 * @param lastName a String value representing the user's last name
 	 */
 	public void setUsername(String username) {
-		this.name = username;
+		this.username = username;
 	}
 
 	/**

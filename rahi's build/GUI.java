@@ -409,10 +409,11 @@ public class GUI extends JFrame implements ActionListener {
 		 */
 		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				centerPanel.add(login(), "login");
-				cardlayout.show(centerPanel, "login");
-				appendToTextAreaAndRemoveButtons();
-
+				String inputUsername = usernameField.getText();
+				String inputPassword = String.valueOf(passwordField.getPassword());
+				user.setUsername(inputUsername);
+				DatabaseMethods.getUser_Info(con, user);
+				checkAccount(inputUsername, inputPassword);
 			}
 		});
 
@@ -429,6 +430,18 @@ public class GUI extends JFrame implements ActionListener {
 			}
 		});
 		return panel;
+	}
+	
+	//checks if the user entered valid account information
+	private void checkAccount(String username, String password) {
+		if(user.getUsername().equals(username) && user.getPassword().equals(password)) {
+			centerPanel.add(login(), "login");
+			cardlayout.show(centerPanel, "login");
+			appendToTextAreaAndRemoveButtons();
+		}
+		else {
+			JOptionPane.showMessageDialog(frame, "Incorrect Account Information");
+		}
 	}
 
 	/**
@@ -1166,9 +1179,13 @@ public class GUI extends JFrame implements ActionListener {
 			loginOrRegisterbtn.setText("log in/register");
 			proceedBtn.setText("guest checkout");
 			isLogin = false;
+			user.setName("");
+			user.setUsername("");
+			user.setEmail("");
+			user.setPassword("");
+			user.setPhoneNumber("");
 			camefromSummaryPanel = false;
 			usernameTextFiled.setText("");
-
 			btnPanel.add(cartloginBtn);
 			btnPanel.add(proceedBtn);
 
@@ -1229,7 +1246,7 @@ public class GUI extends JFrame implements ActionListener {
 		}
 		if (e.getSource() == adminLoginBtn) {
 
-			if (adminNameTextfield.getText().equals("csun") && adminLoginTextfield.getText().equals("123")) {
+			if (adminNameTextfield.getText().equals("csun") && String.valueOf(passwordField.getPassword()).equals("123")) {
 
 				File file = new File("output.txt");
 				if (!file.exists()) {
