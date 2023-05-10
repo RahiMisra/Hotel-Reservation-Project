@@ -13,12 +13,12 @@ public class UserInfo {
 	 * 
 	 * The first name of the user.
 	 */
-	private String firstName;
+	private String name;
 	/**
 	 * 
 	 * The last name of the user.
 	 */
-	private String lastName;
+	private String username;
 	/**
 	 * 
 	 * The email address of the user.
@@ -68,12 +68,21 @@ public class UserInfo {
 	 * @param password    a String value representing the user's password
 	 * @param phoneNumber a String value representing the user's phone number
 	 */
-	public UserInfo(String firstName, String lastName, String email, String password, String phoneNumber) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+	public UserInfo(String name, String username, String email, String password, String phoneNumber) {
+		this.name = name;
+		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.phoneNumber = phoneNumber;
+		this.isAdmin = false;
+	}
+
+	public UserInfo() {
+		this.name = "";
+		this.username = "";
+		this.email = "";
+		this.password = "";
+		this.phoneNumber = "";
 		this.isAdmin = false;
 	}
 
@@ -82,8 +91,8 @@ public class UserInfo {
 	 *
 	 * @return a String value representing the user's first name
 	 */
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -91,17 +100,17 @@ public class UserInfo {
 	 *
 	 * @param firstName a String value representing the user's first name
 	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
 	 * This method returns the user's last name.
 	 *
-	 * @return a String value representing the user's last name
+	 * @return a String value representing the user's username name
 	 */
-	public String getLastName() {
-		return lastName;
+	public String getUsername() {
+		return username;
 	}
 
 	/**
@@ -109,8 +118,8 @@ public class UserInfo {
 	 *
 	 * @param lastName a String value representing the user's last name
 	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	/**
@@ -177,6 +186,21 @@ public class UserInfo {
 	 */
 	public boolean isAdmin() {
 		return isAdmin;
+	}
+	
+	/**
+	 * 
+	 * Returns whether the user is an admin or not.
+	 * 
+	 * @return 1 if the user is an admin, 0 otherwise.
+	 */
+	public int getAdmin() {
+		if (isAdmin) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
 	}
 
 	/**

@@ -1,197 +1,137 @@
-/**
- * 
- * This class represents a room in a hotel and all of its attributes
- */
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 public class Room {
 
-	/**
-	 * 
-	 * The room number of the room.
-	 */
 	private int roomNumber;
-	/**
-	 * 
-	 * The type of room (Master Suite, Family Suite, Queen Suite).
-	 */
-	private RoomType roomType;
-	/**
-	 * 
-	 * The number of beds in the room (1 or 2).
-	 */
 	private int bedCount;
-	/**
-	 * 
-	 * The type of bed in the room (1 = King, 2 = Queen).
-	 */
 	private int bedType;
-	/**
-	 * 
-	 * The price per night for the room.
-	 */
 	private int pricePerNight;
-	/**
-	 * 
-	 * The maximum number of guests that can occupy the room.
-	 */
 	private int maxGuests;
-	/**
-	 * 
-	 * A boolean indicating whether the room is currently occupied or not.
-	 */
+	private RoomType roomType;
 	private boolean isOccupied;
-	/**
-	 * 
-	 * The number of available master suites in the hotel.
-	 */
-	private int availableMaster = 20;
-	/**
-	 * 
-	 * The number of available family suites in the hotel.
-	 */
-	private int availableFamily = 20;
-	/**
-	 * 
-	 * The number of available queen suites in the hotel.
-	 */
-	private int availableQueen = 10;
+	private int kingRoomRate = 250;
+	private int queenRoomRate = 200;
+	private int suiteRoomRate = 300;
+	private boolean[] roomCalendar = new boolean[365];
+	public ArrayList<Room> roomArray;
 
-	/**
-	 * 
-	 * Constructs a Room object with the given room number.
-	 * 
-	 * @param roomNumber the room number of the room
-	 */
+	public Room() {
+	}
+
 	public Room(int roomNumber) {
 		this.roomNumber = roomNumber;
-		this.isOccupied = false;
 
-		if (roomNumber <= 20 && roomNumber > 0) { // 20 King suites
+		if (roomNumber <= 20 && roomNumber > 0) {
 			bedCount = 1;
-			bedType = 1; // 1 for King bed
+			bedType = 1;
 			maxGuests = 4;
-			this.pricePerNight = 140; // $125 per night
-			this.roomType = RoomType.MasterSuite;
-		} else if (roomNumber <= 40 && roomNumber > 20) { // 20 Family suites
+			this.pricePerNight = kingRoomRate;
+			this.roomType = RoomType.KingRoom;
+		} else if (roomNumber <= 40 && roomNumber > 20) {
 			bedCount = 2;
-			bedType = 2; // 2 for Queen bed
+			bedType = 2;
 			maxGuests = 6;
-			this.pricePerNight = 175; // $175 per night
-			this.roomType = RoomType.FamilySuite;
-		} else if (roomNumber <= 50 && roomNumber > 40) { // 10 Queen suites
+			this.pricePerNight = queenRoomRate;
+			this.roomType = RoomType.QueenRoom;
+		} else if (roomNumber <= 50 && roomNumber > 40) {
 			bedCount = 1;
-			bedType = 2; // 2 for Queen bed
+			bedType = 2;
 			maxGuests = 3;
-			this.pricePerNight = 120; // $120 per night
-			this.roomType = RoomType.QueenSuite;
-		} else {
-// GUI.roomNumberErrorMessage(); //display an error message from the GUI
+			this.pricePerNight = suiteRoomRate;
+			this.roomType = RoomType.SuiteRoom;
 		}
 	}
 
-	/**
-	 * 
-	 * Gets the room number of the room.
-	 * 
-	 * @return the room number of the room
-	 */
-	public int getRoomNumber() {
-		return roomNumber;
+	public Room(String roomType) {
+		if (roomType.equals("king")) {
+			bedCount = 1;
+			bedType = 1;
+			maxGuests = 4;
+			this.pricePerNight = kingRoomRate;
+			this.roomType = RoomType.KingRoom;
+		} else if (roomType.equals("queen")) {
+			bedCount = 2;
+			bedType = 2;
+			maxGuests = 6;
+			this.pricePerNight = queenRoomRate;
+			this.roomType = RoomType.QueenRoom;
+		} else {
+			bedCount = 1;
+			bedType = 2;
+			maxGuests = 3;
+			this.pricePerNight = suiteRoomRate;
+			this.roomType = RoomType.SuiteRoom;
+		}
 	}
 
-	/**
-	 * 
-	 * Gets the type of room.
-	 * 
-	 * @return the type of room
-	 */
+	public void addRoom(int roomNumber) {
+		roomArray = new ArrayList<>();
+		roomArray.add(new Room(roomNumber));
+	}
+
+	public boolean getIsOccupied(LocalDate checkInDate, LocalDate checkOutDate) {
+		int dayNumber = checkInDate.getDayOfYear() - 1;
+		int nightsReserved = checkInDate.until(checkOutDate).getDays();
+
+		for (int i = 0; i <= nightsReserved; i++) {
+			if (roomCalendar[dayNumber] == true) {
+				isOccupied = true;
+				break;
+			} else {
+				isOccupied = false;
+			}
+		}
+		return isOccupied;
+	}
+
+	public void setIsOccupied(LocalDate checkInDate, LocalDate checkOutDate) {
+		int dayNumber = checkInDate.getDayOfYear() - 1;
+		int nightsReserved = checkInDate.until(checkOutDate).getDays();
+
+		for (int i = 0; i <= nightsReserved; i++) {
+			roomCalendar[dayNumber + i] = true;
+		}
+	}
+
+	public void releaseRoom(int dateReserved) {
+		roomCalendar[dateReserved] = false;
+	}
+
 	public RoomType getRoomType() {
 		return roomType;
 	}
 
-	/**
-	 * 
-	 * Gets whether the room is currently occupied.
-	 * 
-	 * @return true if the room is currently occupied, false otherwise
-	 */
-	public boolean getIsOccupied() {
-		return isOccupied;
+	public int getRoomNumber() {
+		return roomNumber;
 	}
 
-	/**
-	 * 
-	 * Reserves the room if it's available and of the requested type. If the room is
-	 * reserved successfully, decrement the available rooms count.
-	 */
-	public void reserveRoom() {
-		if (roomType == RoomType.MasterSuite && availableMaster >= 1 && !isOccupied) {
-			isOccupied = true;
-			availableMaster--;
-		} else if (roomType == RoomType.FamilySuite && availableFamily >= 1 && !isOccupied) {
-			isOccupied = true;
-			availableFamily--;
-		} else if (roomType == RoomType.QueenSuite && availableQueen >= 1 && !isOccupied) {
-			isOccupied = true;
-			availableQueen--;
-		}
-	}
-
-	/**
-	 * 
-	 * Releases the room if it's currently occupied and of the requested type. If
-	 * the room is released successfully, increment the available rooms count.
-	 */
-	public void releaseRoom() {
-		if (roomType == RoomType.MasterSuite && isOccupied) {
-			isOccupied = false;
-			availableMaster++;
-		} else if (roomType == RoomType.FamilySuite && isOccupied) {
-			isOccupied = false;
-			availableFamily++;
-		} else if (roomType == RoomType.QueenSuite && isOccupied) {
-			isOccupied = false;
-			availableQueen++;
-		}
-	}
-
-	/**
-	 * 
-	 * Returns the price per night of the room.
-	 * 
-	 * @return the price per night of the room
-	 */
 	public int getPricePerNight() {
 		return pricePerNight;
 	}
 
-	/**
-	 * 
-	 * Returns the number of beds in the room.
-	 * 
-	 * @return the number of beds in the room
-	 */
 	public double getBedCount() {
 		return bedCount;
 	}
 
-	/**
-	 * 
-	 * Returns the type of the beds in the room.
-	 * 
-	 * @return the type of the beds in the room
-	 */
 	public double getBedType() {
 		return bedType;
 	}
 
-	/**
-	 * 
-	 * Returns the maximum number of guests allowed in the room.
-	 * 
-	 * @return the maximum number of guests allowed in the room
-	 */
 	public int getMaxGuests() {
 		return maxGuests;
+	}
+
+	public int getKingRoomRate() {
+		return kingRoomRate;
+	}
+
+	public int getQueenRoomRate() {
+		return queenRoomRate;
+	}
+
+	public int getSuiteRoomRate() {
+		return suiteRoomRate;
 	}
 }
 
@@ -200,5 +140,5 @@ public class Room {
  * Enumeration of the possible room types.
  */
 enum RoomType {
-	MasterSuite, FamilySuite, QueenSuite
+	KingRoom, QueenRoom, SuiteRoom
 }

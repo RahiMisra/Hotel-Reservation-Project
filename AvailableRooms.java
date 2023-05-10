@@ -183,6 +183,28 @@ public class AvailableRooms {
                 + "queenrooms available: " + QueenRoomsLeft() + "\n"
                 + "suiterooms available: " + SuiteRoomsLeft() + "\n";
     }
+    
+    // gets the number of beds occupied so it can be stored in the database
+    public int getkingBedsOccupied() {
+    	return kingBedsOccupied;
+    }
+    public int getqueenBedsOccupied() {
+    	return queenBedsOccupied;
+    }
+    public int getsuiteBedsOccupied() {
+    	return suiteBedsOccupied;
+    }
+    
+    //sets the number of beds occupied so it can be stored in the database
+    public void setkingBedsOccupied(int kingstaken) {
+    	this.kingBedsOccupied = kingstaken;
+    }
+    public void setqueenBedsOccupied(int queenstaken) {
+    	this.queenBedsOccupied = queenstaken;
+    }
+    public void setsuiteBedsOccupied(int suitestaken) {
+    	this.suiteBedsOccupied = suitestaken;
+    }
 
 }
 

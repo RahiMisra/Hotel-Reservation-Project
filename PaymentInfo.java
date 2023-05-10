@@ -7,6 +7,7 @@
  */
 public class PaymentInfo {
 
+	private String username; //connects payment into with user account
 	private String cardName; // The name on the card
 	private String cardNumber; // The card number
 	private String expirationDate; // The expiration date of the card
@@ -25,14 +26,35 @@ public class PaymentInfo {
 	 * @param billingAddress  The billing address of the customer
 	 * @param shippingAddress The shipping address of the customer
 	 */
-	public PaymentInfo(String cardName, String cardNumber, String CVC, String expirationDate, String billingAddress,
+	
+	public PaymentInfo() {
+		username = "";
+		cardName = "";
+		cardNumber = "";
+		expirationDate = "";
+		CVC = "";
+		billingAddress = "";
+		shippingAddress = "";
+	}
+	public PaymentInfo(String username, String cardName, String cardNumber, String CVC, String expirationDate, String billingAddress,
 			String shippingAddress) {
+		this.username = username;
 		this.cardName = cardName;
 		this.cardNumber = cardNumber;
 		this.CVC = CVC;
 		this.expirationDate = expirationDate;
 		this.billingAddress = billingAddress;
 		this.shippingAddress = shippingAddress;
+	}
+	
+	/**
+	 * 
+	 * Returns the username attached to the payment
+	 * 
+	 * @return The username
+	 */
+	public String getUsername() {
+		return username;
 	}
 
 	/**
@@ -94,6 +116,16 @@ public class PaymentInfo {
 	public String getShippingAddress() {
 		return shippingAddress;
 	}
+	
+	/**
+	 * 
+	 * Updates the username attached to the payment
+	 * 
+	 * @param username the new username attached to the payment account
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	/**
 	 * 
@@ -113,6 +145,10 @@ public class PaymentInfo {
 	 */
 	public void setCardNumber(String cardNumber) {
 		this.cardNumber = cardNumber;
+	}
+	
+	public void setCVC(String CVC) {
+		this.CVC = CVC;
 	}
 
 	/**

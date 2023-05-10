@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.sql.Date;
 
 public class DatabaseMethods {
 	//the get connection function is used to connect to the database server
@@ -76,15 +79,17 @@ public class DatabaseMethods {
 	//User_Account (working)
 //---------------------------------------------------------------------------------------------------------------
 	//this function makes a row in the User_Info table
-	public static void makeAccount(Connection con, String name, String password, String email, String phone, String username) {
-		String SQL = "INSERT INTO User_Info(Name, Password, Email, Phone, Username) Values(?,?,?,?,?)";
+	//retested
+	public static void makeAccount(Connection con, UserInfo user) {
+		String SQL = "INSERT INTO User_Info(Name, Password, Email, Phone, Admin, Username) Values(?,?,?,?,?,?)";
 		try {
 	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1, name);
-	    pstmt.setString(2, password);
-	    pstmt.setString(3, email);
-	    pstmt.setString(4,  phone);
-	    pstmt.setString(5,  username);
+	    pstmt.setString(1, user.getName());
+	    pstmt.setString(2, user.getPassword());
+	    pstmt.setString(3, user.getEmail());
+	    pstmt.setString(4,  user.getPhoneNumber());
+	    pstmt.setInt(5, user.getAdmin());
+	    pstmt.setString(6,  user.getUsername());
 	    pstmt.executeUpdate();
 	    pstmt.close();
 		} catch (SQLException e) {
@@ -94,102 +99,40 @@ public class DatabaseMethods {
 	} 
 	//this function allows you to update all of the columns in a row
 	//requires user's username
-	public static void updateAccount(Connection con, String name, String password, String email, String phone, String username) {
-		String SQL = "UPDATE User_Info SET Name = ?, Password = ?, Email = ?, Phone = ? WHERE Username = ?";
+	//retested
+	public static void updateAccount(Connection con, UserInfo user) {
+		String SQL = "UPDATE User_Info SET Name = ?, Password = ?, Email = ?, Phone = ?, Admin = ? WHERE Username = ?";
 		try {
 	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1, name);
-	    pstmt.setString(2, password);
-	    pstmt.setString(3, email);
-	    pstmt.setString(4, phone);
-	    pstmt.setString(5, username);
+	    pstmt.setString(1, user.getName());
+	    pstmt.setString(2, user.getPassword());
+	    pstmt.setString(3, user.getEmail());
+	    pstmt.setString(4, user.getPhoneNumber());
+	    pstmt.setInt(5, user.getAdmin());
+	    pstmt.setString(6, user.getUsername());
 	    pstmt.executeUpdate();
 	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("failed to update account");
 		}
-	} 
-	//this function updates the name in the User_Info table
-	//requires user's username
-	public static void updateName(Connection con, String name, String username) {
-		String SQL = "UPDATE User_Info SET Name = ? WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1, name);
-	    pstmt.setString(2, username);
-	    pstmt.executeUpdate();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to update account name");
-		}
-	} 
-	//this function allows you to update the password in the User_Info table
-	//requires user's username
-	public static void updatePassword(Connection con, String password, String username) {
-		String SQL = "UPDATE User_Info SET Password = ? WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1, password);
-	    pstmt.setString(2, username);
-	    pstmt.executeUpdate();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to update account password");
-		}
-	} 
-	//this function allows you to update the email in the User_Info table
-	//requires user's username
-	public static void updateEmail(Connection con, String email, String username) {
-		String SQL = "UPDATE User_Info SET Email = ? WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1, email);
-	    pstmt.setString(2, username);
-	    pstmt.executeUpdate();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to update account email");
-		}
-	} 
-	//this function allows you to update the phone number in the User_Info table
-	//requires user's username
-	public static void updatePhone(Connection con, String phone, String username) {
-		String SQL = "UPDATE User_Info SET Phone = ? WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1, phone);
-	    pstmt.setString(2, username);
-	    pstmt.executeUpdate();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to update account phone");
-		}
-	} 
-	
-	
-	
-	
-	
+	}
+
 	//Payment_Account	(working)
 //---------------------------------------------------------------------------------------------------------------
 	//this function allows you to make a row in the Payment_Info table
-	public static void makePaymentAccount(Connection con, String name, int paytype, String cardnum, int ccv, String expdate, String country, String address, String username) {
-		String SQL = "INSERT INTO Payment_Info(Name, PayType, CardNum, CCV, ExpDate, Country, Address, Username) Values(?,?,?,?,?,?,?,?)";
+	//retested
+	public static void makePaymentAccount(Connection con, PaymentInfo payment) {
+		String SQL = "INSERT INTO Payment_Info(Name, CardNum, CCV, ExpDate, Billing, Shipping, Username) Values(?,?,?,?,?,?,?)";
 		try {
 		    PreparedStatement pstmt = con.prepareStatement(SQL);
-		    pstmt.setString(1, name);
-		    pstmt.setInt(2, paytype);
-		    pstmt.setString(3, cardnum);
-		    pstmt.setInt(4, ccv);
-		    pstmt.setString(5, expdate);
-		    pstmt.setString(6, country);
-		    pstmt.setString(7, address);
-		    pstmt.setString(8, username);
+		    pstmt.setString(1, payment.getCardName());
+		    pstmt.setString(2, payment.getCardNumber());
+		    pstmt.setString(3, payment.getCVC());
+		    pstmt.setString(4, payment.getExpirationDate());
+		    pstmt.setString(5, payment.getBillingAddress());
+		    pstmt.setString(6, payment.getShippingAddress());
+		    pstmt.setString(7, payment.getUsername());
 		    pstmt.executeUpdate();
 		    pstmt.close();
 			} catch (SQLException e) {
@@ -199,18 +142,18 @@ public class DatabaseMethods {
 		} 
 	//this function allows you to update a row in the Payment_Info table
 	//requires user's username
-	public static void updatePaymentAccount(Connection con, String name, int paytype, String cardnum, int ccv, String expdate, String country, String address, String username) {
-		String SQL = "UPDATE Payment_Info SET Name = ?, PayType = ?, CardNum = ?, CCV = ?, ExpDate = ?, Country = ?, Address = ? WHERE Username = ?";
+	//retested
+	public static void updatePaymentAccount(Connection con, PaymentInfo payment) {
+		String SQL = "UPDATE Payment_Info SET Name = ?, CardNum = ?, CCV = ?, ExpDate = ?, Billing = ?, Shipping = ? WHERE Username = ?";
 		try {
 	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1, name);
-	    pstmt.setInt(2, paytype);
-	    pstmt.setString(3, cardnum);
-	    pstmt.setInt(4, ccv);
-	    pstmt.setString(5, expdate);
-	    pstmt.setString(6, country);
-	    pstmt.setString(7, address);
-	    pstmt.setString(8, username);
+	    pstmt.setString(1, payment.getCardName());
+	    pstmt.setString(2, payment.getCardNumber());
+	    pstmt.setString(3, payment.getCVC());
+	    pstmt.setString(4, payment.getExpirationDate());
+	    pstmt.setString(5, payment.getBillingAddress());
+	    pstmt.setString(6, payment.getShippingAddress());
+	    pstmt.setString(7, payment.getUsername());
 	    pstmt.executeUpdate();
 	    pstmt.close();
 		} catch (SQLException e) {
@@ -226,14 +169,16 @@ public class DatabaseMethods {
 	//Reservations	(working)
 //---------------------------------------------------------------------------------------------------------------
 	//this function allows you to make a row in the Reservation table
-	public static void makeReservation(Connection con, int room, String date, int price, String username) {
-		String SQL = "INSERT INTO Reservation(Room, Date, Price, Username) Values(?,?,?,?)";
+	//retested
+	public static void makeReservation(Connection con, Reservation reservation) {
+		String SQL = "INSERT INTO Reservation(RoomType, Confirmation, Guests, CheckIn, CheckOut) Values(?,?,?,?,?)";
 		try {
 	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setInt(1, room);
-	    pstmt.setString(2, date);
-	    pstmt.setInt(3, price);
-	    pstmt.setString(4,  username);
+	    pstmt.setString(1, reservation.getRoomType());
+	    pstmt.setInt(2, reservation.getConfirmationNumber());
+	    pstmt.setInt(3, reservation.getGuests());
+	    pstmt.setDate(4, Date.valueOf(reservation.getCheckInDate()));
+	    pstmt.setDate(5,  Date.valueOf(reservation.getCheckOutDate()));
 	    pstmt.executeUpdate();
 	    pstmt.close();
 		} catch (SQLException e) {
@@ -243,52 +188,21 @@ public class DatabaseMethods {
 	} 
 	//this function allows you to update the room column the Reservation table
 	//requires reservation's room and date
-	public static void updateReservationRoom(Connection con, int room, String date, int newroom) {
-		String SQL = "UPDATE Reservation SET Room = ? WHERE Room = ? AND Date = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setInt(1, newroom);
-	    pstmt.setInt(2, room);
-	    pstmt.setString(3,  date);
-	    pstmt.executeUpdate();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to update reservation room");
-		}
-	} 
-	//this function allows you to update the date column in the Reservation table
-	//requires reservation's room and date
-	public static void updateReservationDate(Connection con, int room, String date, String newdate) {
-		String SQL = "UPDATE Reservation SET Date = ? WHERE Room = ? AND Date = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1, newdate);
-	    pstmt.setInt(2, room);
-	    pstmt.setString(3,  date);
-	    pstmt.executeUpdate();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to update reservation date");
-		}
-	} 
-	//this function allows you to update the price column in the Reservation table
-	//requires reservation's room and date
-	public static void updateReservationPrice(Connection con, int room, String date, int price) {
-		String SQL = "UPDATE Reservation SET Price = ? WHERE Room = ? AND Date = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setInt(1, price);
-	    pstmt.setInt(2, room);
-	    pstmt.setString(3,  date);
-	    pstmt.executeUpdate();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to update reservation price");
-		}
-	} 
+	//probably not needed anymore
+	/*
+	 * public static void updateReservation(Connection con, Reservation reservation)
+	 * { String SQL = "UPDATE Reservation SET Room = ? WHERE Room = ? AND Date = ?";
+	 * try { PreparedStatement pstmt = con.prepareStatement(SQL); pstmt.setString(1,
+	 * reservation.getRoomType()); pstmt.setInt(2,
+	 * reservation.getConfirmationNumber()); pstmt.setInt(3,
+	 * reservation.getGuests()); pstmt.setDate(4,
+	 * Date.valueOf(reservation.getCheckInDate())); pstmt.setDate(5,
+	 * Date.valueOf(reservation.getCheckOutDate())); pstmt.executeUpdate();
+	 * pstmt.close(); } catch (SQLException e) { e.printStackTrace();
+	 * System.out.println("failed to update reservation"); } }
+	 */
+
+
 	
 	
 	
@@ -296,18 +210,15 @@ public class DatabaseMethods {
 	
 	//Rooms	(working)
 //---------------------------------------------------------------------------------------------------------------
-	//this function allows you to make a row in the Rooms table
-	public static void addRoom(Connection con, int room, int floor, int bedrooms, int bathrooms, int beds, int bedsize, int price) {
-		String SQL = "INSERT INTO Rooms(Room, Floor, Bedrooms, Bathrooms, Beds, BedSize, Price) Values(?,?,?,?,?,?,?)";
+	//this function allows you to make a row of occupied rooms in the Rooms table
+	public static void addRoom(Connection con, int day, AvailableRooms occupied) {
+		String SQL = "INSERT INTO Rooms(Day, King, Queen, Suite) Values(?,?,?,?)";
 		try {
 	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setInt(1, room);
-	    pstmt.setInt(2, floor);
-	    pstmt.setInt(3, bedrooms);
-	    pstmt.setInt(4, bathrooms);
-	    pstmt.setInt(5, beds);
-	    pstmt.setInt(6, bedsize);
-	    pstmt.setInt(7, price);
+	    pstmt.setInt(1, day);
+	    pstmt.setInt(2, occupied.getkingBedsOccupied());
+	    pstmt.setInt(3, occupied.getqueenBedsOccupied());
+	    pstmt.setInt(4, occupied.getsuiteBedsOccupied());
 	    pstmt.executeUpdate();
 	    pstmt.close();
 		} catch (SQLException e) {
@@ -315,19 +226,21 @@ public class DatabaseMethods {
 			System.out.println("failed to add a room");
 		}
 	} 
-	//this function allows you to update the price of a room
+	//this function allows you to update the occupied rooms count
 	//requires the room number
-	public static void updateRoomPrice(Connection con, int room, int price) {
-		String SQL = "UPDATE Rooms SET Price = ? WHERE Room = ?";
+	public static void updateRoom(Connection con, int day ,AvailableRooms occupied) {
+		String SQL = "UPDATE Rooms SET King = ?, Queen = ?, Suite = ? WHERE Day = ?";
 		try {
 	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setInt(1, price);
-	    pstmt.setInt(2, room);
+	    pstmt.setInt(1, occupied.getkingBedsOccupied());
+	    pstmt.setInt(2, occupied.getqueenBedsOccupied());
+	    pstmt.setInt(3, occupied.getsuiteBedsOccupied());
+	    pstmt.setInt(4, day);
 	    pstmt.executeUpdate();
 	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("failed to update price of room");
+			System.out.println("failed to update avaliable rooms");
 		}
 	} 
 	
@@ -351,86 +264,40 @@ public class DatabaseMethods {
 	
 	//User_Account	(working)
 //---------------------------------------------------------------------------------------------------------------
-	//this function allows you to get the name from the User_Info table
+	//this function allows you to get the info from the User_Info table
 	//requires the user's username
-	public static String getUser_Name(Connection con, String username) {
+	//retested
+	public static void getUser_Info(Connection con, UserInfo user) {
 		String gotName = null;
-		String SQL = "SELECT Name FROM User_Info WHERE Username = ?";
+		String gotPass = null;
+		String gotEmail = null;
+		String gotPhone = null;
+		String gotAdmin = null;
+		String SQL = "SELECT Name, Password, Email, Phone, Admin FROM User_Info WHERE Username = ?";
 		try {
 	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1,  username);
+	    pstmt.setString(1,  user.getUsername());
 	    ResultSet rs = pstmt.executeQuery();
 	    if(rs.next()) {
 	    	gotName = rs.getString("Name");
-	    }
-	    rs.close();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to get name");
-		}
-		return gotName;
-	} 
-	//this function allows you to get the password from the User_Info table
-	//requires the user's username
-	public static String getUser_Password(Connection con, String username) {
-		String gotPassword = null;
-		String SQL = "SELECT Password FROM User_Info WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1,  username);
-	    ResultSet rs = pstmt.executeQuery();
-	    if(rs.next()) {
-	    	gotPassword = rs.getString("Password");
-	    }
-	    rs.close();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to get password");
-		}
-		return gotPassword;
-	} 
-	//this function allows you to get the email from the User_Info table
-	//requires the user's username
-	public static String getUser_Email(Connection con, String username) {
-		String gotEmail = null;
-		String SQL = "SELECT Email FROM User_Info WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1,  username);
-	    ResultSet rs = pstmt.executeQuery();
-	    if(rs.next()) {
+	    	gotPass = rs.getString("Password");
 	    	gotEmail = rs.getString("Email");
-	    }
-	    rs.close();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to get email");
-		}
-		return gotEmail;
-	} 
-	//this function allows you to get the phone number from the User_Info table
-	//requires the user's username
-	public static String getUser_Phone(Connection con, String username) {
-		String gotPhone = null;
-		String SQL = "SELECT Phone FROM User_Info WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1,  username);
-	    ResultSet rs = pstmt.executeQuery();
-	    if(rs.next()) {
 	    	gotPhone = rs.getString("Phone");
+	    	gotAdmin = rs.getString("Admin");
+	    	user.setName(gotName);
+	    	user.setPassword(gotPass);
+	    	user.setEmail(gotEmail);
+	    	user.setPhoneNumber(gotPhone);
+	    	user.setAdmin(gotAdmin);
 	    }
 	    rs.close();
 	    pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("failed to get phone");
+			System.out.println("failed to get user info");
 		}
-		return gotPhone;
 	} 
+ 
 	
 	
 	
@@ -438,57 +305,34 @@ public class DatabaseMethods {
 	
 	//Payment Account	(working)
 //---------------------------------------------------------------------------------------------------------------
-	//this function allows you to get the name from the Payment_Info table
+	//this function allows you to get info from the Payment_Info table
 	//requires the user's username
-	public static String getPayment_Name(Connection con, String username) {
+	//retested
+	public static void getPayment_Info(Connection con, PaymentInfo payment) {
 		String gotName = null;
-		String SQL = "SELECT Name FROM Payment_Info WHERE Username = ?";
+		String gotCard = null;
+		String gotExp = null;
+		String gotCCV = null;
+		String gotBilling = null;
+		String gotShipping = null;
+		String SQL = "SELECT Name, CardNum, CCV, ExpDate, Billing, Shipping FROM Payment_Info WHERE Username = ?";
 		try {
 	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1,  username);
+	    pstmt.setString(1,  payment.getUsername());
 	    ResultSet rs = pstmt.executeQuery();
 	    if(rs.next()) {
 	    	gotName = rs.getString("Name");
-	    }
-	    rs.close();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to get name");
-		}
-		return gotName;
-	} 
-	//this function allows you to get the payment type from the Payment_Info table
-		//requires the user's username
-	public static int getPayment_Type(Connection con, String username) {
-		int gotPayType = 0;
-		String SQL = "SELECT PayType FROM Payment_Info WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1,  username);
-	    ResultSet rs = pstmt.executeQuery();
-	    if(rs.next()) {
-	    	gotPayType = rs.getInt("PayType");
-	    }
-	    rs.close();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to get payment type");
-		}
-		return gotPayType;
-	}
-	//this function allows you to get the card number from the Payment_Info table
-	//requires the user's username
-	public static String getPayment_Card(Connection con, String username) {
-		String gotCard = null;
-		String SQL = "SELECT CardNum FROM Payment_Info WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1,  username);
-	    ResultSet rs = pstmt.executeQuery();
-	    if(rs.next()) {
 	    	gotCard = rs.getString("CardNum");
+	    	gotCCV = rs.getString("CCV");
+	    	gotExp = rs.getString("ExpDate");
+	    	gotBilling = rs.getString("Billing");
+	    	gotShipping = rs.getString("Shipping");
+	    	payment.setCardName(gotName);
+	    	payment.setCardNumber(gotCard);
+	    	payment.setExpirationDate(gotExp);
+	    	payment.setCVC(gotCCV);
+	    	payment.setBillingAddress(gotBilling);
+	    	payment.setShippingAddress(gotShipping);
 	    }
 	    rs.close();
 	    pstmt.close();
@@ -496,88 +340,8 @@ public class DatabaseMethods {
 			e.printStackTrace();
 			System.out.println("failed to get name");
 		}
-		return gotCard;
 	} 
-	//this function allows you to get the ccv from the Payment_Info table
-	//requires the user's username
-	public static int getCCV(Connection con, String username) {
-		int gotCCV = 0;
-		String SQL = "SELECT CCV FROM Payment_Info WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1,  username);
-	    ResultSet rs = pstmt.executeQuery();
-	    if(rs.next()) {
-	    	gotCCV = rs.getInt("CCV");
-	    }
-	    rs.close();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to get ccv");
-		}
-		return gotCCV;
-	} 
-	//this function allows you to get the expiration date from the Payment_Info table
-	//requires the user's username
-	public static String getPayment_ExpDate(Connection con, String username) {
-		String gotExp = null;
-		String SQL = "SELECT ExpDate FROM Payment_Info WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1,  username);
-	    ResultSet rs = pstmt.executeQuery();
-	    if(rs.next()) {
-	    	gotExp = rs.getString("ExpDate");
-	    }
-	    rs.close();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to get card expiration date");
-		}
-		return gotExp;
-	} 
-	//this function allows you to get the country from the Payment_Info table
-	//requires the user's username
-	public static String getPayment_Country(Connection con, String username) {
-		String gotCountry = null;
-		String SQL = "SELECT Country FROM Payment_Info WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1,  username);
-	    ResultSet rs = pstmt.executeQuery();
-	    if(rs.next()) {
-	    	gotCountry = rs.getString("Country");
-	    }
-	    rs.close();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to get country of residence");
-		}
-		return gotCountry;
-	} 
-	//this function allows you to get the address from the Payment_Info table
-	//requires the user's username
-	public static String getPayment_Address(Connection con, String username) {
-		String gotAddress = null;
-		String SQL = "SELECT Address FROM Payment_Info WHERE Username = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setString(1,  username);
-	    ResultSet rs = pstmt.executeQuery();
-	    if(rs.next()) {
-	    	gotAddress = rs.getString("Address");
-	    }
-	    rs.close();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to get address");
-		}
-		return gotAddress;
-	} 
+
 	
 	
 	
@@ -587,46 +351,32 @@ public class DatabaseMethods {
 //---------------------------------------------------------------------------------------------------------------
 	//this function allows you to get the username associated with a reservation from the Reservation table
 	//requires the reservation's room number and date
-	public static String getReservation_Username(Connection con, int room, String date) {
-		String gotUsername = null;
-		String SQL = "SELECT Username FROM Reservation WHERE Room = ? AND Date = ?";
+	public static ArrayList<Reservation> getReservation(Connection con, ArrayList<Reservation> reservationList) {
+		String SQL = "SELECT * FROM Reservation"; // Replace with your table name
 		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setInt(1,  room);
-	    pstmt.setString(2,  date);
-	    ResultSet rs = pstmt.executeQuery();
-	    if(rs.next()) {
-	    	gotUsername = rs.getString("Username");
-	    }
-	    rs.close();
-	    pstmt.close();
+		    Statement stmt = con.createStatement();
+		    ResultSet rs = stmt.executeQuery(SQL);
+		    while (rs.next()) {
+		        // Get values from ResultSet and create a Reservation object
+		        LocalDate checkInDate = rs.getDate("CheckIn").toLocalDate();
+		        LocalDate checkOutDate = rs.getDate("CheckOut").toLocalDate();
+		        int totalGuests = rs.getInt("Guests");
+		        int confirmationNumber = rs.getInt("Confirmation");
+		        String roomType = rs.getString("RoomType");
+		        Reservation reservation = new Reservation(checkInDate, checkOutDate, totalGuests, roomType, confirmationNumber);
+		        
+		        // Add Reservation object to ArrayList
+		        reservationList.add(reservation);
+		    }
+		    rs.close();
+		    stmt.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to get reservation");
+		    e.printStackTrace();
+		    System.out.println("Failed to retrieve reservations from database");
 		}
-		return gotUsername;
+		return reservationList;
 	}
-	//this function allows you to get the price associated with a reservation from the Reservation table
-	//requires the reservation's room number and date
-	public static int getReservation_Price(Connection con, int room, String date) {
-		int gotPrice = 0;
-		String SQL = "SELECT Price FROM Reservation WHERE Room = ? AND Date = ?";
-		try {
-	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setInt(1,  room);
-	    pstmt.setString(2,  date);
-	    ResultSet rs = pstmt.executeQuery();
-	    if(rs.next()) {
-	    	gotPrice = rs.getInt("Price");
-	    }
-	    rs.close();
-	    pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("failed to get reservation price");
-		}
-		return gotPrice;
-	}
+
 	
 	
 	
@@ -636,22 +386,16 @@ public class DatabaseMethods {
 //---------------------------------------------------------------------------------------------------------------
 	//this function allows you to get a room object from the Rooms table
 	//requires the room number
-	public static Room getRoom(Connection con, int room) {
-		Room gotRoom = new Room();
-		String SQL = "SELECT * FROM Rooms WHERE Room = ?";
+	public static void getRoom(Connection con, int day, AvailableRooms room) {
+		String SQL = "SELECT * FROM Rooms WHERE Date = ?";
 		try {
 	    PreparedStatement pstmt = con.prepareStatement(SQL);
-	    pstmt.setInt(1,  room);
+	    pstmt.setInt(1,  day);
 	    ResultSet rs = pstmt.executeQuery();
 	    if(rs.next()) {
-	    	gotRoom.room = rs.getInt("Room");
-	    	gotRoom.floor = rs.getInt("Floor");
-	    	gotRoom.bedrooms = rs.getInt("Bedrooms");
-	    	gotRoom.bathrooms = rs.getInt("Bathrooms");
-	    	gotRoom.beds = rs.getInt("Beds");
-	    	gotRoom.bedsize = rs.getInt("BedSize");
-	    	gotRoom.price = rs.getInt("Price");
-	    	gotRoom.room = rs.getInt("Room");
+	    	room.setkingBedsOccupied(rs.getInt("King"));
+	    	room.setqueenBedsOccupied(rs.getInt("Queen"));
+	    	room.setsuiteBedsOccupied(rs.getInt("Suite"));
 	    }
 	    rs.close();
 	    pstmt.close();
@@ -659,7 +403,6 @@ public class DatabaseMethods {
 			e.printStackTrace();
 			System.out.println("failed to get room");
 		}
-		return gotRoom;
 	}
 
 
@@ -684,6 +427,7 @@ public class DatabaseMethods {
 //---------------------------------------------------------------------------------------------------------------
 //this function allows you to delete a row from the User_Info table
 //requires the user's username
+	//refactored & retested
 public static void deleteUser(Connection con, String username) {
 	String SQL = "DELETE FROM User_Info WHERE Username = ?";
 	try {
@@ -705,6 +449,7 @@ public static void deleteUser(Connection con, String username) {
 //---------------------------------------------------------------------------------------------------------------
 //this function allows you to delete a row from the Payment_Info table
 //requires the user's username
+//refactored & retested
 public static void deletePayment(Connection con, String username) {
 	String SQL = "DELETE FROM Payment_Info WHERE Username = ?";
 	try {
@@ -726,12 +471,16 @@ public static void deletePayment(Connection con, String username) {
 //---------------------------------------------------------------------------------------------------------------
 //this function allows you to delete a row from the Reservation table
 //requires the reservation's room number and date
-public static void deleteReservation(Connection con, int room, String date) {
-	String SQL = "DELETE FROM Reservation WHERE Room = ? AND Date = ?";
+//retested
+public static void deleteReservation(Connection con, Reservation reservation) {
+	String SQL = "DELETE FROM Reservation WHERE RoomType = ? AND Confirmation = ? AND Guests = ? AND CheckIn = ? AND CheckOut = ?";
 	try {
 		PreparedStatement pstmt = con.prepareStatement(SQL);
-		pstmt.setInt(1,  room);
-		pstmt.setString(2,  date);
+		pstmt.setString(1, reservation.getRoomType());
+	    pstmt.setInt(2, reservation.getConfirmationNumber());
+	    pstmt.setInt(3, reservation.getGuests());
+	    pstmt.setDate(4, Date.valueOf(reservation.getCheckInDate()));
+	    pstmt.setDate(5,  Date.valueOf(reservation.getCheckOutDate()));
 		pstmt.executeUpdate();
 		pstmt.close();
 	} catch (SQLException e) {
@@ -748,20 +497,17 @@ public static void deleteReservation(Connection con, int room, String date) {
 //---------------------------------------------------------------------------------------------------------------
 //this function allows you to delete a row from the Room table
 //requires the room number
-public static void deleteRoom(Connection con, int room) {
-	String SQL = "DELETE FROM Rooms WHERE Room = ?";
+public static void deleteRoom(Connection con, int date) {
+	String SQL = "DELETE FROM Rooms WHERE Date = ?";
 	try {
 		PreparedStatement pstmt = con.prepareStatement(SQL);
-		pstmt.setInt(1,  room);
+		pstmt.setInt(1,  date);
 		pstmt.executeUpdate();
 		pstmt.close();
 	} catch (SQLException e) {
 		e.printStackTrace();
 		System.out.println("failed to delete room");
 	}
-}
-public static void createAccount(Connection con, String firstName, String lastName, String phoneNumber, String email,
-        String password, String paymentMethod) {
 }
 
 }

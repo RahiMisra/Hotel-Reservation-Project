@@ -1,11 +1,9 @@
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 
 class Main extends DatabaseMethods {
-	
-	UserInfo user = new UserInfo();
-	public boolean LoggedIn;
 	
 	
   public static void main(String[] args) {
@@ -17,14 +15,8 @@ class Main extends DatabaseMethods {
   else {
     System.out.println("Database connection failed.");
   }
-	
-	try {
-		con.close();
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		System.out.println("failure3");
-	}
+  	GUI gui = new GUI(con);
+
     System.out.println("Hello world!");
   }
 }
